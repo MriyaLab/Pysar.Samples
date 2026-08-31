@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage x:Class="Pysar.Maui.Sample.Views.ReportViewerPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:Pysar.Maui.Sample.Converters"
+             xmlns:pysar="clr-namespace:Pysar.Maui;assembly=Pysar.Maui"
+             xmlns:viewModels="clr-namespace:Pysar.Maui.Sample.ViewModels"
+             Title="Pysar Sample"
+             x:DataType="viewModels:ReportViewerViewModel"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <converters:IsNotEmptyConverter x:Key="IsNotEmpty" />
+    </ContentPage.Resources>
+
+    <Grid BackgroundColor="{StaticResource ChromeSurface}"
+          RowDefinitions="Auto,Auto,*"
+          RowSpacing="0">
+        <Grid Padding="12,8"
+              BackgroundColor="{StaticResource ChromeBackground}"
+              ColumnDefinitions="Auto,*"
+              ColumnSpacing="8">
+            <Border Style="{StaticResource ToolbarPill}">
+                <Button Clicked="OnOpenFlyoutClicked" Style="{StaticResource ToolbarPillButton}">
+                    <Button.ImageSource>
+                        <FontImageSource FontFamily="FontAwesomeSolid"
+                                         Glyph="bars"
+                                         Size="14"
+                                         Color="{StaticResource ChromeText}" />
+                    </Button.ImageSource>
+                </Button>
+            </Border>
+
+            <HorizontalStackLayout Grid.Column="1"
+                                   HorizontalOptions="End"
+                                   Spacing="8"
+                                   VerticalOptions="Center">
+                <Border Style="{StaticResource ToolbarPill}">
+                    <HorizontalStackLayout Spacing="0">
+                        <Button Command="{Binding ZoomOutCommand}"
+                                FontSize="18"
+                                Style="{StaticResource ToolbarPillButton}"
+                                Text="−" />
+                        <BoxView BackgroundColor="{StaticResource ChromeDivider}"
+                                 HeightRequest="16"
+                                 VerticalOptions="Center"
+                                 WidthRequest="1" />
+                        <Button Command="{Binding ActualSizeCommand}"
+                                Style="{StaticResource ToolbarPillButton}"
+                                Text="{Binding ZoomText}"
+                                WidthRequest="52" />
+                        <BoxView BackgroundColor="{StaticResource ChromeDivider}"
+                                 HeightRequest="16"
+                                 VerticalOptions="Center"
+                                 WidthRequest="1" />
+                        <Button Command="{Binding ZoomInCommand}"
+                                FontSize="18"
+                                Style="{StaticResource ToolbarPillButton}"
+                                Text="+" />
+                    </HorizontalStackLayout>
+                </Border>
+
+                <Border Style="{StaticResource ToolbarPill}">
+                    <Button Command="{Binding ToggleFitCommand}" Style="{StaticResource ToolbarPillButton}">
+                        <Button.ImageSource>
+                            <FontImageSource FontAutoScalingEnabled="True"
+                                             FontFamily="FontAwesomeSolid"
+                                             Glyph="{Binding FitButtonGlyph}"
+                                             Size="18" />
+                        </Button.ImageSource>
+                    </Button>
+                </Border>
+
+                <Border IsVisible="{OnIdiom Phone=False, Default=True}" Style="{StaticResource ToolbarPill}">
+                    <Button Command="{Binding PrintCommand}" Style="{StaticResource ToolbarPillButton}">
+                        <Button.ImageSource>
+                            <FontImageSource FontAutoScalingEnabled="True"
+                                             FontFamily="FontAwesomeSolid"
+                                             Glyph="print"
+                                             Size="18" />
+                        </Button.ImageSource>
+                    </Button>
+                </Border>
+
+                <Border IsVisible="{OnIdiom Phone=False, Default=True}" Style="{StaticResource ToolbarPill}">
+                    <Button Command="{Binding ExportPdfCommand}" Style="{StaticResource ToolbarPillButton}">
+                        <Button.ImageSource>
+                            <FontImageSource FontAutoScalingEnabled="True"
+                                             FontFamily="FontAwesomeSolid"
+                                             Glyph="arrow-up-from-bracket"
+                                             Size="18" />
+                        </Button.ImageSource>
+                    </Button>
+                </Border>
+
+                <Border IsVisible="{OnIdiom Phone=True, Default=False}" Style="{StaticResource ToolbarPill}">
+                    <Button Clicked="OnOverflowClicked" Style="{StaticResource ToolbarPillButton}">
+                        <Button.ImageSource>
+                            <FontImageSource FontAutoScalingEnabled="True"
+                                             FontFamily="FontAwesomeSolid"
+                                             Glyph="ellipsis"
+                                             Size="18"
+                                             Color="{StaticResource ChromeText}" />
+                        </Button.ImageSource>
+                    </Button>
+                </Border>
+            </HorizontalStackLayout>
+        </Grid>
+
+        <Label Grid.Row="1"
+               IsVisible="{Binding ErrorMessage, Converter={StaticResource IsNotEmpty}}"
+               Text="{Binding ErrorMessage}"
+               TextColor="#C0392B" />
+
+        <pysar:ReportView x:Name="Viewer"
+                          Grid.Row="2"
+                          BackgroundColor="{StaticResource ChromeViewer}"
+                          CurrentPage="{Binding CurrentPage}"
+                          DocumentPadding="16"
+                          EffectiveZoom="{Binding EffectiveZoom}"
+                          PageBorderColor="{StaticResource ChromePageBorder}"
+                          PageBorderThickness="2"
+                          PageCount="{Binding PageCount, Mode=OneWayToSource}"
+                          PageSpacing="16"
+                          RenderBudget="256"
+                          RenderFailed="OnRenderFailed"
+                          Report="{Binding Report}"
+                           Zoom="{Binding Zoom}"
+                           ZoomMode="{Binding ZoomMode}" />
+
+        <Border x:Name="PageIndicator"
+                Grid.Row="2"
+                IsVisible="False"
+                Style="{StaticResource PageIndicator}"
+                ZIndex="3">
+            <HorizontalStackLayout Spacing="8">
+                <Image HeightRequest="16"
+                       WidthRequest="16"
+                       VerticalOptions="Center">
+                    <Image.Source>
+                        <FontImageSource FontFamily="FontAwesomeSolid"
+                                         Glyph="file-lines"
+                                         Size="14"
+                                         Color="{StaticResource ChromeText}" />
+                    </Image.Source>
+                </Image>
+                <Label Style="{StaticResource PageIndicatorLabel}"
+                       Text="{Binding PageIndicatorText}" />
+            </HorizontalStackLayout>
+        </Border>
+
+        <Grid x:Name="OverflowDismiss"
+              Grid.Row="2"
+              BackgroundColor="#01000000"
+              IsVisible="False"
+              ZIndex="1">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnOverflowDismissed" />
+            </Grid.GestureRecognizers>
+        </Grid>
+
+        <Border x:Name="OverflowMenu"
+                Grid.Row="2"
+                Margin="12,8,12,0"
+                Padding="0"
+                BackgroundColor="{StaticResource ChromePill}"
+                HorizontalOptions="End"
+                IsVisible="False"
+                Stroke="{StaticResource ChromeStroke}"
+                StrokeShape="RoundRectangle 16"
+                StrokeThickness="1"
+                VerticalOptions="Start"
+                WidthRequest="220"
+                ZIndex="2">
+            <VerticalStackLayout Spacing="0">
+                <Grid ColumnDefinitions="22,*" Style="{StaticResource OverflowMenuItem}">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding PrintCommand}" Tapped="OnOverflowPrintClicked" />
+                    </Grid.GestureRecognizers>
+                    <Image Style="{StaticResource OverflowMenuIcon}" WidthRequest="16">
+                        <Image.Source>
+                            <FontImageSource FontAutoScalingEnabled="True"
+                                             FontFamily="FontAwesomeSolid"
+                                             Glyph="print"
+                                             Size="14"
+                                             Color="{StaticResource ChromeText}" />
+                        </Image.Source>
+                    </Image>
+                    <Label Grid.Column="1"
+                           Style="{StaticResource OverflowMenuLabel}"
+                           Text="Print" />
+                </Grid>
+                <BoxView Margin="12,0"
+                         BackgroundColor="{StaticResource ChromeDivider}"
+                         HeightRequest="1" />
+                <Grid ColumnDefinitions="22,*" Style="{StaticResource OverflowMenuItem}">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ExportPdfCommand}" Tapped="OnOverflowExportClicked" />
+                    </Grid.GestureRecognizers>
+                    <Image Style="{StaticResource OverflowMenuIcon}" WidthRequest="16">
+                        <Image.Source>
+                            <FontImageSource FontAutoScalingEnabled="True"
+                                             FontFamily="FontAwesomeSolid"
+                                             Glyph="arrow-up-from-bracket"
+                                             Size="14"
+                                             Color="{StaticResource ChromeText}" />
+                        </Image.Source>
+                    </Image>
+                    <Label Grid.Column="1"
+                           Style="{StaticResource OverflowMenuLabel}"
+                           Text="Export" />
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentPage>

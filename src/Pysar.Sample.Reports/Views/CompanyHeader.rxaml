@@ -1,0 +1,104 @@
+<ReportView x:Class="Pysar.Sample.Reports.Views.CompanyHeader"
+            xmlns="https://mriyalab.com/pysar"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            x:Name="Root"
+            Height="115">
+
+    <!--  A component owns its resource scope, so it merges the shared styles itself.  -->
+    <ReportView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Styles/ReportStyles.rxaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ReportView.Resources>
+
+    <Grid Height="Fill"
+          Padding="50,20"
+          BackgroundColor="{StaticResource LightGray}"
+          ColumnDefinitions="Auto, 170, *, 200"
+          ColumnSpacing="20">
+
+        <Image Grid.Row="0"
+               Grid.Column="0"
+               Width="60"
+               Height="60"
+               Margin="0,0,10,0"
+               Source="{Binding LogoSource, Source={x:Reference Root}}" />
+
+        <Grid Grid.Row="0"
+              Grid.Column="1"
+              RowDefinitions="Auto, Auto, Auto, Auto, Auto"
+              RowSpacing="4">
+            <Text Grid.Row="0"
+                  Content="{Binding CompanyName, Source={x:Reference Root}}"
+                  FontColor="{StaticResource DarkGray}"
+                  FontSize="12"
+                  FontStyle="Bold" />
+            <Text Grid.Row="1"
+                  Content="{Binding CompanyAddress, Source={x:Reference Root}}"
+                  FontColor="{StaticResource DarkGray}"
+                  FontSize="9" />
+            <Text Grid.Row="2"
+                  Content="{Binding CompanyPhone, Source={x:Reference Root}}"
+                  FontColor="{StaticResource DarkGray}"
+                  FontSize="9" />
+            <Text Grid.Row="3"
+                  Content="{Binding CompanyEmail, Source={x:Reference Root}}"
+                  FontColor="{StaticResource DarkGray}"
+                  FontSize="9" />
+            <Text Grid.Row="4"
+                  Content="{Binding CompanyWebsite, Source={x:Reference Root}}"
+                  FontColor="{StaticResource DarkGray}"
+                  FontSize="9" />
+        </Grid>
+
+        <StackPanel Grid.Column="3" Orientation="Vertical">
+
+            <Text HorizontalAlignment="End"
+                  VerticalAlignment="Start"
+                  Content="{Binding DocumentTitle, Source={x:Reference Root}}"
+                  FontColor="{StaticResource DarkGray}"
+                  FontSize="36"
+                  FontStyle="Bold"
+                  LineHeight="1"
+                  TextTrimming="WordWrap" />
+
+            <Grid Width="90"
+                  HorizontalAlignment="End"
+                  ColumnDefinitions="Auto, Auto"
+                  ColumnSpacing="4"
+                  RowDefinitions="Auto, Auto"
+                  RowSpacing="4">
+                <Text Grid.Row="0"
+                      Grid.Column="0"
+                      HorizontalAlignment="End"
+                      Content="{Binding DocumentNumberLabel, Source={x:Reference Root}}"
+                      Style="{StaticResource FieldLabel}"
+                      TextTrimming="None" />
+                <Text Grid.Row="0"
+                      Grid.Column="1"
+                      HorizontalAlignment="End"
+                      Content="{Binding DocumentNumber, Source={x:Reference Root}}"
+                      FontStyle="Bold"
+                      Style="{StaticResource FieldValue}" />
+                <Text Grid.Row="1"
+                      Grid.Column="0"
+                      HorizontalAlignment="End"
+                      Content="{Binding DocumentDateLabel, Source={x:Reference Root}}"
+                      Style="{StaticResource FieldLabel}"
+                      TextTrimming="None" />
+                <Text Grid.Row="1"
+                      Grid.Column="1"
+                      HorizontalAlignment="End"
+                      Content="{Binding DocumentDate, Source={x:Reference Root}}"
+                      FontStyle="Bold"
+                      Style="{StaticResource FieldValue}" />
+            </Grid>
+        </StackPanel>
+
+        <!--
+            Spans the filler column too, so a long title such as "ANNUAL REPORT" still fits.
+        -->
+    </Grid>
+</ReportView>

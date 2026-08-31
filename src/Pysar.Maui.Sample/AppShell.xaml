@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell x:Class="Pysar.Maui.Sample.AppShell"
+       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       x:Name="This"
+       Title="Pysar Samples"
+       FlyoutBackgroundColor="{StaticResource ChromeBackground}"
+       FlyoutBehavior="Flyout">
+
+    <Shell.TitleView>
+        <Label x:Name="TitleLabel"
+               FontFamily="CookieRegular"
+               FontSize="32"
+               HorizontalOptions="Center"
+               Text="{Binding Source={x:Reference This}, Path=CurrentItem.Title}"
+               TextColor="{StaticResource ChromeText}"
+               TranslationX="-30"
+               VerticalOptions="Center" />
+    </Shell.TitleView>
+
+    <Shell.FlyoutHeader>
+        <Grid Margin="0,30,0,40" HeightRequest="200">
+            <Image Aspect="AspectFill"
+                   HorizontalOptions="Fill"
+                   Opacity="0.1"
+                   Source="pysar"
+                   VerticalOptions="Fill" />
+            <Label Padding="20"
+                   FontAttributes="Bold"
+                   FontFamily="CookieRegular"
+                   FontSize="42"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   Text="Pysar Samples"
+                   TextColor="{StaticResource ChromeText}"
+                   VerticalOptions="Center" />
+        </Grid>
+    </Shell.FlyoutHeader>
+
+    <Shell.ItemTemplate>
+        <DataTemplate x:DataType="ShellContent">
+            <Grid>
+                <Grid Padding="0,10" ColumnDefinitions="0.2*,0.8*">
+                    <!--
+                        The selected look is driven by IsChecked rather than by visual-state setters.
+                        A Setter carrying TargetName inside this template makes the flyout's
+                        UITableView reload the row it is in the middle of selecting, and that reload
+                        applies the state again - the app then spins at 100% on the main thread and
+                        never comes back. A root-level setter is safe; one aimed at a named child is
+                        not, so the children carry their own triggers instead.
+                    -->
+                    <Image Margin="5"
+                           HeightRequest="20"
+                           Source="{Binding FlyoutIcon}">
+                        <Image.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked}"
+                                         TargetType="Image"
+                                         Value="True">
+                                <Setter Property="Source">
+                                    <Setter.Value>
+                                        <FontImageSource FontFamily="FontAwesomeRegular"
+                                                         Glyph="circle-right"
+                                                         Size="14"
+                                                         Color="{StaticResource ChromeText}" />
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Image.Triggers>
+                    </Image>
+                    <Label Grid.Column="1"
+                           FontSize="16"
+                           Text="{Binding Title}"
+                           TextColor="{StaticResource ChromeText}"
+                           VerticalTextAlignment="Center">
+                        <Label.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked}"
+                                         TargetType="Label"
+                                         Value="True">
+                                <Setter Property="FontAttributes" Value="Bold" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                </Grid>
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{StaticResource ChromePill}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+</Shell>
