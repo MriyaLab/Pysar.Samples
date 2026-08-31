@@ -1,0 +1,43 @@
+<Project>
+  <!-- Central Package Management: all package versions defined here. -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Pysar -->
+    <PackageVersion Include="Pysar" Version="0.1.10" />
+    <PackageVersion Include="Pysar.Xaml" Version="0.1.10" />
+    <PackageVersion Include="Pysar.Maui" Version="0.1.10" />
+    <PackageVersion Include="Pysar.Avalonia" Version="0.1.10" />
+    <PackageVersion Include="Pysar.Blazor" Version="0.1.10" />
+    <PackageVersion Include="Pysar.Wpf" Version="0.1.10" />
+
+    <!-- Avalonia UI framework -->
+    <PackageVersion Include="Avalonia" Version="12.1.1" />
+    <PackageVersion Include="Avalonia.Desktop" Version="12.1.1" />
+    <PackageVersion Include="Avalonia.Fonts.Inter" Version="12.1.1" />
+    <PackageVersion Include="Avalonia.Themes.Fluent" Version="12.1.1" />
+    <PackageVersion Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.3" />
+
+    <!-- MAUI -->
+    <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.90" />
+
+    <!-- Blazor WebAssembly -->
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.11" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.11" />
+
+    <!-- SkiaSharp & Vector Graphics -->
+    <PackageVersion Include="SkiaSharp" Version="4.151.1" />
+    <PackageVersion Include="SkiaSharp.NativeAssets.Android" Version="4.151.1" />
+    <PackageVersion Include="SkiaSharp.NativeAssets.iOS" Version="4.151.1" />
+    <PackageVersion Include="SkiaSharp.NativeAssets.MacCatalyst" Version="4.151.1" />
+    <PackageVersion Include="SkiaSharp.NativeAssets.WebAssembly" Version="4.151.1" />
+    <PackageVersion Include="SkiaSharp.QrCode" Version="1.1.1" />
+
+    <!-- Misc -->
+    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.11" />
+    <PackageVersion Include="Tmds.DBus.Protocol" Version="0.94.2" />
+  </ItemGroup>
+</Project>

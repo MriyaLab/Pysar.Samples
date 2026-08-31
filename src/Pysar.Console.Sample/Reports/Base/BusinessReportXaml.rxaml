@@ -24,7 +24,7 @@
                    Width="Fill"
                    Height="Fill"
                    Margin="-50,0"
-                   BackgroundColor="Chocolate"
+				   BackgroundColor="Chocolate"
                    IsClippedToBounds="False">
                 <Text Width="200"
                       Height="Fill"

@@ -33,9 +33,9 @@
     </ItemGroup>
     
     <ItemGroup>
-      <PackageReference Include="Pysar" Version="0.1.10" />
-      <PackageReference Include="Pysar.Xaml" Version="0.1.10" />
-      <PackageReference Include="SkiaSharp.QrCode" Version="1.1.1" />
+      <PackageReference Include="Pysar" />
+      <PackageReference Include="Pysar.Xaml" />
+      <PackageReference Include="SkiaSharp.QrCode" />
     </ItemGroup>
     
 </Project>
