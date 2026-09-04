@@ -35,17 +35,12 @@
 
     <ReportHeaderBand Height="Auto" Margin="-50,-20,-50,20">
         <StackPanel Height="Auto">
-            <views:CompanyHeader CompanyAddress="One Portals Way, Twin Points WA, 98156"
-                                 CompanyEmail="northwind@mail.com"
-                                 CompanyName="Northwind Traders"
-                                 CompanyPhone="1-206-555-1417"
-                                 CompanyWebsite="www.northwind.com"
+            <views:CompanyHeader Company="{Binding Company}"
                                  DocumentDate="7/27/2024"
                                  DocumentDateLabel="To:"
                                  DocumentNumber="6/27/2024"
                                  DocumentNumberLabel="From:"
-                                 DocumentTitle="REVENUE"
-                                 LogoSource="Images/logo.svg" />
+                                 DocumentTitle="REVENUE" />
             <Grid Height="Auto"
                   Margin="0,20,0,0"
                   Padding="50,0"
@@ -82,7 +77,7 @@
                 </Grid>
                 <Grid Grid.Column="1"
                       Padding="16"
-                  VerticalAlignment="Center"
+                      VerticalAlignment="Center"
                       BackgroundColor="{StaticResource LightGray}"
                       ColumnDefinitions="Auto, *"
                       ColumnSpacing="8"

@@ -6,8 +6,8 @@
              xmlns:pysar="clr-namespace:Pysar.Maui;assembly=Pysar.Maui"
              xmlns:viewModels="clr-namespace:Pysar.Maui.Sample.ViewModels"
              Title="Pysar Sample"
-             Shell.NavBarIsVisible="False"
-             x:DataType="viewModels:ReportViewerViewModel">
+             x:DataType="viewModels:ReportViewerViewModel"
+             Shell.NavBarIsVisible="False">
 
     <ContentPage.Resources>
         <converters:IsNotEmptyConverter x:Key="IsNotEmpty" />
@@ -16,8 +16,9 @@
             <Setter Property="BackgroundColor" Value="#2F2F2F" />
             <Setter Property="Stroke" Value="#4A4A4A" />
             <Setter Property="StrokeThickness" Value="1" />
-            <Setter Property="StrokeShape" Value="RoundRectangle 16" />
-            <Setter Property="HeightRequest" Value="28" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 24" />
+            <Setter Property="HeightRequest" Value="48" />
+            <Setter Property="MinimumWidthRequest" Value="48" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="VerticalOptions" Value="Center" />
         </Style>
@@ -67,20 +68,33 @@
           RowSpacing="0">
         <Grid Padding="12,8"
               BackgroundColor="#1E1E1E"
-              ColumnDefinitions="Auto,Auto,*,Auto,Auto,Auto,Auto"
+              ColumnDefinitions="Auto,Auto,Auto,*,Auto,Auto,Auto,Auto"
               ColumnSpacing="8">
-            <Entry Style="{StaticResource ToolbarPageEntry}"
+            <Border Style="{StaticResource ToolbarPill}">
+                <Button Clicked="OnOpenFlyoutClicked" Style="{StaticResource ToolbarPillButton}">
+                    <Button.ImageSource>
+                        <FontImageSource FontFamily="FontAwesomeSolid"
+                                         Glyph="bars"
+                                         Size="14"
+                                         Color="#E8E8E8" />
+                    </Button.ImageSource>
+                </Button>
+            </Border>
+
+            <Entry Grid.Column="1"
+                   Style="{StaticResource ToolbarPageEntry}"
                    Text="{Binding CurrentPageText}" />
 
-            <Label Grid.Column="1"
+            <Label Grid.Column="2"
                    FontSize="12"
                    Text="{Binding PageCount, StringFormat='/ {0}'}"
                    TextColor="#9A9A9A"
                    VerticalOptions="Center" />
 
-            <Border Grid.Column="3" Style="{StaticResource ToolbarPill}">
+            <Border Grid.Column="4" Style="{StaticResource ToolbarPill}">
                 <HorizontalStackLayout Spacing="0">
                     <Button Command="{Binding ZoomOutCommand}"
+                            FontSize="18"
                             Style="{StaticResource ToolbarPillButton}"
                             Text="−" />
                     <BoxView BackgroundColor="#555555"
@@ -96,27 +110,43 @@
                              VerticalOptions="Center"
                              WidthRequest="1" />
                     <Button Command="{Binding ZoomInCommand}"
+                            FontSize="18"
                             Style="{StaticResource ToolbarPillButton}"
                             Text="+" />
                 </HorizontalStackLayout>
             </Border>
 
-            <Border Grid.Column="4" Style="{StaticResource ToolbarPill}">
-                <Button Command="{Binding ToggleFitCommand}"
-                        Style="{StaticResource ToolbarPillButton}"
-                        Text="{Binding FitButtonText}" />
-            </Border>
-
             <Border Grid.Column="5" Style="{StaticResource ToolbarPill}">
-                <Button Command="{Binding PrintCommand}"
-                        Style="{StaticResource ToolbarPillButton}"
-                        Text="Print" />
+                <Button Command="{Binding ToggleFitCommand}" Style="{StaticResource ToolbarPillButton}">
+                    <Button.ImageSource>
+                        <FontImageSource FontAutoScalingEnabled="True"
+                                         FontFamily="FontAwesomeSolid"
+                                         Glyph="{Binding FitButtonGlyph}"
+                                         Size="18" />
+                    </Button.ImageSource>
+                </Button>
             </Border>
 
             <Border Grid.Column="6" Style="{StaticResource ToolbarPill}">
-                <Button Command="{Binding ExportPdfCommand}"
-                        Style="{StaticResource ToolbarPillButton}"
-                        Text="Export" />
+                <Button Command="{Binding PrintCommand}" Style="{StaticResource ToolbarPillButton}">
+                    <Button.ImageSource>
+                        <FontImageSource FontAutoScalingEnabled="True"
+                                         FontFamily="FontAwesomeSolid"
+                                         Glyph="print"
+                                         Size="18" />
+                    </Button.ImageSource>
+                </Button>
+            </Border>
+
+            <Border Grid.Column="7" Style="{StaticResource ToolbarPill}">
+                <Button Command="{Binding ExportPdfCommand}" Style="{StaticResource ToolbarPillButton}">
+                    <Button.ImageSource>
+                        <FontImageSource FontAutoScalingEnabled="True"
+                                         FontFamily="FontAwesomeSolid"
+                                         Glyph="arrow-up-from-bracket"
+                                         Size="18" />
+                    </Button.ImageSource>
+                </Button>
             </Border>
         </Grid>
 
@@ -126,19 +156,19 @@
                TextColor="#C0392B" />
 
         <pysar:ReportView x:Name="Viewer"
-                            Grid.Row="2"
-                            BackgroundColor="#292929"
-                            CurrentPage="{Binding CurrentPage}"
-                            DocumentPadding="16"
-                            EffectiveZoom="{Binding EffectiveZoom}"
-                            PageBorderColor="#3E4351"
-                            PageBorderThickness="2"
-                            PageCount="{Binding PageCount, Mode=OneWayToSource}"
-                            PageSpacing="16"
-                            RenderBudget="256"
-                            RenderFailed="OnRenderFailed"
-                            Report="{Binding Report}"
-                            Zoom="{Binding Zoom}"
-                            ZoomMode="{Binding ZoomMode}" />
+                          Grid.Row="2"
+                          BackgroundColor="#292929"
+                          CurrentPage="{Binding CurrentPage}"
+                          DocumentPadding="16"
+                          EffectiveZoom="{Binding EffectiveZoom}"
+                          PageBorderColor="#3E4351"
+                          PageBorderThickness="2"
+                          PageCount="{Binding PageCount, Mode=OneWayToSource}"
+                          PageSpacing="16"
+                          RenderBudget="256"
+                          RenderFailed="OnRenderFailed"
+                          Report="{Binding Report}"
+                          Zoom="{Binding Zoom}"
+                          ZoomMode="{Binding ZoomMode}" />
     </Grid>
 </ContentPage>

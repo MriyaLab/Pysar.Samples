@@ -5,6 +5,8 @@ using Pysar.Avalonia;
 using Pysar.Elements;
 using Pysar.Export;
 using Pysar.Sample.Reports;
+using Pysar.Sample.Reports.Data;
+using Pysar.Sample.Reports.Reports.Invoice;
 using Pysar.Skia;
 using Pysar.Viewer.Zoom;
 
@@ -15,7 +17,7 @@ public sealed record ReportDescriptor(string Title, Func<Report> Create)
 {
     public static IReadOnlyList<ReportDescriptor> All { get; } =
     [
-        new("Invoice", () => new InvoiceReport(Invoice.CreateDesignInstance())),
+        new("Invoice", () => new InvoiceReport(InvoiceData.CreateDesignInstance())),
         new("Annual", () => new AnnualReport(AnnualLedger.CreateDesignInstance())),
         new("Revenue By Customer", () => new RevenueByCustomerReport(RevenueReportData.CreateDesignInstance()))
     ];

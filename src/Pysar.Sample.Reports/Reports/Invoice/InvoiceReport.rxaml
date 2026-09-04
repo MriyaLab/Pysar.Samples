@@ -1,19 +1,19 @@
-<Report x:Class="Pysar.Sample.Reports.InvoiceReport"
+<Report x:Class="Pysar.Sample.Reports.Reports.Invoice.InvoiceReport"
         xmlns="https://mriyalab.com/pysar"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:conv="clr-namespace:Pysar.Sample.Reports.Converters;assembly=Pysar.Sample.Reports"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:qrCode="clr-namespace:Pysar.Sample.Reports.QRCode;assembly=Pysar.Sample.Reports"
-        xmlns:reports="clr-namespace:Pysar.Sample.Reports;assembly=Pysar.Sample.Reports"
+        xmlns:reports="clr-namespace:Pysar.Sample.Reports.Data;assembly=Pysar.Sample.Reports"
         xmlns:views="clr-namespace:Pysar.Sample.Reports.Views;assembly=Pysar.Sample.Reports"
         x:Name="Root"
-        d:DataContext="{d:DesignInstance Type=reports:Invoice,
+        d:DataContext="{d:DesignInstance Type=reports:InvoiceData,
                                          IsDesignTimeCreatable=True}">
 
     <Report.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Styles/ReportStyles.rxaml" />
+                <ResourceDictionary Source="../../Styles/ReportStyles.rxaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <conv:UppercaseConverter x:Key="Upper" />
@@ -40,17 +40,12 @@
 
     <ReportHeaderBand Height="245" Margin="-50,-20,-50,0">
         <StackPanel Height="Auto">
-            <views:CompanyHeader CompanyAddress="One Portals Way, Twin Points WA, 98156"
-                                 CompanyEmail="northwind@mail.com"
-                                 CompanyName="Northwind Traders"
-                                 CompanyPhone="1-206-555-1417"
-                                 CompanyWebsite="www.northwind.com"
+            <views:CompanyHeader Company="{Binding Company}"
                                  DocumentDate="{Binding Date}"
                                  DocumentDateLabel="Invoice Date:"
                                  DocumentNumber="{Binding Number}"
                                  DocumentNumberLabel="Invoice №:"
-                                 DocumentTitle="{Binding Metadata.Title, Source={x:Reference Root}, Converter={StaticResource Upper}}"
-                                 LogoSource="Images/logo.svg" />
+                                 DocumentTitle="{Binding Metadata.Title, Source={x:Reference Root}, Converter={StaticResource Upper}}" />
             <Grid Height="Auto"
                   Margin="0,20,0,20"
                   Padding="50,0"
@@ -289,7 +284,7 @@
                       Content="{Binding Number}"
                       FontColor="{StaticResource DarkGray}"
                       FontFamily="LibreBarcode128"
-                      FontSize="55" />
+                      FontSize="70" />
             </Grid>
         </DetailBand.DetailFooter>
     </DetailBand>

@@ -1,5 +1,6 @@
 using Pysar.Binding;
 using Pysar.Elements;
+using Pysar.Sample.Reports.Data;
 
 namespace Pysar.Sample.Reports.Views;
 
@@ -10,6 +11,10 @@ namespace Pysar.Sample.Reports.Views;
 /// </summary>
 public partial class CompanyHeader
 {
+    
+    public static BindableProperty CompanyProperty { get; } =
+        BindableProperty.Create(nameof(Company), typeof(Organization), typeof(CompanyHeader), null, propertyChanged: OnCompanyPropertyChanged);
+
     public static BindableProperty LogoSourceProperty { get; } =
         BindableProperty.Create(nameof(LogoSource), typeof(ImageSource), typeof(CompanyHeader), null);
 
@@ -45,6 +50,25 @@ public partial class CompanyHeader
 
     public CompanyHeader() => InitializeComponent();
 
+    private static void OnCompanyPropertyChanged(BindableObject control, object? oldValue, object? newValue)
+    {
+        if (control is CompanyHeader companyHeader && newValue is Organization customer)
+        {
+            companyHeader.CompanyName = customer.Company;
+            companyHeader.CompanyAddress = customer.Address;
+            companyHeader.CompanyWebsite = customer.Website;
+            companyHeader.CompanyEmail = customer.Email;
+            companyHeader.CompanyPhone = customer.Phone;
+            companyHeader.LogoSource = new FileImageSource(customer.Logo);
+        }
+    }
+    
+    public Organization? Company
+    {
+        get => (Organization?)GetValue(CompanyProperty);
+        set => SetValue(CompanyProperty, value);
+    }
+    
     /// <summary>The company logo shown at the left edge of the banner.</summary>
     public ImageSource? LogoSource
     {
@@ -76,7 +100,7 @@ public partial class CompanyHeader
         set => SetValue(CompanyEmailProperty, value);
     }
 
-    public string CompanyWebsite
+    public string? CompanyWebsite
     {
         get => (string)GetValue(CompanyWebsiteProperty)!;
         set => SetValue(CompanyWebsiteProperty, value);

@@ -154,7 +154,7 @@
             <Text Grid.Column="4"
                   HorizontalAlignment="End"
                   VerticalAlignment="Center"
-                  Content="{Binding Balance}"
+				  Content="{Binding Balance}"
                   FontFamily="Kanit"
                   FontSize="14">
                 <Text.Triggers>

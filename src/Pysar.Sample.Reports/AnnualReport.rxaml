@@ -38,17 +38,12 @@
 
     <ReportHeaderBand Height="215" Margin="-50,-20,-50,0">
         <StackPanel Height="Auto">
-            <views:CompanyHeader CompanyAddress="One Portals Way, Twin Points WA, 98156"
-                                 CompanyEmail="northwind@mail.com"
-                                 CompanyName="{Binding Company}"
-                                 CompanyPhone="1-206-555-1417"
-                                 CompanyWebsite="www.northwind.com"
+            <views:CompanyHeader Company="{Binding Company}"
                                  DocumentDate="01/15/26"
                                  DocumentDateLabel="Prepared:"
                                  DocumentNumber="{Binding YearLabel}"
                                  DocumentNumberLabel="Year:"
-                                 DocumentTitle="{Binding Metadata.Title, Source={x:Reference Root}, Converter={StaticResource Upper}}"
-                                 LogoSource="Images/logo.svg" />
+                                 DocumentTitle="{Binding Metadata.Title, Source={x:Reference Root}, Converter={StaticResource Upper}}" />
 
             <!--  Year at a glance: the totals aggregated from every month's entries.  -->
             <Grid Height="Auto"

@@ -1,8 +1,10 @@
 using Pysar.Core.Abstractions;
+using Pysar.Sample.Reports.Data;
 
 namespace Pysar.Sample.Reports;
 
 public sealed record RevenueReportData(
+    Organization Company,
     IReadOnlyList<RevenueCustomer> Customers,
     decimal TotalRevenue,
     int OrderCount,
@@ -217,7 +219,7 @@ public static class RevenueData
         var orderCount = allOrders.Length;
         var averageSaleAmount = orderCount == 0 ? 0m : Math.Round(totalRevenue / orderCount, 0);
 
-        return new RevenueReportData(customers, totalRevenue, orderCount, averageSaleAmount);
+        return new RevenueReportData(Organization.GetOwnCompany, customers, totalRevenue, orderCount, averageSaleAmount);
     }
 
     private static RevenueCustomer Customer(

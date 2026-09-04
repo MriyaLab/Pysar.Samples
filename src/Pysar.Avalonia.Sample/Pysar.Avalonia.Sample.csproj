@@ -41,6 +41,7 @@
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="pysar.xaml" />
 
     <!--
       Pinned ahead of what Avalonia's Linux support pulls in transitively: 0.21.2 carries a known

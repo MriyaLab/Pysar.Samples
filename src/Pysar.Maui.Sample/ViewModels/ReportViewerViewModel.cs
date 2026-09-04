@@ -81,7 +81,7 @@ public sealed class ReportViewerViewModel : INotifyPropertyChanged
             if (!SetField(ref _zoomMode, value))
                 return;
 
-            OnPropertyChanged(nameof(FitButtonText));
+            OnPropertyChanged(nameof(FitButtonGlyph));
         }
     }
 
@@ -110,7 +110,7 @@ public sealed class ReportViewerViewModel : INotifyPropertyChanged
 
     public string ZoomText => $"{Math.Round(EffectiveZoom * 100)}%";
 
-    public string FitButtonText => ZoomMode == ReportZoomMode.FitWidth ? "Fit Page" : "Fit Width";
+    public string FitButtonGlyph => ZoomMode == ReportZoomMode.FitWidth ? "expand" : "arrows-left-right";
 
     public int CurrentPage
     {

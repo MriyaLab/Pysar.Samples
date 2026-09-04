@@ -16,79 +16,89 @@
     <Grid Height="Fill"
           Padding="50,20"
           BackgroundColor="{StaticResource LightGray}"
-          ColumnDefinitions="Auto, 170, *, 70, 90"
-          RowDefinitions="Auto, Auto, Auto, Auto, Auto"
-          RowSpacing="4">
+          ColumnDefinitions="Auto, 170, *, 200"
+          ColumnSpacing="20">
 
         <Image Grid.Row="0"
-               Grid.RowSpan="5"
                Grid.Column="0"
                Width="60"
                Height="60"
                Margin="0,0,10,0"
                Source="{Binding LogoSource, Source={x:Reference Root}}" />
 
-        <Text Grid.Row="0"
+        <Grid Grid.Row="0"
               Grid.Column="1"
-              Content="{Binding CompanyName, Source={x:Reference Root}}"
-              FontColor="{StaticResource DarkGray}"
-              FontSize="12"
-              FontStyle="Bold" />
-        <Text Grid.Row="1"
-              Grid.Column="1"
-              Content="{Binding CompanyAddress, Source={x:Reference Root}}"
-              FontColor="{StaticResource DarkGray}"
-              FontSize="9" />
-        <Text Grid.Row="2"
-              Grid.Column="1"
-              Content="{Binding CompanyPhone, Source={x:Reference Root}}"
-              FontColor="{StaticResource DarkGray}"
-              FontSize="9" />
-        <Text Grid.Row="3"
-              Grid.Column="1"
-              Content="{Binding CompanyEmail, Source={x:Reference Root}}"
-              FontColor="{StaticResource DarkGray}"
-              FontSize="9" />
-        <Text Grid.Row="4"
-              Grid.Column="1"
-              Content="{Binding CompanyWebsite, Source={x:Reference Root}}"
-              FontColor="{StaticResource DarkGray}"
-              FontSize="9" />
-        <!--  Spans the filler column too, so a long title such as "ANNUAL REPORT" still fits.  -->
-        <Text Grid.Row="0"
-              Grid.RowSpan="3"
-              Grid.Column="2"
-              Grid.ColumnSpan="3"
-              HorizontalAlignment="End"
-              VerticalAlignment="Start"
-              Content="{Binding DocumentTitle, Source={x:Reference Root}}"
-              FontColor="{StaticResource DarkGray}"
-              FontSize="36"
-              FontStyle="Bold"
-              TextTrimming="WordWrap" />
-        <Text Grid.Row="3"
-              Grid.Column="3"
-              HorizontalAlignment="End"
-              Content="{Binding DocumentNumberLabel, Source={x:Reference Root}}"
-              Style="{StaticResource FieldLabel}"
-              TextTrimming="None" />
-        <Text Grid.Row="3"
-              Grid.Column="4"
-              HorizontalAlignment="End"
-              Content="{Binding DocumentNumber, Source={x:Reference Root}}"
-              FontStyle="Bold"
-              Style="{StaticResource FieldValue}" />
-        <Text Grid.Row="4"
-              Grid.Column="3"
-              HorizontalAlignment="End"
-              Content="{Binding DocumentDateLabel, Source={x:Reference Root}}"
-              Style="{StaticResource FieldLabel}"
-              TextTrimming="None" />
-        <Text Grid.Row="4"
-              Grid.Column="4"
-              HorizontalAlignment="End"
-              Content="{Binding DocumentDate, Source={x:Reference Root}}"
-              FontStyle="Bold"
-              Style="{StaticResource FieldValue}" />
+              RowDefinitions="Auto, Auto, Auto, Auto, Auto"
+              RowSpacing="4">
+            <Text Grid.Row="0"
+                  Content="{Binding CompanyName, Source={x:Reference Root}}"
+                  FontColor="{StaticResource DarkGray}"
+                  FontSize="12"
+                  FontStyle="Bold" />
+            <Text Grid.Row="1"
+                  Content="{Binding CompanyAddress, Source={x:Reference Root}}"
+                  FontColor="{StaticResource DarkGray}"
+                  FontSize="9" />
+            <Text Grid.Row="2"
+                  Content="{Binding CompanyPhone, Source={x:Reference Root}}"
+                  FontColor="{StaticResource DarkGray}"
+                  FontSize="9" />
+            <Text Grid.Row="3"
+                  Content="{Binding CompanyEmail, Source={x:Reference Root}}"
+                  FontColor="{StaticResource DarkGray}"
+                  FontSize="9" />
+            <Text Grid.Row="4"
+                  Content="{Binding CompanyWebsite, Source={x:Reference Root}}"
+                  FontColor="{StaticResource DarkGray}"
+                  FontSize="9" />
+        </Grid>
+
+        <StackPanel Grid.Column="3" Orientation="Vertical">
+
+            <Text HorizontalAlignment="End"
+                  VerticalAlignment="Start"
+                  Content="{Binding DocumentTitle, Source={x:Reference Root}}"
+                  FontColor="{StaticResource DarkGray}"
+                  FontSize="36"
+                  FontStyle="Bold"
+                  LineHeight="1"
+                  TextTrimming="WordWrap" />
+
+            <Grid Width="90"
+                  HorizontalAlignment="End"
+                  ColumnDefinitions="Auto, Auto"
+                  ColumnSpacing="4"
+                  RowDefinitions="Auto, Auto"
+                  RowSpacing="4">
+                <Text Grid.Row="0"
+                      Grid.Column="0"
+                      HorizontalAlignment="End"
+                      Content="{Binding DocumentNumberLabel, Source={x:Reference Root}}"
+                      Style="{StaticResource FieldLabel}"
+                      TextTrimming="None" />
+                <Text Grid.Row="0"
+                      Grid.Column="1"
+                      HorizontalAlignment="End"
+                      Content="{Binding DocumentNumber, Source={x:Reference Root}}"
+                      FontStyle="Bold"
+                      Style="{StaticResource FieldValue}" />
+                <Text Grid.Row="1"
+                      Grid.Column="0"
+                      HorizontalAlignment="End"
+                      Content="{Binding DocumentDateLabel, Source={x:Reference Root}}"
+                      Style="{StaticResource FieldLabel}"
+                      TextTrimming="None" />
+                <Text Grid.Row="1"
+                      Grid.Column="1"
+                      HorizontalAlignment="End"
+                      Content="{Binding DocumentDate, Source={x:Reference Root}}"
+                      FontStyle="Bold"
+                      Style="{StaticResource FieldValue}" />
+            </Grid>
+        </StackPanel>
+
+        <!--
+            Spans the filler column too, so a long title such as "ANNUAL REPORT" still fits.
+        -->
     </Grid>
 </ReportView>

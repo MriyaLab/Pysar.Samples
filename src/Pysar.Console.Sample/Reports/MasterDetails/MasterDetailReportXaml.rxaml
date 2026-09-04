@@ -17,13 +17,13 @@
     </Report.Resources>
 
     <PageFormat Margin="50"
-                Orientation="Landscape"
+				Orientation="Landscape"
                 Size="A4" />
 
     <PageHeaderBand Height="30"
                     Margin="-50,-50,-50,15"
                     Padding="25,0"
-                    BackgroundColor="{StaticResource LightGray}">
+					BackgroundColor="{StaticResource LightGray}">
         <StackPanel Width="Auto"
                     Height="Auto"
                     HorizontalAlignment="Start"

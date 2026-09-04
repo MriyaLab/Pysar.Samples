@@ -1,5 +1,7 @@
 using Pysar.Elements;
 using Pysar.Sample.Reports;
+using Pysar.Sample.Reports.Data;
+using Pysar.Sample.Reports.Reports.Invoice;
 
 namespace Pysar.Maui.Sample.Services;
 
@@ -8,7 +10,7 @@ public sealed record ReportDescriptor(string Title, string FileName, string Flyo
 {
     public static IReadOnlyList<ReportDescriptor> All { get; } =
     [
-        new("Invoice", "InvoiceReport.pdf", "file-invoice-dollar", () => new InvoiceReport(Invoice.CreateDesignInstance())),
+        new("Invoice", "InvoiceReport.pdf", "file-invoice-dollar", () => new InvoiceReport(InvoiceData.CreateDesignInstance())),
         new("Annual", "AnnualReport.pdf", "chart-line", () => new AnnualReport(AnnualLedger.CreateDesignInstance())),
         new("Revenue By Customer", "RevenueByCustomer.pdf", "users", () => new RevenueByCustomerReport(RevenueReportData.CreateDesignInstance()))
     ];

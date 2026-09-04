@@ -14,6 +14,12 @@ public partial class ReportViewerPage : ContentPage
         BindingContext = viewModel;
     }
 
+    private void OnOpenFlyoutClicked(object? sender, EventArgs e)
+    {
+        if (Shell.Current is not null)
+            Shell.Current.FlyoutIsPresented = true;
+    }
+
     /// <summary>Surfaces a viewer failure in the same label the export uses.</summary>
     private void OnRenderFailed(object? sender, Exception exception)
     {

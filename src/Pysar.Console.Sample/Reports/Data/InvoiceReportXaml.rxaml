@@ -4,6 +4,8 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:reports="clr-namespace:Pysar.Console.Sample.Reports.Data;assembly=Pysar.Console.Sample"
       x:Name="Root"
+	  BorderThickness="0.5"
+	  BorderColor="Gainsboro"
       d:DataContext="{d:DesignInstance Type=reports:Invoice,
                                          IsDesignTimeCreatable=True}"
       x:DataType="reports:Invoice">

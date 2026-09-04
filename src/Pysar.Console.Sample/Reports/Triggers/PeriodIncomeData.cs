@@ -10,21 +10,21 @@ public sealed record PeriodIncome(
     public decimal Total => Items.Sum(item => item.Balance);
 
     public static PeriodIncome CreateDesignInstance() => new(
-        "Nexus IT Solutions",
+        "Mriya Lab",
         "01 Aug 2026 – 26 Aug 2026",
         [
             new CompanyIncome(1, "Pacific Healthcare Group", 9600m, 7200m, false),
             new CompanyIncome(2, "Harbor Logistics", 4100m, 6350m, false),
-            new CompanyIncome(3, "Nexus IT Solutions", 18400m, 12150m, true),
+            new CompanyIncome(3, "Mriya Lab", 18400m, 12150m, true),
             new CompanyIncome(4, "Apex Manufacturing", 15200m, 9800m, false),
             new CompanyIncome(5, "Redwood Retail", 2800m, 4100m, false)
         ]);
 
     public static PeriodIncome CreateSample() => new(
-        "Nexus IT Solutions",
+        "Mriya Lab",
         "01 Aug 2026 – 26 Aug 2026",
         [
-            new CompanyIncome(1, "Nexus IT Solutions", 42850m, 28640m, true),
+            new CompanyIncome(1, "Mriya Lab", 42850m, 28640m, true),
             new CompanyIncome(2, "Pacific Healthcare Group", 31200m, 18450m, false),
             new CompanyIncome(3, "Harbor Logistics", 9400m, 12870m, false),
             new CompanyIncome(4, "Apex Manufacturing", 18750m, 14200m, false),

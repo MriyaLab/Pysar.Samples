@@ -1,4 +1,5 @@
 using Pysar.Core.Abstractions;
+using Pysar.Sample.Reports.Data;
 
 namespace Pysar.Sample.Reports;
 
@@ -36,7 +37,7 @@ public sealed record MonthSummary(string Name, IReadOnlyList<LedgerEntry> Entrie
 }
 
 /// <summary>The report's root record: a year of months, each carrying its own bookings.</summary>
-public sealed record AnnualLedger(int Year, string Company, IReadOnlyList<MonthSummary> Months)
+public sealed record AnnualLedger(int Year, Organization Company, IReadOnlyList<MonthSummary> Months)
     : IDesignTimeCreatable<AnnualLedger>
 {
     /// <summary>The year as text, because the header component's parameters are strings.</summary>

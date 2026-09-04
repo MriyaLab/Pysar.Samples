@@ -24,9 +24,9 @@
                    Width="Fill"
                    Height="Fill"
                    Margin="-50,0"
-				   BackgroundColor="Chocolate"
+                   BackgroundColor="Chocolate"
                    IsClippedToBounds="False">
-                <Text Width="200"
+                <Text Width="300"
                       Height="Fill"
                       Content="BUSINESS REPORT"
                       FontColor="White"
@@ -34,7 +34,7 @@
                       FontSize="38"
                       FontStyle="Bold"
                       LineHeight="1"
-                      Position="50,-10" />
+                      Position="50,0" />
             </Frame>
 
             <StackPanel Grid.Row="2"

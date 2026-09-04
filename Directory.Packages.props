@@ -2,39 +2,47 @@
   <!-- Central Package Management: all package versions defined here. -->
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <!-- Without this, a PackageVersion pin only overrides a package that some project references
+         directly - SkiaSharp.NativeAssets.Win32/macOS here are always transitive (pulled in via
+         Pysar/Pysar.Xaml and SkiaSharp.QrCode), so the pins below did nothing for them until this
+         was turned on, and whichever transitive version NuGet's own resolution preferred kept
+         winning regardless of what was pinned. -->
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
-
   <ItemGroup>
     <!-- Pysar -->
-    <PackageVersion Include="Pysar" Version="0.1.10" />
-    <PackageVersion Include="Pysar.Xaml" Version="0.1.10" />
-    <PackageVersion Include="Pysar.Maui" Version="0.1.10" />
-    <PackageVersion Include="Pysar.Avalonia" Version="0.1.10" />
-    <PackageVersion Include="Pysar.Blazor" Version="0.1.10" />
+    <PackageVersion Include="Pysar" Version="0.1.17" />
+    <PackageVersion Include="Pysar.Xaml" Version="0.1.17" />
+    <PackageVersion Include="Pysar.Maui" Version="0.1.17" />
+    <PackageVersion Include="Pysar.Avalonia" Version="0.1.17" />
+    <PackageVersion Include="Pysar.Blazor" Version="0.1.17" />
     <PackageVersion Include="Pysar.Wpf" Version="0.1.10" />
-
     <!-- Avalonia UI framework -->
     <PackageVersion Include="Avalonia" Version="12.1.1" />
     <PackageVersion Include="Avalonia.Desktop" Version="12.1.1" />
     <PackageVersion Include="Avalonia.Fonts.Inter" Version="12.1.1" />
     <PackageVersion Include="Avalonia.Themes.Fluent" Version="12.1.1" />
     <PackageVersion Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.3" />
-
     <!-- MAUI -->
     <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.90" />
-
     <!-- Blazor WebAssembly -->
     <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.11" />
     <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.11" />
-
     <!-- SkiaSharp & Vector Graphics -->
+    <PackageVersion Include="pysar.xaml" Version="0.1.17" />
     <PackageVersion Include="SkiaSharp" Version="4.151.1" />
+    <!-- Win32/macOS need pinning too, same as the platforms below: left implicit, a transitive
+         dependency on an older SkiaSharp line (SkiaSharp.QrCode 1.1.1 wants 4.148.0) can resolve its
+         own native asset separately from the version this project references, and whichever native
+         binary's copy lands last in the output is what actually runs - see Pysar's own
+         Directory.Packages.props for the exception that produces. -->
+    <PackageVersion Include="SkiaSharp.NativeAssets.Win32" Version="4.151.1" />
+    <PackageVersion Include="SkiaSharp.NativeAssets.macOS" Version="4.151.1" />
     <PackageVersion Include="SkiaSharp.NativeAssets.Android" Version="4.151.1" />
     <PackageVersion Include="SkiaSharp.NativeAssets.iOS" Version="4.151.1" />
     <PackageVersion Include="SkiaSharp.NativeAssets.MacCatalyst" Version="4.151.1" />
     <PackageVersion Include="SkiaSharp.NativeAssets.WebAssembly" Version="4.151.1" />
     <PackageVersion Include="SkiaSharp.QrCode" Version="1.1.1" />
-
     <!-- Misc -->
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.11" />

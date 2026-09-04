@@ -1,3 +1,5 @@
+using Pysar.Sample.Reports.Data;
+
 namespace Pysar.Sample.Reports;
 
 /// <summary>
@@ -32,7 +34,7 @@ public static class AnnualData
 
     public static AnnualLedger Ledger { get; } = new(
         2025,
-        "Northwind Traders",
+        Organization.GetOwnCompany,
         MonthNames.Select(BuildMonth).ToArray());
 
     private static MonthSummary BuildMonth(string name, int index)

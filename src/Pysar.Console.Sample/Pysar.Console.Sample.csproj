@@ -38,4 +38,10 @@
       <PackageReference Include="SkiaSharp.QrCode" />
     </ItemGroup>
     
+    <ItemGroup>
+      <Content Update="Fonts\LibreBarcode128-Regular.ttf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+    
 </Project>

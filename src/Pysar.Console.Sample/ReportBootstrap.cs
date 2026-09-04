@@ -19,6 +19,8 @@ public sealed class ReportBootstrap : IReportBootstrap
         fonts.AddFont("Fonts/Kanit-Regular.ttf", "Kanit");
         fonts.AddFont("Fonts/Ubuntu-Bold.ttf", "Ubuntu", FontStyle.Bold);
         fonts.AddFont("Fonts/Ubuntu-Regular.ttf", "Ubuntu");
+        fonts.AddFont("Fonts/LibreBarcode128-Regular.ttf", "LibreBarcode128");
+        
         renderer.WithDrawer<QRCode>(new QRCodeDrawer());
     }
 }
