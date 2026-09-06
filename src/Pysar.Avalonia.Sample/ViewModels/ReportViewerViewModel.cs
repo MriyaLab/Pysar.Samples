@@ -1,4 +1,5 @@
 using System.Globalization;
+using Avalonia.Data.Converters;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Pysar.Avalonia;
@@ -91,6 +92,10 @@ public sealed partial class ReportViewerViewModel : ViewModelBase
 
     public string FitButtonText => ZoomMode == ReportZoomMode.FitWidth ? "Fit Page" : "Fit Width";
 
+    public bool IsFitWidth => ZoomMode == ReportZoomMode.FitWidth;
+
+    public bool IsFitPage => ZoomMode == ReportZoomMode.FitPage;
+
     /// <summary>The page number for the toolbar's entry; text that is not a number is ignored.</summary>
     public string CurrentPageText
     {
@@ -106,7 +111,12 @@ public sealed partial class ReportViewerViewModel : ViewModelBase
 
     partial void OnReportChanged(Report? value) => PrintCommand.NotifyCanExecuteChanged();
 
-    partial void OnZoomModeChanged(ReportZoomMode value) => OnPropertyChanged(nameof(FitButtonText));
+    partial void OnZoomModeChanged(ReportZoomMode value)
+    {
+        OnPropertyChanged(nameof(FitButtonText));
+        OnPropertyChanged(nameof(IsFitWidth));
+        OnPropertyChanged(nameof(IsFitPage));
+    }
 
     partial void OnCurrentPageChanged(int value) => OnPropertyChanged(nameof(CurrentPageText));
 
@@ -164,6 +174,21 @@ public sealed partial class ReportViewerViewModel : ViewModelBase
         => ZoomMode = ZoomMode == ReportZoomMode.FitWidth ? ReportZoomMode.FitPage : ReportZoomMode.FitWidth;
 
     [RelayCommand]
+    private void SelectReport(ReportDescriptor? descriptor)
+    {
+        if (descriptor is null)
+            return;
+
+        SelectedReport = descriptor;
+    }
+
+    [RelayCommand]
+    private void FitWidth() => ZoomMode = ReportZoomMode.FitWidth;
+
+    [RelayCommand]
+    private void FitPage() => ZoomMode = ReportZoomMode.FitPage;
+
+    [RelayCommand]
     private void ZoomIn()
     {
         var next = ZoomSteps.FirstOrDefault(step => step > EffectiveZoom + 0.001);
@@ -187,4 +212,16 @@ public sealed partial class ReportViewerViewModel : ViewModelBase
         Zoom = zoom;
         ZoomMode = ReportZoomMode.Custom;
     }
+}
+
+/// <summary>
+///     True when the two multi-binding values are equal. Used so a Reports
+///     <c>MenuItem</c> checks itself against <c>SelectedReport</c>.
+/// </summary>
+public sealed class SelectedReportEqualsConverter : IMultiValueConverter
+{
+    public static SelectedReportEqualsConverter Instance { get; } = new();
+
+    public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
+        => values.Count == 2 && Equals(values[0], values[1]);
 }

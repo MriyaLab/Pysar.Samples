@@ -10,75 +10,139 @@
         Height="700"
         d:DesignHeight="700"
         d:DesignWidth="1000"
+        x:Name="Root"
         x:DataType="vm:ReportViewerViewModel"
         Background="#262626"
         Icon="/Assets/avalonia-logo.ico"
         mc:Ignorable="d">
 
     <Design.DataContext>
-        <!--
-            This only sets the DataContext for the previewer in an IDE,
-            to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs)
-        -->
         <vm:ReportViewerViewModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,Auto,*" RowSpacing="0">
+    <Window.KeyBindings>
+        <KeyBinding Gesture="Ctrl+P" Command="{Binding PrintCommand}" />
+        <KeyBinding Gesture="Ctrl+OemPlus" Command="{Binding ZoomInCommand}" />
+        <KeyBinding Gesture="Ctrl+Add" Command="{Binding ZoomInCommand}" />
+        <KeyBinding Gesture="Ctrl+OemMinus" Command="{Binding ZoomOutCommand}" />
+        <KeyBinding Gesture="Ctrl+Subtract" Command="{Binding ZoomOutCommand}" />
+        <KeyBinding Gesture="Ctrl+D0" Command="{Binding ActualSizeCommand}" />
+        <KeyBinding Gesture="Ctrl+W" Command="{Binding #Root.ExitCommand}" />
+    </Window.KeyBindings>
 
-        <StackPanel Margin="8"
-                    Orientation="Horizontal"
-                    Spacing="8">
-            <ComboBox Width="140"
-                      ItemsSource="{Binding Reports}"
-                      SelectedItem="{Binding SelectedReport}" />
+    <Grid RowDefinitions="Auto,Auto,Auto,*" RowSpacing="0">
 
-            <TextBox Width="52"
-                     Text="{Binding CurrentPageText}"
-                     TextAlignment="Center" />
+        <Menu>
+            <MenuItem Header="_File">
+                <MenuItem Command="{Binding PrintCommand}"
+                          Header="_Print"
+                          InputGesture="Ctrl+P" />
+                <Separator />
+                <MenuItem Command="{Binding #Root.ExitCommand}"
+                          Header="E_xit"
+                          InputGesture="Ctrl+W" />
+            </MenuItem>
 
-            <TextBlock VerticalAlignment="Center"
-                       Foreground="White"
-                       Text="{Binding PageCount, StringFormat='/ {0}'}" />
+            <MenuItem Header="_View">
+                <MenuItem Command="{Binding ZoomInCommand}"
+                          Header="Zoom _In"
+                          InputGesture="Ctrl++" />
+                <MenuItem Command="{Binding ZoomOutCommand}"
+                          Header="Zoom _Out"
+                          InputGesture="Ctrl+-" />
+                <MenuItem Command="{Binding ActualSizeCommand}"
+                          Header="_Actual Size"
+                          InputGesture="Ctrl+D0" />
+                <Separator />
+                <MenuItem Command="{Binding FitWidthCommand}"
+                          Header="Fit _Width"
+                          IsChecked="{Binding IsFitWidth, Mode=OneWay}"
+                          ToggleType="Radio" />
+                <MenuItem Command="{Binding FitPageCommand}"
+                          Header="Fit _Page"
+                          IsChecked="{Binding IsFitPage, Mode=OneWay}"
+                          ToggleType="Radio" />
+            </MenuItem>
 
-            <Button Width="36"
-                    Command="{Binding ZoomOutCommand}"
-                    Content="−" />
+            <MenuItem Header="_Reports" ItemsSource="{Binding Reports}">
+                <MenuItem.ItemContainerTheme>
+                    <ControlTheme TargetType="MenuItem" x:DataType="vm:ReportDescriptor"
+                                  BasedOn="{StaticResource {x:Type MenuItem}}">
+                        <Setter Property="Header" Value="{Binding Title}" />
+                        <Setter Property="Command" Value="{Binding #Root.((vm:ReportViewerViewModel)DataContext).SelectReportCommand}" />
+                        <Setter Property="CommandParameter" Value="{Binding}" />
+                        <Setter Property="ToggleType" Value="Radio" />
+                        <Setter Property="IsChecked">
+                            <Setter.Value>
+                                <MultiBinding Converter="{x:Static vm:SelectedReportEqualsConverter.Instance}" Mode="OneWay">
+                                    <Binding Path="#Root.((vm:ReportViewerViewModel)DataContext).SelectedReport" />
+                                    <Binding />
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                    </ControlTheme>
+                </MenuItem.ItemContainerTheme>
+            </MenuItem>
+        </Menu>
 
-            <Button Width="64"
-                    Command="{Binding ActualSizeCommand}"
-                    Content="{Binding ZoomText}" />
+        <Border Grid.Row="1"
+                Background="#323232"
+                BorderBrush="#3A3A3A"
+                BorderThickness="0,0,0,1">
+            <StackPanel Margin="8"
+                        Orientation="Horizontal"
+                        Spacing="8">
+                <ComboBox Width="140"
+                          ItemsSource="{Binding Reports}"
+                          SelectedItem="{Binding SelectedReport}" />
 
-            <Button Width="36"
-                    Command="{Binding ZoomInCommand}"
-                    Content="+" />
+                <TextBox Width="52"
+                         Text="{Binding CurrentPageText}"
+                         TextAlignment="Center" />
 
-            <Button Command="{Binding ToggleFitCommand}" Content="{Binding FitButtonText}" />
+                <TextBlock VerticalAlignment="Center"
+                           Foreground="White"
+                           Text="{Binding PageCount, StringFormat='/ {0}'}" />
 
-            <Button Command="{Binding PrintCommand}" Content="Print" />
-        </StackPanel>
+                <Button Width="36"
+                        Command="{Binding ZoomOutCommand}"
+                        Content="−" />
 
-        <TextBlock Grid.Row="1"
+                <Button Width="64"
+                        Command="{Binding ActualSizeCommand}"
+                        Content="{Binding ZoomText}" />
+
+                <Button Width="36"
+                        Command="{Binding ZoomInCommand}"
+                        Content="+" />
+
+                <Button Command="{Binding ToggleFitCommand}" Content="{Binding FitButtonText}" />
+
+                <Button Command="{Binding PrintCommand}" Content="Print" />
+            </StackPanel>
+        </Border>
+
+        <TextBlock Grid.Row="2"
                    Margin="8,0"
                    Foreground="#C0392B"
                    IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                    Text="{Binding ErrorMessage}" />
 
         <pysar:ReportView x:Name="Viewer"
-                            Grid.Row="2"
-                            Background="#292929"
-                            CurrentPage="{Binding CurrentPage}"
-                            DocumentPadding="16"
-                            EffectiveZoom="{Binding EffectiveZoom}"
-                            PageBorderColor="#3E4351"
-                            PageBorderThickness="2"
-                            PageCount="{Binding PageCount, Mode=OneWayToSource}"
-                            PageSpacing="16"
-                            RenderBudget="256"
-                            RenderFailed="OnRenderFailed"
-                            Report="{Binding Report}"
-                            Zoom="{Binding Zoom}"
-                            ZoomMode="{Binding ZoomMode}" />
-
+                          Grid.Row="3"
+                          Background="#292929"
+                          CurrentPage="{Binding CurrentPage}"
+                          DocumentPadding="16"
+                          EffectiveZoom="{Binding EffectiveZoom}"
+                          PageBorderColor="#3E4351"
+                          PageBorderThickness="2"
+                          PageCount="{Binding PageCount, Mode=OneWayToSource}"
+                          PageSpacing="16"
+                          RenderBudget="256"
+                          RenderFailed="OnRenderFailed"
+                          Report="{Binding Report}"
+                          Zoom="{Binding Zoom}"
+                          ZoomMode="{Binding ZoomMode}" />
     </Grid>
 
 </Window>

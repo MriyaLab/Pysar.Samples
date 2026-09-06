@@ -6,8 +6,9 @@ The Pysar viewer on the Avalonia desktop — Windows, macOS and Linux from one `
 dotnet run --project src/Pysar.Avalonia.Sample
 ```
 
-A 1000×700 window with a toolbar (report picker, page box, zoom controls, fit toggle, print) above a
-`ReportView` filling the rest. The reports come from
+A 1000×700 window with an in-window `Menu` (File / View / Reports), a toolbar (report picker, page
+box, zoom controls, fit toggle, print), and a `ReportView` filling the rest. Shortcuts: Ctrl+P print,
+Ctrl++ / Ctrl+- zoom, Ctrl+0 actual size, Ctrl+W exit. The reports come from
 [Pysar.Sample.Reports](../Pysar.Sample.Reports); this is what they look like rendered by the shared
 viewer control:
 
