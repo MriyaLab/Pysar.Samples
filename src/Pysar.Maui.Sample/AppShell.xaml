@@ -20,7 +20,8 @@
 
     <Shell.FlyoutHeader>
         <Grid Margin="0,30,0,40" HeightRequest="200">
-            <Image Aspect="AspectFill"
+            <Image Margin="10"
+                   Aspect="AspectFit"
                    HorizontalOptions="Fill"
                    Opacity="0.1"
                    Source="pysar"

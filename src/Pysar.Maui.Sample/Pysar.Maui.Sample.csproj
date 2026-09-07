@@ -46,9 +46,11 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'"
-				  BaseSize="128,128"
-		          Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\mac_appiconfg.svg" Color="#141414"/>
+		<!--
+			Mac Catalyst uses Platforms/MacCatalyst/Resources/AppIcon.icns via CFBundleIconFile.
+			A MauiIcon here would emit an asset catalog (CFBundleIconName) and macOS would paint
+			the "iOS app on Mac" plate — or show no icon at all.
+		-->
 		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'"
 		          Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\ios_appiconfg.svg" Color="#141414"/>
 		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'"

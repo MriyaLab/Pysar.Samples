@@ -13,7 +13,7 @@
         x:Name="Root"
         x:DataType="vm:ReportViewerViewModel"
         Background="#262626"
-        Icon="/Assets/avalonia-logo.ico"
+         Icon="/Assets/pysar.png"
         mc:Ignorable="d">
 
     <Design.DataContext>
