@@ -1,0 +1,174 @@
+<Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--
+        The MAUI sample's toolbar pills and flyout rows, translated to Avalonia selectors:
+        where MAUI keys a style and applies it per control, Avalonia matches on a class.
+        See Pysar.Maui.Sample/Resources/Styles/Styles.xaml for the originals.
+    -->
+
+    <!--  Toolbar  -->
+
+    <Style Selector="Border.toolbar-pill">
+        <Setter Property="Background" Value="{StaticResource ChromePillBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource ChromeStrokeBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="24" />
+        <Setter Property="Height" Value="48" />
+        <Setter Property="MinWidth" Value="48" />
+        <Setter Property="ClipToBounds" Value="True" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="Border.toolbar-pill > StackPanel > Border.toolbar-pill-divider">
+        <Setter Property="Background" Value="{StaticResource ChromeDividerBrush}" />
+        <Setter Property="Width" Value="1" />
+        <Setter Property="Height" Value="16" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="Button.toolbar-pill-button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{StaticResource ChromeTextBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Padding" Value="10,0" />
+        <Setter Property="MinWidth" Value="28" />
+        <Setter Property="Height" Value="46" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="Button.toolbar-pill-button:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#14FFFFFF" />
+    </Style>
+
+    <Style Selector="Button.toolbar-pill-button:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="#28FFFFFF" />
+    </Style>
+
+    <Style Selector="Button.toolbar-pill-button:disabled /template/ ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="TextElement.Foreground" Value="{StaticResource ChromeMutedBrush}" />
+    </Style>
+
+    <!--  MAUI gives the zoom steps their own larger font so the signs read at a glance.  -->
+    <Style Selector="Button.toolbar-pill-button.step">
+        <Setter Property="FontSize" Value="18" />
+    </Style>
+
+    <!--  The zoom percentage sits in a fixed cell so stepping the zoom does not shift the pill.  -->
+    <Style Selector="Button.toolbar-pill-button.wide">
+        <Setter Property="Width" Value="52" />
+        <Setter Property="Padding" Value="0" />
+    </Style>
+
+    <!--  The icon sizes are the FontImageSource sizes of the MAUI toolbar.  -->
+    <Style Selector="Button.toolbar-pill-button.icon">
+        <Setter Property="FontFamily" Value="{StaticResource FontAwesomeSolid}" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="Width" Value="46" />
+        <Setter Property="Padding" Value="0" />
+    </Style>
+
+    <!--  Report panel  -->
+
+    <!--
+        The panel is a drawer at every window size, as the MAUI flyout is: hidden until the toolbar's
+        hamburger opens it, then drawn over a scrim above the content. The window carries the open
+        state as its "nav-open" class.
+    -->
+    <Style Selector="DockPanel.nav-panel">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <Style Selector="Window.nav-open DockPanel.nav-panel">
+        <Setter Property="IsVisible" Value="True" />
+    </Style>
+
+    <Style Selector="Border.nav-scrim">
+        <Setter Property="Background" Value="#80000000" />
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <Style Selector="Window.nav-open Border.nav-scrim">
+        <Setter Property="IsVisible" Value="True" />
+    </Style>
+
+    <Style Selector="TextBlock.nav-header-title">
+        <Setter Property="FontFamily" Value="{StaticResource Cookie}" />
+        <Setter Property="FontSize" Value="42" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource ChromeTextBrush}" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="TextAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="ListBox.nav-items">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+
+    <Style Selector="ListBox.nav-items ListBoxItem">
+        <Setter Property="Padding" Value="0,10" />
+        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="Foreground" Value="{StaticResource ChromeTextBrush}" />
+    </Style>
+
+    <Style Selector="ListBox.nav-items ListBoxItem:selected /template/ ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource ChromePillBrush}" />
+    </Style>
+
+    <Style Selector="ListBox.nav-items ListBoxItem:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#14FFFFFF" />
+    </Style>
+
+    <Style Selector="ListBox.nav-items ListBoxItem:selected TextBlock.nav-item-title">
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <Style Selector="TextBlock.nav-item-icon">
+        <Setter Property="FontFamily" Value="{StaticResource FontAwesomeSolid}" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="Foreground" Value="{StaticResource ChromeTextBrush}" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="TextBlock.nav-item-icon.marker">
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+
+    <Style Selector="TextBlock.nav-item-title">
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Foreground" Value="{StaticResource ChromeTextBrush}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <!--  Page indicator  -->
+
+    <Style Selector="Border.page-indicator">
+        <Setter Property="Background" Value="{StaticResource PageIndicatorBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource PageIndicatorStrokeBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="24" />
+        <Setter Property="Padding" Value="14,10" />
+        <Setter Property="Margin" Value="16" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+    </Style>
+
+    <Style Selector="Border.page-indicator TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource ChromeTextBrush}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="Border.page-indicator TextBlock.icon">
+        <Setter Property="FontFamily" Value="{StaticResource FontAwesomeSolid}" />
+    </Style>
+
+</Styles>

@@ -5,15 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:pysar="using:Pysar.Avalonia"
         xmlns:vm="using:Pysar.Avalonia.Sample.ViewModels"
-        Title="Pysar.Avalonia.Sample"
+        x:Name="Root"
+        Title="Pysar Samples - Avalonia"
         Width="1000"
         Height="700"
         d:DesignHeight="700"
         d:DesignWidth="1000"
-        x:Name="Root"
         x:DataType="vm:ReportViewerViewModel"
-        Background="#262626"
-         Icon="/Assets/pysar.png"
+        Background="{StaticResource ChromeSurfaceBrush}"
+        Icon="/Assets/pysar.png"
         mc:Ignorable="d">
 
     <Design.DataContext>
@@ -21,128 +21,195 @@
     </Design.DataContext>
 
     <Window.KeyBindings>
-        <KeyBinding Gesture="Ctrl+P" Command="{Binding PrintCommand}" />
-        <KeyBinding Gesture="Ctrl+OemPlus" Command="{Binding ZoomInCommand}" />
-        <KeyBinding Gesture="Ctrl+Add" Command="{Binding ZoomInCommand}" />
-        <KeyBinding Gesture="Ctrl+OemMinus" Command="{Binding ZoomOutCommand}" />
-        <KeyBinding Gesture="Ctrl+Subtract" Command="{Binding ZoomOutCommand}" />
-        <KeyBinding Gesture="Ctrl+D0" Command="{Binding ActualSizeCommand}" />
-        <KeyBinding Gesture="Ctrl+W" Command="{Binding #Root.ExitCommand}" />
+        <KeyBinding Command="{Binding PrintCommand}" Gesture="Ctrl+P" />
+        <KeyBinding Command="{Binding #Root.ExportPdfCommand}" Gesture="Ctrl+E" />
+        <KeyBinding Command="{Binding ZoomInCommand}" Gesture="Ctrl+OemPlus" />
+        <KeyBinding Command="{Binding ZoomInCommand}" Gesture="Ctrl+Add" />
+        <KeyBinding Command="{Binding ZoomOutCommand}" Gesture="Ctrl+OemMinus" />
+        <KeyBinding Command="{Binding ZoomOutCommand}" Gesture="Ctrl+Subtract" />
+        <KeyBinding Command="{Binding ActualSizeCommand}" Gesture="Ctrl+D0" />
+        <KeyBinding Command="{Binding #Root.ExitCommand}" Gesture="Ctrl+W" />
     </Window.KeyBindings>
 
-    <Grid RowDefinitions="Auto,Auto,Auto,*" RowSpacing="0">
+    <!--
+        The report list is a drawer, as the MAUI Shell flyout is: hidden until the toolbar's
+        hamburger opens it, whatever the window size. The window's "nav-open" class carries that
+        state; see Themes/Styles.axaml. The panel comes last so it draws above the scrim.
+    -->
+    <Panel>
 
-        <Menu>
-            <MenuItem Header="_File">
-                <MenuItem Command="{Binding PrintCommand}"
-                          Header="_Print"
-                          InputGesture="Ctrl+P" />
-                <Separator />
-                <MenuItem Command="{Binding #Root.ExitCommand}"
-                          Header="E_xit"
-                          InputGesture="Ctrl+W" />
-            </MenuItem>
+        <Grid RowDefinitions="Auto,Auto,Auto,*">
 
-            <MenuItem Header="_View">
-                <MenuItem Command="{Binding ZoomInCommand}"
-                          Header="Zoom _In"
-                          InputGesture="Ctrl++" />
-                <MenuItem Command="{Binding ZoomOutCommand}"
-                          Header="Zoom _Out"
-                          InputGesture="Ctrl+-" />
-                <MenuItem Command="{Binding ActualSizeCommand}"
-                          Header="_Actual Size"
-                          InputGesture="Ctrl+D0" />
-                <Separator />
-                <MenuItem Command="{Binding FitWidthCommand}"
-                          Header="Fit _Width"
-                          IsChecked="{Binding IsFitWidth, Mode=OneWay}"
-                          ToggleType="Radio" />
-                <MenuItem Command="{Binding FitPageCommand}"
-                          Header="Fit _Page"
-                          IsChecked="{Binding IsFitPage, Mode=OneWay}"
-                          ToggleType="Radio" />
-            </MenuItem>
+            <Menu Background="{StaticResource ChromeBackgroundBrush}">
+                <MenuItem Header="_File">
+                    <MenuItem Command="{Binding PrintCommand}"
+                              Header="_Print"
+                              InputGesture="Ctrl+P" />
+                    <MenuItem Command="{Binding #Root.ExportPdfCommand}"
+                              Header="_Export PDF..."
+                              InputGesture="Ctrl+E" />
+                    <Separator />
+                    <MenuItem Command="{Binding #Root.ExitCommand}"
+                              Header="E_xit"
+                              InputGesture="Ctrl+W" />
+                </MenuItem>
 
-            <MenuItem Header="_Reports" ItemsSource="{Binding Reports}">
-                <MenuItem.ItemContainerTheme>
-                    <ControlTheme TargetType="MenuItem" x:DataType="vm:ReportDescriptor"
-                                  BasedOn="{StaticResource {x:Type MenuItem}}">
-                        <Setter Property="Header" Value="{Binding Title}" />
-                        <Setter Property="Command" Value="{Binding #Root.((vm:ReportViewerViewModel)DataContext).SelectReportCommand}" />
-                        <Setter Property="CommandParameter" Value="{Binding}" />
-                        <Setter Property="ToggleType" Value="Radio" />
-                        <Setter Property="IsChecked">
-                            <Setter.Value>
-                                <MultiBinding Converter="{x:Static vm:SelectedReportEqualsConverter.Instance}" Mode="OneWay">
-                                    <Binding Path="#Root.((vm:ReportViewerViewModel)DataContext).SelectedReport" />
-                                    <Binding />
-                                </MultiBinding>
-                            </Setter.Value>
-                        </Setter>
-                    </ControlTheme>
-                </MenuItem.ItemContainerTheme>
-            </MenuItem>
-        </Menu>
+                <MenuItem Header="_View">
+                    <MenuItem Command="{Binding ZoomInCommand}"
+                              Header="Zoom _In"
+                              InputGesture="Ctrl++" />
+                    <MenuItem Command="{Binding ZoomOutCommand}"
+                              Header="Zoom _Out"
+                              InputGesture="Ctrl+-" />
+                    <MenuItem Command="{Binding ActualSizeCommand}"
+                              Header="_Actual Size"
+                              InputGesture="Ctrl+D0" />
+                    <Separator />
+                    <MenuItem Command="{Binding FitWidthCommand}"
+                              Header="Fit _Width"
+                              IsChecked="{Binding IsFitWidth, Mode=OneWay}"
+                              ToggleType="Radio" />
+                    <MenuItem Command="{Binding FitPageCommand}"
+                              Header="Fit _Page"
+                              IsChecked="{Binding IsFitPage, Mode=OneWay}"
+                              ToggleType="Radio" />
+                </MenuItem>
+            </Menu>
 
-        <Border Grid.Row="1"
-                Background="#323232"
-                BorderBrush="#3A3A3A"
-                BorderThickness="0,0,0,1">
-            <StackPanel Margin="8"
-                        Orientation="Horizontal"
-                        Spacing="8">
-                <ComboBox Width="140"
-                          ItemsSource="{Binding Reports}"
-                          SelectedItem="{Binding SelectedReport}" />
+            <!--  The toolbar is the MAUI report page's: rounded pills on the dark chrome bar.  -->
+            <Grid Grid.Row="1"
+                  Background="{StaticResource ChromeBackgroundBrush}"
+                  ColumnDefinitions="Auto,*">
 
-                <TextBox Width="52"
-                         Text="{Binding CurrentPageText}"
-                         TextAlignment="Center" />
+                <Border Margin="12,8" Classes="toolbar-pill">
+                    <Button Classes="toolbar-pill-button icon"
+                            Click="OnNavToggleClick"
+                            Content="&#xf0c9;"
+                            FontSize="14"
+                            ToolTip.Tip="Reports" />
+                </Border>
 
-                <TextBlock VerticalAlignment="Center"
-                           Foreground="White"
-                           Text="{Binding PageCount, StringFormat='/ {0}'}" />
+                <StackPanel Grid.Column="1"
+                            Margin="12,8"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal"
+                            Spacing="8">
+                    <Border Classes="toolbar-pill">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Classes="toolbar-pill-button step"
+                                    Command="{Binding ZoomOutCommand}"
+                                    Content="−"
+                                    ToolTip.Tip="Zoom out" />
+                            <Border Classes="toolbar-pill-divider" />
+                            <Button Classes="toolbar-pill-button wide"
+                                    Command="{Binding ActualSizeCommand}"
+                                    Content="{Binding ZoomText}"
+                                    ToolTip.Tip="Actual size" />
+                            <Border Classes="toolbar-pill-divider" />
+                            <Button Classes="toolbar-pill-button step"
+                                    Command="{Binding ZoomInCommand}"
+                                    Content="+"
+                                    ToolTip.Tip="Zoom in" />
+                        </StackPanel>
+                    </Border>
 
-                <Button Width="36"
-                        Command="{Binding ZoomOutCommand}"
-                        Content="−" />
+                    <Border Classes="toolbar-pill">
+                        <Button Classes="toolbar-pill-button icon"
+                                Command="{Binding ToggleFitCommand}"
+                                Content="{Binding FitButtonGlyph}"
+                                ToolTip.Tip="Fit width or page" />
+                    </Border>
 
-                <Button Width="64"
-                        Command="{Binding ActualSizeCommand}"
-                        Content="{Binding ZoomText}" />
+                    <Border Classes="toolbar-pill">
+                        <Button Classes="toolbar-pill-button icon"
+                                Command="{Binding PrintCommand}"
+                                Content="&#xf02f;"
+                                ToolTip.Tip="Print" />
+                    </Border>
 
-                <Button Width="36"
-                        Command="{Binding ZoomInCommand}"
-                        Content="+" />
+                    <Border Classes="toolbar-pill">
+                        <Button Classes="toolbar-pill-button icon"
+                                Command="{Binding #Root.ExportPdfCommand}"
+                                Content="&#xe09a;"
+                                ToolTip.Tip="Export PDF" />
+                    </Border>
+                </StackPanel>
+            </Grid>
 
-                <Button Command="{Binding ToggleFitCommand}" Content="{Binding FitButtonText}" />
+            <TextBlock Grid.Row="2"
+                       Margin="12,0"
+                       Foreground="#C0392B"
+                       IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                       Text="{Binding ErrorMessage}" />
 
-                <Button Command="{Binding PrintCommand}" Content="Print" />
-            </StackPanel>
-        </Border>
+            <Panel Grid.Row="3">
+                <pysar:ReportView x:Name="Viewer"
+                                  Background="{StaticResource ChromeViewerBrush}"
+                                  CurrentPage="{Binding CurrentPage}"
+                                  DocumentPadding="16"
+                                  EffectiveZoom="{Binding EffectiveZoom}"
+                                  PageBorderColor="{StaticResource ChromePageBorder}"
+                                  PageBorderThickness="2"
+                                  PageCount="{Binding PageCount, Mode=OneWayToSource}"
+                                  PageSpacing="16"
+                                  RenderBudget="256"
+                                  RenderFailed="OnRenderFailed"
+                                  Report="{Binding Report}"
+                                  Zoom="{Binding Zoom}"
+                                  ZoomMode="{Binding ZoomMode}" />
 
-        <TextBlock Grid.Row="2"
-                   Margin="8,0"
-                   Foreground="#C0392B"
-                   IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                   Text="{Binding ErrorMessage}" />
+                <Border x:Name="PageIndicator"
+                        Classes="page-indicator"
+                        IsVisible="False">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Classes="icon" Text="&#xf15c;" />
+                        <TextBlock Text="{Binding PageIndicatorText}" />
+                    </StackPanel>
+                </Border>
+            </Panel>
+        </Grid>
 
-        <pysar:ReportView x:Name="Viewer"
-                          Grid.Row="3"
-                          Background="#292929"
-                          CurrentPage="{Binding CurrentPage}"
-                          DocumentPadding="16"
-                          EffectiveZoom="{Binding EffectiveZoom}"
-                          PageBorderColor="#3E4351"
-                          PageBorderThickness="2"
-                          PageCount="{Binding PageCount, Mode=OneWayToSource}"
-                          PageSpacing="16"
-                          RenderBudget="256"
-                          RenderFailed="OnRenderFailed"
-                          Report="{Binding Report}"
-                          Zoom="{Binding Zoom}"
-                          ZoomMode="{Binding ZoomMode}" />
-    </Grid>
+        <Border Classes="nav-scrim" PointerPressed="OnNavScrimPressed" />
+
+        <DockPanel Width="250"
+                   HorizontalAlignment="Left"
+                   Background="{StaticResource ChromeBackgroundBrush}"
+                   Classes="nav-panel">
+            <Panel Height="200"
+                   Margin="0,30,0,40"
+                   DockPanel.Dock="Top">
+                <Image Margin="10"
+                       Opacity="0.1"
+                       Source="/Assets/pysar.png"
+                       Stretch="Uniform" />
+                <TextBlock Margin="20,0"
+                           Classes="nav-header-title"
+                           Text="Pysar Samples Avalonia"
+                           TextWrapping="Wrap" />
+            </Panel>
+
+            <ListBox Classes="nav-items"
+                     ItemsSource="{Binding Reports}"
+                     SelectedItem="{Binding SelectedReport}"
+                     SelectionChanged="OnReportSelected">
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="vm:ReportDescriptor">
+                        <Grid ColumnDefinitions="40,*">
+                            <!--  The selected row trades its report icon for a marker, as the flyout does.  -->
+                            <TextBlock Classes="nav-item-icon"
+                                       IsVisible="{Binding !$parent[ListBoxItem].IsSelected}"
+                                       Text="{Binding Glyph}" />
+                            <TextBlock Classes="nav-item-icon marker"
+                                       IsVisible="{Binding $parent[ListBoxItem].IsSelected}"
+                                       Text="&#xf35a;" />
+                            <TextBlock Grid.Column="1"
+                                       Classes="nav-item-title"
+                                       Text="{Binding Title}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </DockPanel>
+    </Panel>
 
 </Window>

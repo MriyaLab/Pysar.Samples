@@ -1,5 +1,4 @@
 using System.Globalization;
-using Avalonia.Data.Converters;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Pysar.Avalonia;
@@ -13,23 +12,27 @@ using Pysar.Viewer.Zoom;
 
 namespace Pysar.Avalonia.Sample.ViewModels;
 
-/// <summary>One entry of the report picker: a display name and how to build the report.</summary>
-public sealed record ReportDescriptor(string Title, Func<Report> Create)
+/// <summary>One entry of the report panel: a display name, how to build the report and its icon.</summary>
+/// <param name="Glyph">
+///     A Font Awesome solid code point; it renders only where the FontAwesomeSolid family is
+///     applied, which the nav-item-icon style does.
+/// </param>
+public sealed record ReportDescriptor(string Title, string FileName, string Glyph, Func<Report> Create)
 {
     public static IReadOnlyList<ReportDescriptor> All { get; } =
     [
-        new("Invoice", () => new InvoiceReport(InvoiceData.CreateDesignInstance())),
-        new("Annual", () => new AnnualReport(AnnualLedger.CreateDesignInstance())),
-        new("Revenue By Customer", () => new RevenueByCustomerReport(RevenueReportData.CreateDesignInstance()))
+        new("Invoice", "InvoiceReport.pdf", "\uf571", () => new InvoiceReport(InvoiceData.CreateDesignInstance())),
+        new("Annual", "AnnualReport.pdf", "\uf201", () => new AnnualReport(AnnualLedger.CreateDesignInstance())),
+        new("Revenue By Customer", "RevenueByCustomer.pdf", "\uf0c0", () => new RevenueByCustomerReport(RevenueReportData.CreateDesignInstance()))
     ];
 
     public override string ToString() => Title;
 }
 
 /// <summary>
-///     Drives the report picker and the viewer's toolbar. Ported from the MAUI sample's view model
-///     of the same name; PDF export is dropped here because sharing is a platform feature and this
-///     sample is about the viewer.
+///     Drives the report panel and the viewer's toolbar. Ported from the MAUI sample's view model
+///     of the same name; the PDF export lives in the window instead, because picking a destination
+///     is a shell concern and the file picker needs a top level.
 /// </summary>
 public sealed partial class ReportViewerViewModel : ViewModelBase
 {
@@ -90,11 +93,15 @@ public sealed partial class ReportViewerViewModel : ViewModelBase
 
     public string ZoomText => $"{Math.Round(EffectiveZoom * 100)}%";
 
-    public string FitButtonText => ZoomMode == ReportZoomMode.FitWidth ? "Fit Page" : "Fit Width";
+    /// <summary>The toolbar's fit icon: the mode the button switches to, as in the MAUI sample.</summary>
+    public string FitButtonGlyph => ZoomMode == ReportZoomMode.FitWidth ? "\uf065" : "\uf337";
 
     public bool IsFitWidth => ZoomMode == ReportZoomMode.FitWidth;
 
     public bool IsFitPage => ZoomMode == ReportZoomMode.FitPage;
+
+    /// <summary>Transient overlay label shown while the current page changes.</summary>
+    public string PageIndicatorText => $"{CurrentPage} of {PageCount}";
 
     /// <summary>The page number for the toolbar's entry; text that is not a number is ignored.</summary>
     public string CurrentPageText
@@ -113,14 +120,22 @@ public sealed partial class ReportViewerViewModel : ViewModelBase
 
     partial void OnZoomModeChanged(ReportZoomMode value)
     {
-        OnPropertyChanged(nameof(FitButtonText));
+        OnPropertyChanged(nameof(FitButtonGlyph));
         OnPropertyChanged(nameof(IsFitWidth));
         OnPropertyChanged(nameof(IsFitPage));
     }
 
-    partial void OnCurrentPageChanged(int value) => OnPropertyChanged(nameof(CurrentPageText));
+    partial void OnCurrentPageChanged(int value)
+    {
+        OnPropertyChanged(nameof(CurrentPageText));
+        OnPropertyChanged(nameof(PageIndicatorText));
+    }
 
-    partial void OnPageCountChanged(int value) => OnPropertyChanged(nameof(CurrentPageText));
+    partial void OnPageCountChanged(int value)
+    {
+        OnPropertyChanged(nameof(CurrentPageText));
+        OnPropertyChanged(nameof(PageIndicatorText));
+    }
 
     private void LoadReport()
     {
@@ -174,15 +189,6 @@ public sealed partial class ReportViewerViewModel : ViewModelBase
         => ZoomMode = ZoomMode == ReportZoomMode.FitWidth ? ReportZoomMode.FitPage : ReportZoomMode.FitWidth;
 
     [RelayCommand]
-    private void SelectReport(ReportDescriptor? descriptor)
-    {
-        if (descriptor is null)
-            return;
-
-        SelectedReport = descriptor;
-    }
-
-    [RelayCommand]
     private void FitWidth() => ZoomMode = ReportZoomMode.FitWidth;
 
     [RelayCommand]
@@ -212,16 +218,4 @@ public sealed partial class ReportViewerViewModel : ViewModelBase
         Zoom = zoom;
         ZoomMode = ReportZoomMode.Custom;
     }
-}
-
-/// <summary>
-///     True when the two multi-binding values are equal. Used so a Reports
-///     <c>MenuItem</c> checks itself against <c>SelectedReport</c>.
-/// </summary>
-public sealed class SelectedReportEqualsConverter : IMultiValueConverter
-{
-    public static SelectedReportEqualsConverter Instance { get; } = new();
-
-    public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
-        => values.Count == 2 && Equals(values[0], values[1]);
 }
