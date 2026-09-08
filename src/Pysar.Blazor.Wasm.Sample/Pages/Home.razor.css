@@ -1,0 +1,15 @@
+/* The panel is permanent on wide windows, so its toggle only appears once the panel hides. */
+.nav-toggle {
+    display: none;
+}
+
+/* MAUI draws the hamburger a size smaller than the rest of the toolbar icons. */
+.nav-toggle .fa {
+    font-size: 14px;
+}
+
+@media (max-width: 640.98px) {
+    .nav-toggle {
+        display: inline-flex;
+    }
+}

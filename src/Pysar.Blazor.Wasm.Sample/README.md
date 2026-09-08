@@ -96,27 +96,31 @@ Two properties are worth calling out:
 
 ## Switching reports
 
-The picker is a plain list of factories — the same shape the MAUI and Avalonia samples use:
+The picker is a plain list of factories — the same shape the MAUI and Avalonia samples use, with a
+route slug and a Font Awesome code point so the side panel can render a row per report:
 
 ```csharp
-private sealed record ReportOption(string Title, Func<Report> Create);
-
-private static readonly ReportOption[] ReportOptions =
-[
-    new("Invoice", () => new InvoiceReport(InvoiceData.CreateDesignInstance())),
-    new("Annual", () => new AnnualReport(AnnualLedger.CreateDesignInstance())),
-    new("Revenue By Customer", () => new RevenueByCustomerReport(RevenueReportData.CreateDesignInstance()))
-];
-
-private void LoadReport()
+public sealed record ReportDescriptor(string Slug, string Title, string FileName, string Glyph, Func<Report> Create)
 {
-    var report = ReportOptions.First(option => option.Title == _selectedReport).Create();
-    report.Build();
-
-    _report = report;
-    _currentPage = 1;
+    public static IReadOnlyList<ReportDescriptor> All { get; } =
+    [
+        new("invoice", "Invoice", "InvoiceReport.pdf", "\uf571", () => new InvoiceReport(InvoiceData.CreateDesignInstance())),
+        new("annual", "Annual", "AnnualReport.pdf", "\uf201", () => new AnnualReport(AnnualLedger.CreateDesignInstance())),
+        new("revenue", "Revenue By Customer", "RevenueByCustomer.pdf", "\uf0c0", () => new RevenueByCustomerReport(RevenueReportData.CreateDesignInstance()))
+    ];
 }
 ```
+
+The viewer page is routed on that slug (`@page "/report/{Slug}"`), so picking a report in the panel
+is an ordinary navigation and the selected row comes from `NavLink` rather than from page state.
+
+## Chrome
+
+The dark theme is the MAUI sample's, ported to CSS: the colours in `wwwroot/css/theme.css` are the
+`Chrome*` entries of `Resources/Styles/Colors.xaml`, and the rounded toolbar pills are its
+`ToolbarPill` styles. Where MAUI opens the report list as a Shell flyout, the browser keeps it as a
+permanent 250px panel, collapsing into a drawer below 641px — the width at which MAUI's phone
+layout takes over.
 
 Note that the first render after a cold load takes a few seconds: the .NET runtime, the report
 assemblies and the assets all have to arrive before Skia can paint anything.

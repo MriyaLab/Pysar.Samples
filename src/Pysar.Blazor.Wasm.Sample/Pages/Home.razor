@@ -1,58 +1,84 @@
 @page "/"
+@page "/report/{Slug}"
 @using Pysar.Blazor
+@using Pysar.Blazor.Wasm.Sample.Services
 @using Pysar.Elements
 @using Pysar.Export
 @using Pysar.Sample.Shared
-@using Pysar.Sample.Shared.Data
-@using Pysar.Sample.Shared.Reports.Invoice
 @using Pysar.Skia
 @using Pysar.Viewer.Zoom
+@implements IDisposable
 @inject HttpClient Http
 @inject IReportPrinter Printer
+@inject IReportExportService Exporter
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
 
-<h3>Pysar Blazor WebAssembly viewer</h3>
+<PageTitle>@_descriptor.Title - Pysar Samples</PageTitle>
 
-<div style="display:flex;align-items:center;gap:8px;margin:8px 0">
-    <select style="width:140px" value="@_selectedReport" @onchange="OnReportSelected">
-        @foreach (var option in ReportOptions)
-        {
-            <option value="@option.Title">@option.Title</option>
-        }
-    </select>
-
-    <input style="width:52px;text-align:center" value="@_currentPage" @onchange="OnPageEntered" />
-
-    <span>/ @_pageCount</span>
-
-    <button style="width:36px" @onclick="ZoomOut">&minus;</button>
-
-    <button style="width:64px" @onclick="ActualSize">@ZoomText</button>
-
-    <button style="width:36px" @onclick="ZoomIn">+</button>
-
-    <button @onclick="ToggleFit">@FitButtonText</button>
-
-    <button disabled="@(_isPrinting || _report is null)" @onclick="PrintAsync">
-        @(_isPrinting ? "Printing..." : "Print")
+@*
+    The toolbar mirrors the MAUI report page: rounded pills on the dark chrome bar, with the
+    zoom controls grouped into a single pill. The drawer toggle is the MAUI hamburger and,
+    like there, only earns its place when the panel is not permanently on screen.
+*@
+<div class="toolbar">
+    <button class="toolbar-pill toolbar-pill-button nav-toggle"
+            title="Reports"
+            @onclick="() => Layout?.ToggleNav()">
+        <span class="fa" aria-hidden="true">@("\uf0c9")</span>
     </button>
+
+    <div class="toolbar-spacer"></div>
+
+    <div class="toolbar-pill">
+        <button class="toolbar-pill-button step" title="Zoom out" @onclick="ZoomOut">&minus;</button>
+        <span class="toolbar-pill-divider"></span>
+        <button class="toolbar-pill-button wide" title="Actual size" @onclick="ActualSize">@ZoomText</button>
+        <span class="toolbar-pill-divider"></span>
+        <button class="toolbar-pill-button step" title="Zoom in" @onclick="ZoomIn">+</button>
+    </div>
+
+    <div class="toolbar-pill">
+        <button class="toolbar-pill-button" title="@FitButtonTitle" @onclick="ToggleFit">
+            <span class="fa" aria-hidden="true">@FitButtonGlyph</span>
+        </button>
+    </div>
+
+    <div class="toolbar-pill">
+        <button class="toolbar-pill-button"
+                title="Print"
+                disabled="@(_isBusy || _report is null)"
+                @onclick="PrintAsync">
+            <span class="fa" aria-hidden="true">@("\uf02f")</span>
+        </button>
+    </div>
+
+    <div class="toolbar-pill">
+        <button class="toolbar-pill-button"
+                title="Export PDF"
+                disabled="@(_isBusy || _report is null)"
+                @onclick="ExportPdfAsync">
+            <span class="fa" aria-hidden="true">@("\ue09a")</span>
+        </button>
+    </div>
 </div>
 
 @if (!string.IsNullOrEmpty(_error))
 {
-    <pre style="color:#C0392B">@_error</pre>
+    <pre class="viewer-error">@_error</pre>
 }
 
-<div style="height:80vh;border:1px solid #CCCCCC;background:#292929">
+<div class="viewer-host">
     @if (_report is not null)
     {
         <ReportView Report="_report"
                     CurrentPage="_currentPage"
-                    CurrentPageChanged="page => _currentPage = page"
+                    CurrentPageChanged="OnCurrentPageChanged"
                     DocumentPadding="16"
                     EffectiveZoomChanged="zoom => _effectiveZoom = zoom"
                     PageBorderColor="#3E4351"
                     PageBorderThickness="2"
-                    PageCountChanged="count => _pageCount = count"
+                    PageCountChanged="OnPageCountChanged"
                     PageSpacing="16"
                     RenderBudget="256"
                     RenderFailed="exception => _error = exception.ToString()"
@@ -61,19 +87,17 @@
                     ZoomMode="_zoomMode"
                     ZoomModeChanged="mode => _zoomMode = mode" />
     }
+
+    @if (_isPageIndicatorVisible)
+    {
+        <div class="page-indicator">
+            <span class="fa" aria-hidden="true">@("\uf15c")</span>
+            <span>@PageIndicatorText</span>
+        </div>
+    }
 </div>
 
 @code {
-    /// <summary>One entry of the report picker: a display name and how to build the report.</summary>
-    private sealed record ReportOption(string Title, Func<Report> Create);
-
-    private static readonly ReportOption[] ReportOptions =
-    [
-        new("Invoice", () => new InvoiceReport(InvoiceData.CreateDesignInstance())),
-        new("Annual", () => new AnnualReport(AnnualLedger.CreateDesignInstance())),
-        new("Revenue By Customer", () => new RevenueByCustomerReport(RevenueReportData.CreateDesignInstance()))
-    ];
-
     /// <summary>The zoom levels the minus and plus buttons step through, as a browser does.</summary>
     private static readonly double[] ZoomSteps =
         [0.25, 0.33, 0.5, 0.67, 0.75, 0.8, 0.9, 1, 1.1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4, 5];
@@ -92,12 +116,12 @@
         "Styles/ReportStyles.rxaml",
         "Styles/ReportColors.rxaml"
     ];
-    
+
+    private ReportDescriptor _descriptor = ReportDescriptor.All[0];
     private Report? _report;
     private string? _error;
-    private bool _isPrinting;
-
-    private string _selectedReport = ReportOptions[0].Title;
+    private bool _isBusy;
+    private bool _assetsLoaded;
 
     private ReportZoomMode _zoomMode = ReportZoomMode.FitWidth;
 
@@ -113,9 +137,24 @@
     private int _currentPage = 1;
     private int _pageCount;
 
+    private bool _isPageIndicatorVisible;
+    private CancellationTokenSource? _pageIndicatorHideCts;
+
+    /// <summary>The report to show; absent on the root route, which falls back to the first report.</summary>
+    [Parameter]
+    public string? Slug { get; set; }
+
+    [CascadingParameter]
+    public MainLayout? Layout { get; set; }
+
     private string ZoomText => $"{Math.Round(_effectiveZoom * 100)}%";
 
-    private string FitButtonText => _zoomMode == ReportZoomMode.FitWidth ? "Fit Page" : "Fit Width";
+    private string FitButtonGlyph => _zoomMode == ReportZoomMode.FitWidth ? "\uf065" : "\uf337";
+
+    private string FitButtonTitle => _zoomMode == ReportZoomMode.FitWidth ? "Fit page" : "Fit width";
+
+    /// <summary>Transient overlay label shown while the current page changes.</summary>
+    private string PageIndicatorText => $"{_currentPage} of {_pageCount}";
 
     protected override async Task OnInitializedAsync()
     {
@@ -127,6 +166,8 @@
             // registrations are host-agnostic by design and are what the MAUI host calls too.
             ReportBootstrap.RegisterFonts(
                 Pysar.Core.ReportPlatformHandler.FontCollection);
+
+            _assetsLoaded = true;
         }
         catch (Exception exception)
         {
@@ -138,25 +179,33 @@
         LoadReport();
     }
 
-    private void OnReportSelected(ChangeEventArgs args)
+    protected override void OnParametersSet()
     {
-        _selectedReport = args.Value?.ToString() ?? ReportOptions[0].Title;
+        // The root route carries no report; land on the first one so the panel can mark it selected.
+        if (Slug is null)
+        {
+            Navigation.NavigateTo($"report/{ReportDescriptor.All[0].Slug}", replace: true);
 
-        LoadReport();
+            return;
+        }
+
+        var descriptor = ReportDescriptor.Find(Slug);
+        if (ReferenceEquals(descriptor, _descriptor) && _report is not null)
+            return;
+
+        _descriptor = descriptor;
+
+        if (_assetsLoaded)
+            LoadReport();
     }
 
-    /// <summary>The page number from the toolbar's entry; text that is not a number is ignored.</summary>
-    private void OnPageEntered(ChangeEventArgs args)
-    {
-        if (int.TryParse(args.Value?.ToString(), out var page))
-            _currentPage = Math.Clamp(page, 1, Math.Max(1, _pageCount));
-    }
+    public void Dispose() => CancelPageIndicatorHide();
 
     private void LoadReport()
     {
         try
         {
-            var report = ReportOptions.First(option => option.Title == _selectedReport).Create();
+            var report = _descriptor.Create();
             report.Build();
 
             _report = report;
@@ -168,6 +217,57 @@
             _report = null;
             _error = exception.ToString();
         }
+    }
+
+    private void OnCurrentPageChanged(int page)
+    {
+        _currentPage = page;
+
+        ShowPageIndicator();
+    }
+
+    private void OnPageCountChanged(int count)
+    {
+        _pageCount = count;
+
+        ShowPageIndicator();
+    }
+
+    /// <summary>Reveals the page overlay and hides it again after a few idle seconds, as MAUI does.</summary>
+    private void ShowPageIndicator()
+    {
+        if (_pageCount < 1)
+            return;
+
+        _isPageIndicatorVisible = true;
+        CancelPageIndicatorHide();
+
+        var cts = new CancellationTokenSource();
+        _pageIndicatorHideCts = cts;
+
+        _ = HidePageIndicatorAsync(cts.Token);
+    }
+
+    private async Task HidePageIndicatorAsync(CancellationToken token)
+    {
+        try
+        {
+            await Task.Delay(TimeSpan.FromSeconds(3), token);
+
+            _isPageIndicatorVisible = false;
+
+            StateHasChanged();
+        }
+        catch (OperationCanceledException)
+        {
+        }
+    }
+
+    private void CancelPageIndicatorHide()
+    {
+        _pageIndicatorHideCts?.Cancel();
+        _pageIndicatorHideCts?.Dispose();
+        _pageIndicatorHideCts = null;
     }
 
     private void ToggleFit()
@@ -197,10 +297,10 @@
 
     private async Task PrintAsync()
     {
-        if (_report is null || _isPrinting)
+        if (_report is null || _isBusy)
             return;
 
-        _isPrinting = true;
+        _isBusy = true;
         _error = null;
 
         try
@@ -213,7 +313,35 @@
         }
         finally
         {
-            _isPrinting = false;
+            _isBusy = false;
+        }
+    }
+
+    private async Task ExportPdfAsync()
+    {
+        if (_report is null || _isBusy)
+            return;
+
+        _isBusy = true;
+        _error = null;
+
+        try
+        {
+            var bytes = await Exporter.ExportAsync(_report, ExportFormat.Pdf);
+
+            await JS.InvokeVoidAsync(
+                "pysarSample.downloadFile",
+                _descriptor.FileName,
+                "application/pdf",
+                Convert.ToBase64String(bytes));
+        }
+        catch (Exception exception)
+        {
+            _error = exception.ToString();
+        }
+        finally
+        {
+            _isBusy = false;
         }
     }
 }

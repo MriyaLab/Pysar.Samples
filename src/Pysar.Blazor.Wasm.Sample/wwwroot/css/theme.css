@@ -1,0 +1,154 @@
+/*
+    The dark "chrome" theme shared with the MAUI sample: the colours come from
+    Pysar.Maui.Sample/Resources/Styles/Colors.xaml and the pill shapes from Styles.xaml,
+    so both hosts read as the same product.
+*/
+
+@font-face {
+    font-family: 'Font Awesome Solid';
+    src: url('../Fonts/Font%20Awesome%206%20Free-Solid-900.otf') format('opentype');
+    font-weight: 900;
+    font-display: block;
+}
+
+/* The script face the MAUI flyout header uses for the product name. */
+@font-face {
+    font-family: 'Cookie';
+    src: url('../Fonts/Cookie-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-display: swap;
+}
+
+:root {
+    --chrome-background: #1E1E1E;
+    --chrome-surface: #262626;
+    --chrome-viewer: #292929;
+    --chrome-pill: #2F2F2F;
+    --chrome-stroke: #4A4A4A;
+    --chrome-divider: #555555;
+    --chrome-text: #E8E8E8;
+    --chrome-muted: #9A9A9A;
+    --chrome-page-border: #3E4351;
+    --chrome-error: #C0392B;
+
+    --sidebar-width: 250px;
+    --toolbar-pill-height: 48px;
+}
+
+/* The icon font carries no fallback glyphs, so it is only ever applied to icon spans. */
+.fa {
+    font-family: 'Font Awesome Solid';
+    font-weight: 900;
+    font-style: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Toolbar --------------------------------------------------------------- */
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background-color: var(--chrome-background);
+}
+
+.toolbar-spacer {
+    flex: 1;
+}
+
+.toolbar-pill {
+    display: inline-flex;
+    align-items: center;
+    min-width: var(--toolbar-pill-height);
+    height: var(--toolbar-pill-height);
+    background-color: var(--chrome-pill);
+    border: 1px solid var(--chrome-stroke);
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.toolbar-pill-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 100%;
+    padding: 0 10px;
+    background: none;
+    border: 0;
+    color: var(--chrome-text);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+/* A lone button owns its pill, so the hover highlight follows the rounded shape. */
+.toolbar-pill > .toolbar-pill-button:only-child {
+    flex: 1;
+}
+
+/* The icon sizes are the FontImageSource sizes of the MAUI toolbar. */
+.toolbar-pill-button .fa {
+    font-size: 18px;
+}
+
+/* MAUI gives the zoom steps their own larger font so the signs read at a glance. */
+.toolbar-pill-button.step {
+    font-size: 18px;
+}
+
+.toolbar-pill-button:disabled {
+    color: var(--chrome-muted);
+    cursor: default;
+}
+
+.toolbar-pill-button:not(:disabled):hover {
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.toolbar-pill-button.wide {
+    width: 52px;
+    padding: 0;
+}
+
+.toolbar-pill-divider {
+    width: 1px;
+    height: 16px;
+    background-color: var(--chrome-divider);
+}
+
+/* Viewer ---------------------------------------------------------------- */
+
+.viewer-host {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    background-color: var(--chrome-viewer);
+    /* The viewer stacks its page canvases high; isolating keeps them under the panel and overlay. */
+    isolation: isolate;
+}
+
+.viewer-error {
+    margin: 0;
+    padding: 8px 12px;
+    color: var(--chrome-error);
+    white-space: pre-wrap;
+}
+
+.page-indicator {
+    position: absolute;
+    z-index: 100;
+    top: 16px;
+    left: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background-color: rgba(47, 47, 47, 0.7);
+    border: 1px solid rgba(74, 74, 74, 0.7);
+    border-radius: 24px;
+    color: var(--chrome-text);
+    font-size: 14px;
+    pointer-events: none;
+}

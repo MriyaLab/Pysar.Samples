@@ -1,16 +1,42 @@
-﻿@inherits LayoutComponentBase
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+@inherits LayoutComponentBase
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+@*
+    The MAUI sample opens its report list as a Shell flyout; here the same list is a
+    permanent side panel, collapsing into a drawer only when the window is too narrow.
+    The layout is cascaded so a page's toolbar can own the drawer toggle, as it does in MAUI.
+*@
+<CascadingValue Value="this" IsFixed="true">
+    <div class="page @(IsNavOpen ? "nav-open" : null)">
+        <div class="sidebar">
+            <NavMenu OnNavigated="CloseNav" />
         </div>
 
-        <article class="content px-4">
+        <div class="nav-scrim" @onclick="CloseNav"></div>
+
+        <main>
             @Body
-        </article>
-    </main>
-</div>
+        </main>
+    </div>
+</CascadingValue>
+
+@code {
+    /// <summary>Whether the drawer is showing; it only has an effect on narrow windows.</summary>
+    public bool IsNavOpen { get; private set; }
+
+    public void ToggleNav()
+    {
+        IsNavOpen = !IsNavOpen;
+
+        StateHasChanged();
+    }
+
+    private void CloseNav()
+    {
+        if (!IsNavOpen)
+            return;
+
+        IsNavOpen = false;
+
+        StateHasChanged();
+    }
+}
