@@ -84,10 +84,10 @@
 		assets. LogicalName alone decides the path inside the package.
 	-->
 	<ItemGroup>
-		<MauiAsset Include="..\Pysar.Sample.Reports\Fonts\**"
+		<MauiAsset Include="..\Pysar.Sample.Shared\Fonts\**"
 		           Link="Resources\Raw\Fonts\%(Filename)%(Extension)"
 		           LogicalName="Fonts/%(Filename)%(Extension)" />
-		<MauiAsset Include="..\Pysar.Sample.Reports\Images\**"
+		<MauiAsset Include="..\Pysar.Sample.Shared\Images\**"
 		           Link="Resources\Raw\Images\%(Filename)%(Extension)"
 		           LogicalName="Images/%(Filename)%(Extension)" />
 		<!--
@@ -95,7 +95,7 @@
 			the absolute directory they were built from, which a sandboxed application cannot read, so
 			the dictionaries travel in the package under the paths the reports ask for.
 		-->
-		<MauiAsset Include="..\Pysar.Sample.Reports\Styles\**"
+		<MauiAsset Include="..\Pysar.Sample.Shared\Styles\**"
 		           Link="Resources\Raw\Styles\%(Filename)%(Extension)"
 		           LogicalName="Styles/%(Filename)%(Extension)" />
 	</ItemGroup>
@@ -103,11 +103,10 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" />
-		<!-- Keep native libSkiaSharp in lockstep with managed SkiaSharp 4.151.1. -->
+		<!-- Keep native libSkiaSharp in lockstep with managed SkiaSharp 4.151.2. -->
 		<PackageReference Include="SkiaSharp" />
 	</ItemGroup>
 	<ItemGroup Condition="$(TargetFramework.Contains('maccatalyst'))">
-		<PackageReference Include="SkiaSharp.NativeAssets.MacCatalyst" />
 		<!--
 			The macOS app icon. LogicalName puts it at Contents/Resources/AppIcon.icns, which is where
 			CFBundleIconFile in Platforms\MacCatalyst\Info.plist looks for it.
@@ -123,16 +122,25 @@
 		-->
 		<_CompileAppManifestInputFile Include="Platforms\MacCatalyst\Info.plist" />
 	</ItemGroup>
-	<ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-		<PackageReference Include="SkiaSharp.NativeAssets.iOS" />
-	</ItemGroup>
-	<ItemGroup Condition="$(TargetFramework.Contains('android'))">
-		<PackageReference Include="SkiaSharp.NativeAssets.Android" />
-	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Pysar.Sample.Reports\Pysar.Sample.Reports.csproj" />
+		<ProjectReference Include="..\Pysar.Sample.Shared\Pysar.Sample.Shared.csproj" />
 		<PackageReference Include="Pysar.Maui" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0-android'">
+	  <PackageReference Include="SkiaSharp.NativeAssets.Android" />
+	  <PackageReference Include="HarfBuzzSharp.NativeAssets.Android" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0-ios'">
+	  <PackageReference Include="SkiaSharp.NativeAssets.iOS" />
+	  <PackageReference Include="HarfBuzzSharp.NativeAssets.iOS" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0-maccatalyst'">
+	  <PackageReference Include="SkiaSharp.NativeAssets.MacCatalyst" />
+	  <PackageReference Include="HarfBuzzSharp.NativeAssets.MacCatalyst" />
 	</ItemGroup>
 
 </Project>

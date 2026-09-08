@@ -1,4 +1,4 @@
-<ReportView x:Class="Pysar.Sample.Reports.Views.CompanyHeader"
+<ReportView x:Class="Pysar.Sample.Shared.Views.CompanyHeader"
             xmlns="https://mriyalab.com/pysar"
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
             x:Name="Root"

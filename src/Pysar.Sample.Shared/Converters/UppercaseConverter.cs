@@ -1,6 +1,6 @@
 using Pysar.Binding;
 
-namespace Pysar.Sample.Reports.Converters;
+namespace Pysar.Sample.Shared.Converters;
 
 /// <summary>Renders the bound value in upper case. Demonstrates XAML <c>Converter={StaticResource ...}</c>.</summary>
 public sealed class UppercaseConverter : IValueConverter

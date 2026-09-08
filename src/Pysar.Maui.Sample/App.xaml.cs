@@ -1,5 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-
 namespace Pysar.Maui.Sample;
 
 public partial class App : Application

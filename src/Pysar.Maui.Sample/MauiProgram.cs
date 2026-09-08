@@ -2,8 +2,8 @@ using Microsoft.Extensions.Logging;
 using Pysar.Maui.Sample.Services;
 using Pysar.Maui.Sample.ViewModels;
 using Pysar.Maui.Sample.Views;
-using Pysar.Sample.Reports;
-using Pysar.Sample.Reports.QRCode;
+using Pysar.Sample.Shared;
+using Pysar.Sample.Shared.QRCode;
 
 namespace Pysar.Maui.Sample;
 

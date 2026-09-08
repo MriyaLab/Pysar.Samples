@@ -1,6 +1,6 @@
 using System.Windows;
-using Pysar.Sample.Reports;
-using Pysar.Sample.Reports.QRCode;
+using Pysar.Sample.Shared;
+using Pysar.Sample.Shared.QRCode;
 using Pysar.Wpf;
 
 namespace Pysar.Wpf.Sample;

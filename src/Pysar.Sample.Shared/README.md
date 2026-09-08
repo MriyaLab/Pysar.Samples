@@ -1,4 +1,4 @@
-# Pysar.Sample.Reports
+# Pysar.Sample.Shared
 
 The report library the four UI samples share. Nothing here knows about Avalonia, WPF, MAUI or the
 browser — that is the point: reports are authored once and hosted anywhere.
@@ -20,7 +20,7 @@ bindable parameters declared in the code-behind. `CompanyHeader` is the document
 all three reports.
 
 ```xml
-<ReportView x:Class="Pysar.Sample.Reports.Views.CompanyHeader"
+<ReportView x:Class="Pysar.Sample.Shared.Views.CompanyHeader"
             xmlns="https://mriyalab.com/pysar"
             x:Name="Root"
             Height="115">
@@ -84,7 +84,7 @@ Used from a report:
 document set is themed from one place. `d:DataContext` gives the IDE previewer a live instance:
 
 ```xml
-<Report x:Class="Pysar.Sample.Reports.Reports.Invoice.InvoiceReport"
+<Report x:Class="Pysar.Sample.Shared.Reports.Invoice.InvoiceReport"
         xmlns="https://mriyalab.com/pysar"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         d:DataContext="{d:DesignInstance Type=reports:InvoiceData, IsDesignTimeCreatable=True}">

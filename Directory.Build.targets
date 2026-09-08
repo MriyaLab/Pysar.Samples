@@ -1,0 +1,4 @@
+<Project>
+  <Import Project="$(SolutionDir)samples/Directory.Build.targets"
+          Condition="'$(SolutionName)' == 'Pysar.Dev' AND Exists('$(SolutionDir)samples/Directory.Build.targets')" />
+</Project>

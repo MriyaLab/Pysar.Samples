@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pysar.Console.Sample", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pysar.Avalonia.Sample", "src\Pysar.Avalonia.Sample\Pysar.Avalonia.Sample.csproj", "{EA20B1F1-AB89-410B-B1D5-D36CAA1A641C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pysar.Sample.Reports", "src\Pysar.Sample.Reports\Pysar.Sample.Reports.csproj", "{461D557A-41B3-4D4F-9335-607F38D37C5B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pysar.Sample.Shared", "src\Pysar.Sample.Shared\Pysar.Sample.Shared.csproj", "{461D557A-41B3-4D4F-9335-607F38D37C5B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pysar.Blazor.Wasm.Sample", "src\Pysar.Blazor.Wasm.Sample\Pysar.Blazor.Wasm.Sample.csproj", "{93C27BFF-5E81-4A12-923A-23DFB708606A}"
 EndProject

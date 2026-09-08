@@ -5,9 +5,9 @@ using CommunityToolkit.Mvvm.Input;
 using Pysar.Avalonia;
 using Pysar.Elements;
 using Pysar.Export;
-using Pysar.Sample.Reports;
-using Pysar.Sample.Reports.Data;
-using Pysar.Sample.Reports.Reports.Invoice;
+using Pysar.Sample.Shared;
+using Pysar.Sample.Shared.Data;
+using Pysar.Sample.Shared.Reports.Invoice;
 using Pysar.Skia;
 using Pysar.Viewer.Zoom;
 

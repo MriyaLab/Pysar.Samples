@@ -10,7 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
 
@@ -23,11 +22,11 @@
     what AvaloniaAssetFileSystem resolves against at render time.
   -->
   <ItemGroup>
-    <AvaloniaResource Include="..\Pysar.Sample.Reports\Fonts\**"
+    <AvaloniaResource Include="..\Pysar.Sample.Shared\Fonts\**"
                        Link="Fonts\%(Filename)%(Extension)" />
-    <AvaloniaResource Include="..\Pysar.Sample.Reports\Images\**"
+    <AvaloniaResource Include="..\Pysar.Sample.Shared\Images\**"
                        Link="Images\%(Filename)%(Extension)" />
-    <AvaloniaResource Include="..\Pysar.Sample.Reports\Styles\**"
+    <AvaloniaResource Include="..\Pysar.Sample.Shared\Styles\**"
                        Link="Styles\%(Filename)%(Extension)" />
   </ItemGroup>
 
@@ -53,7 +52,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Pysar.Sample.Reports\Pysar.Sample.Reports.csproj" />
+    <ProjectReference Include="..\Pysar.Sample.Shared\Pysar.Sample.Shared.csproj" />
     <PackageReference Include="Pysar.Avalonia" />
   </ItemGroup>
 </Project>

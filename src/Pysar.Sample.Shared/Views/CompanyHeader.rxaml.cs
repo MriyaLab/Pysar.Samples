@@ -1,8 +1,8 @@
 using Pysar.Binding;
 using Pysar.Elements;
-using Pysar.Sample.Reports.Data;
+using Pysar.Sample.Shared.Data;
 
-namespace Pysar.Sample.Reports.Views;
+namespace Pysar.Sample.Shared.Views;
 
 /// <summary>
 /// The document banner: company identity (logo, name, contacts) on the left and the

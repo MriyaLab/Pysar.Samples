@@ -1,10 +1,10 @@
-using Pysar.Sample.Reports.QRCode;
+using Pysar.Sample.Shared.QRCode;
 using Pysar.Core;
 using Pysar.Core.Abstractions;
 using Pysar.Core.Enums;
 using Pysar.Skia;
 
-namespace Pysar.Sample.Reports;
+namespace Pysar.Sample.Shared;
 
 /// <summary>Registrations shared by the application entry point and design-time tooling.</summary>
 public sealed class ReportBootstrap : IReportBootstrap

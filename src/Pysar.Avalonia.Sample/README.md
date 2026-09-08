@@ -9,7 +9,7 @@ dotnet run --project src/Pysar.Avalonia.Sample
 A 1000×700 window with an in-window `Menu` (File / View / Reports), a toolbar (report picker, page
 box, zoom controls, fit toggle, print), and a `ReportView` filling the rest. Shortcuts: Ctrl+P print,
 Ctrl++ / Ctrl+- zoom, Ctrl+0 actual size, Ctrl+W exit. The reports come from
-[Pysar.Sample.Reports](../Pysar.Sample.Reports); this is what they look like rendered by the shared
+[Pysar.Sample.Shared](../Pysar.Sample.Shared); this is what they look like rendered by the shared
 viewer control:
 
 ![Invoice report in the Pysar viewer](../../docs/screenshots/blazor/blazor-viewer.png)

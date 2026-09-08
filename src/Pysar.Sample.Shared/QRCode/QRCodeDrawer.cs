@@ -5,7 +5,7 @@ using SkiaSharp;
 using SkiaSharp.QrCode;
 using SkiaSharp.QrCode.Image;
 
-namespace Pysar.Sample.Reports.QRCode;
+namespace Pysar.Sample.Shared.QRCode;
 
 /// <summary>
 ///     Draws a QR code as vector content onto the page canvas via <see cref="QRCodeRenderer"/>, so it

@@ -9,7 +9,7 @@ Every sample in this repository was built and executed to produce the screenshot
 | Sample | What it shows | Runs on |
 | --- | --- | --- |
 | [Pysar.Console.Sample](src/Pysar.Console.Sample) | The report model itself: 6 reports, each written three ways (C# objects, fluent API, XAML), exported to PDF | any .NET 10 host |
-| [Pysar.Sample.Reports](src/Pysar.Sample.Reports) | The shared report library the UI samples all consume | class library |
+| [Pysar.Sample.Shared](src/Pysar.Sample.Shared) | The shared report library the UI samples all consume | class library |
 | [Pysar.Blazor.Wasm.Sample](src/Pysar.Blazor.Wasm.Sample) | `ReportView` in the browser via WebAssembly | any browser |
 | [Pysar.Maui.Sample](src/Pysar.Maui.Sample) | `ReportView` on phone and tablet, plus print and PDF export | iOS, Android, Mac Catalyst |
 | [Pysar.Avalonia.Sample](src/Pysar.Avalonia.Sample) | `ReportView` on the Avalonia desktop | Windows, macOS, Linux |
@@ -201,7 +201,7 @@ MAUI on an iPhone simulator:
 ```
 src/
   Pysar.Console.Sample/    reports written three ways + PDF export
-  Pysar.Sample.Reports/    shared report library (Invoice, Annual, Revenue by customer)
+  Pysar.Sample.Shared/    shared report library (Invoice, Annual, Revenue by customer)
   Pysar.Blazor.Wasm.Sample/
   Pysar.Maui.Sample/
   Pysar.Avalonia.Sample/

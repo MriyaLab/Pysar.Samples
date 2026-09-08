@@ -1,4 +1,4 @@
-namespace Pysar.Sample.Reports.Data;
+namespace Pysar.Sample.Shared.Data;
 
 public sealed record Organization(string Company, string Name, string Address, string Phone, string Email, string? Website = null, string? Logo = null)
 { 

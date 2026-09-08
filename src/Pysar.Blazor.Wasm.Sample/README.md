@@ -1,7 +1,7 @@
 # Pysar.Blazor.Wasm.Sample
 
 The Pysar viewer running entirely in the browser: the reports from
-[Pysar.Sample.Reports](../Pysar.Sample.Reports) are built and rasterised inside WebAssembly, with no
+[Pysar.Sample.Shared](../Pysar.Sample.Shared) are built and rasterised inside WebAssembly, with no
 server-side rendering and no PDF round-trip.
 
 ```bash

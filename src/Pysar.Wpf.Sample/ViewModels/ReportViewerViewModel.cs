@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Pysar.Elements;
 using Pysar.Export;
-using Pysar.Sample.Reports;
+using Pysar.Sample.Shared;
 using Pysar.Skia;
 using Pysar.Viewer.Zoom;
 using Pysar.Wpf;

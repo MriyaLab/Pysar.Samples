@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using System;
-using Pysar.Sample.Reports;
-using Pysar.Sample.Reports.QRCode;
+using Pysar.Sample.Shared;
+using Pysar.Sample.Shared.QRCode;
 
 namespace Pysar.Avalonia.Sample;
 

@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Pysar.Core.Abstractions;
 using Pysar.Skia;
 
-namespace Pysar.Sample.Reports;
+namespace Pysar.Sample.Shared;
 
 /// <summary>Resolves report assets from the application output directory.</summary>
 public class FileSystemPlatformHandler : IReportPlatformHandler

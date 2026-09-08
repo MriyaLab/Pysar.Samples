@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Pysar.Blazor;
 using Pysar.Blazor.Wasm.Sample;
-using Pysar.Sample.Reports;
+using Pysar.Sample.Shared;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");

@@ -1,6 +1,6 @@
-using Pysar.Sample.Reports.Data;
+using Pysar.Sample.Shared.Data;
 
-namespace Pysar.Sample.Reports;
+namespace Pysar.Sample.Shared;
 
 /// <summary>
 ///     The sample ledger for <see cref="AnnualReport"/>. The figures are fixed rather than random so

@@ -30,7 +30,7 @@ so that `dotnet build Pysar.Samples.sln` still succeeds:
 
 The screenshots in this repository were captured on macOS, so this sample has none. The rendered
 output is identical to the other hosts — see the
-[shared report library](../Pysar.Sample.Reports/README.md).
+[shared report library](../Pysar.Sample.Shared/README.md).
 
 ## Registering Pysar
 
@@ -61,11 +61,11 @@ path the reports ask for:
 
 ```xml
 <ItemGroup Condition="$([MSBuild]::IsOSPlatform('windows'))">
-  <EmbeddedResource Include="..\Pysar.Sample.Reports\Fonts\**"
+  <EmbeddedResource Include="..\Pysar.Sample.Shared\Fonts\**"
                     LogicalName="Fonts/%(Filename)%(Extension)" />
-  <EmbeddedResource Include="..\Pysar.Sample.Reports\Images\**"
+  <EmbeddedResource Include="..\Pysar.Sample.Shared\Images\**"
                     LogicalName="Images/%(Filename)%(Extension)" />
-  <EmbeddedResource Include="..\Pysar.Sample.Reports\Styles\**"
+  <EmbeddedResource Include="..\Pysar.Sample.Shared\Styles\**"
                     LogicalName="Styles/%(Filename)%(Extension)" />
 </ItemGroup>
 ```

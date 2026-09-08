@@ -1,6 +1,6 @@
-using Pysar.Sample.Reports.Data;
+using Pysar.Sample.Shared.Data;
 
-namespace Pysar.Sample.Reports.Reports.Invoice;
+namespace Pysar.Sample.Shared.Reports.Invoice;
 
 public partial class InvoiceReport
 {

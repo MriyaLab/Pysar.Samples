@@ -1,6 +1,6 @@
 using Pysar.Core.Abstractions;
 
-namespace Pysar.Sample.Reports.Data;
+namespace Pysar.Sample.Shared.Data;
 
 public sealed record InvoiceData(
     string Number,

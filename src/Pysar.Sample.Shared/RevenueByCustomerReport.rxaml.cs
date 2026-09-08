@@ -1,6 +1,6 @@
 using Pysar.Core.Abstractions;
 
-namespace Pysar.Sample.Reports;
+namespace Pysar.Sample.Shared;
 
 public partial class RevenueByCustomerReport
 {

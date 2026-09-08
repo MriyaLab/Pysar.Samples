@@ -29,17 +29,17 @@
 
   <ItemGroup Condition="$([MSBuild]::IsOSPlatform('windows'))">
     <Compile Remove="NonWindowsStub.cs" />
-    <ProjectReference Include="..\Pysar.Sample.Reports\Pysar.Sample.Reports.csproj" />
+    <ProjectReference Include="..\Pysar.Sample.Shared\Pysar.Sample.Shared.csproj" />
     <PackageReference Include="Pysar.Wpf" />
     <PackageReference Include="CommunityToolkit.Mvvm" />
   </ItemGroup>
 
   <ItemGroup Condition="$([MSBuild]::IsOSPlatform('windows'))">
-    <EmbeddedResource Include="..\Pysar.Sample.Reports\Fonts\**"
+    <EmbeddedResource Include="..\Pysar.Sample.Shared\Fonts\**"
                       LogicalName="Fonts/%(Filename)%(Extension)" />
-    <EmbeddedResource Include="..\Pysar.Sample.Reports\Images\**"
+    <EmbeddedResource Include="..\Pysar.Sample.Shared\Images\**"
                       LogicalName="Images/%(Filename)%(Extension)" />
-    <EmbeddedResource Include="..\Pysar.Sample.Reports\Styles\**"
+    <EmbeddedResource Include="..\Pysar.Sample.Shared\Styles\**"
                       LogicalName="Styles/%(Filename)%(Extension)" />
   </ItemGroup>
 

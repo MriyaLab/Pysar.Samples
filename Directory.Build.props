@@ -1,0 +1,8 @@
+<Project>
+  <!--
+    Pysar.Dev.sln (sibling Pysar repo) injects ProjectReferences. Pysar.Samples.sln does not
+    set SolutionName to Pysar.Dev, so this import is a no-op and samples stay on NuGet.
+  -->
+  <Import Project="$(SolutionDir)samples/Directory.Build.props"
+          Condition="'$(SolutionName)' == 'Pysar.Dev' AND Exists('$(SolutionDir)samples/Directory.Build.props')" />
+</Project>

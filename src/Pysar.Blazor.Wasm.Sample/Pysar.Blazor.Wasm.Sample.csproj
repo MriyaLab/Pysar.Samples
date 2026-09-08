@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <PackageReference Include="Pysar.Blazor" />
-    <ProjectReference Include="..\Pysar.Sample.Reports\Pysar.Sample.Reports.csproj" />
+    <ProjectReference Include="..\Pysar.Sample.Shared\Pysar.Sample.Shared.csproj" />
   </ItemGroup>
 
 </Project>

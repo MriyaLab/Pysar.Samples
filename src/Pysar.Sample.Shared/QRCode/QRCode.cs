@@ -3,7 +3,7 @@ using Pysar.Core.Structs;
 using Pysar.Elements.Base;
 using SkiaSharp.QrCode;
 
-namespace Pysar.Sample.Reports.QRCode;
+namespace Pysar.Sample.Shared.QRCode;
 
 public class QRCode : ReportContainer<QRCode>
 {
