@@ -33,7 +33,7 @@
               VerticalTextAlignment="Center" />
     </PageHeaderBand>
 
-    <ReportHeaderBand Height="Auto" Margin="-50,-20,-50,20">
+    <ReportHeaderBand Height="Auto" Margin="-50,-20,-50,0">
         <StackPanel Height="Auto">
             <views:CompanyHeader Company="{Binding Company}"
                                  DocumentDate="7/27/2024"
@@ -42,103 +42,106 @@
                                  DocumentNumberLabel="From:"
                                  DocumentTitle="REVENUE" />
             <Grid Height="Auto"
-                  Margin="0,20,0,0"
-                  Padding="50,0"
+                  Padding="50,20"
                   ColumnDefinitions="*,*,*"
                   ColumnSpacing="16">
 
-                <Grid Grid.Column="0"
-                      Padding="16"
-                      VerticalAlignment="Center"
-                      BackgroundColor="{StaticResource LightGray}"
-                      ColumnDefinitions="Auto, *"
-                      ColumnSpacing="8"
-                      RowDefinitions="Auto,Auto">
-                    <Image Grid.Row="0"
-                           Grid.RowSpan="2"
-                           Grid.Column="0"
-                           Width="22"
-                           HorizontalAlignment="Center">
-                        <Image.Source>
-                            <FontImageSource FontFamily="FontAwesomeSolid"
-                                             Glyph="&#xf81d;"
-                                             Size="24"
-                                             Color="{StaticResource DarkGray}" />
-                        </Image.Source>
-                    </Image>
-                    <Text Grid.Column="1"
-                          Content="{Binding TotalRevenue, StringFormat='${0:N0}'}"
-                          FontSize="22"
-                          FontStyle="Bold" />
-                    <Text Grid.Row="1"
-                          Grid.Column="1"
-                          Content="Total Revenue"
-                          FontSize="10" />
-                </Grid>
-                <Grid Grid.Column="1"
-                      Padding="16"
-                      VerticalAlignment="Center"
-                      BackgroundColor="{StaticResource LightGray}"
-                      ColumnDefinitions="Auto, *"
-                      ColumnSpacing="8"
-                      RowDefinitions="Auto,Auto">
-                    <Image Grid.Row="0"
-                           Grid.RowSpan="2"
-                           Grid.Column="0"
-                           Width="22"
-                           HorizontalAlignment="Center">
-                        <Image.Source>
-                            <FontImageSource FontFamily="FontAwesomeSolid"
-                                             Glyph="&#xf07b;"
-                                             Size="24"
-                                             Color="{StaticResource DarkGray}" />
-                        </Image.Source>
-                    </Image>
-                    <Text Grid.Column="1"
-                          Content="{Binding OrderCount}"
-                          FontSize="22"
-                          FontStyle="Bold" />
-                    <Text Grid.Row="1"
-                          Grid.Column="1"
-                          Content="Order Count"
-                          FontSize="10" />
-                </Grid>
-                <Grid Grid.Column="2"
-                      Padding="16"
-                      VerticalAlignment="Center"
-                      BackgroundColor="{StaticResource LightGray}"
-                      ColumnDefinitions="Auto, *"
-                      ColumnSpacing="8"
-                      RowDefinitions="Auto,Auto">
-                    <Image Grid.Row="0"
-                           Grid.RowSpan="2"
-                           Grid.Column="0"
-                           Width="22"
-                           HorizontalAlignment="Center">
-                        <Image.Source>
-                            <FontImageSource FontFamily="FontAwesomeSolid"
-                                             Glyph="&#xf02c;"
-                                             Size="24"
-                                             Color="{StaticResource DarkGray}" />
-                        </Image.Source>
-                    </Image>
-                    <Text Grid.Column="1"
-                          Content="{Binding AverageSaleAmount, StringFormat='${0:N0}'}"
-                          FontSize="22"
-                          FontStyle="Bold" />
-                    <Text Grid.Row="1"
-                          Grid.Column="1"
-                          Content="Average Sale Amount"
-                          FontSize="10" />
-                </Grid>
+                <Frame Grid.Column="0" CornerRadius="8">
+                    <Grid Padding="16"
+                          VerticalAlignment="Center"
+                          BackgroundColor="{StaticResource LightGray}"
+                          ColumnDefinitions="Auto, *"
+                          ColumnSpacing="8"
+                          RowDefinitions="*,*">
+                        <Image Grid.Row="0"
+                               Grid.RowSpan="2"
+                               Grid.Column="0"
+                               Width="22"
+                               HorizontalAlignment="Center">
+                            <Image.Source>
+                                <FontImageSource FontFamily="FontAwesomeSolid"
+                                                 Glyph="&#xf81d;"
+                                                 Size="24"
+                                                 Color="{StaticResource DarkGray}" />
+                            </Image.Source>
+                        </Image>
+                        <Text Grid.Column="1"
+                              Content="{Binding TotalRevenue, StringFormat='${0:N0}'}"
+                              FontSize="22"
+                              FontStyle="Bold" />
+                        <Text Grid.Row="1"
+                              Grid.Column="1"
+                              Content="Total Revenue"
+                              FontSize="10" />
+                    </Grid>
+                </Frame>
+
+                <Frame Grid.Column="1" CornerRadius="8">
+                    <Grid Padding="16"
+                          VerticalAlignment="Center"
+                          BackgroundColor="{StaticResource LightGray}"
+                          ColumnDefinitions="Auto, *"
+                          ColumnSpacing="8"
+                          RowDefinitions="*,*">
+                        <Image Grid.Row="0"
+                               Grid.RowSpan="2"
+                               Grid.Column="0"
+                               Width="22"
+                               HorizontalAlignment="Center">
+                            <Image.Source>
+                                <FontImageSource FontFamily="FontAwesomeSolid"
+                                                 Glyph="&#xf07b;"
+                                                 Size="24"
+                                                 Color="{StaticResource DarkGray}" />
+                            </Image.Source>
+                        </Image>
+                        <Text Grid.Row="0"
+                              Grid.Column="1"
+                              Content="{Binding OrderCount}"
+                              FontSize="22"
+                              FontStyle="Bold" />
+                        <Text Grid.Row="1"
+                              Grid.Column="1"
+                              Content="Order Count"
+                              FontSize="10" />
+                    </Grid>
+                </Frame>
+
+                <Frame Grid.Column="2" CornerRadius="8">
+                    <Grid Padding="16"
+                          VerticalAlignment="Center"
+                          BackgroundColor="{StaticResource LightGray}"
+                          ColumnDefinitions="Auto, *"
+                          ColumnSpacing="8"
+                          RowDefinitions="*,*">
+                        <Image Grid.Row="0"
+                               Grid.RowSpan="2"
+                               Grid.Column="0"
+                               Width="22"
+                               HorizontalAlignment="Center">
+                            <Image.Source>
+                                <FontImageSource FontFamily="FontAwesomeSolid"
+                                                 Glyph="&#xf02c;"
+                                                 Size="24"
+                                                 Color="{StaticResource DarkGray}" />
+                            </Image.Source>
+                        </Image>
+                        <Text Grid.Column="1"
+                              Content="{Binding AverageSaleAmount, StringFormat='${0:N0}'}"
+                              FontSize="22"
+                              FontStyle="Bold" />
+                        <Text Grid.Row="1"
+                              Grid.Column="1"
+                              Content="Average Sale Amount"
+                              FontSize="10" />
+                    </Grid>
+                </Frame>
             </Grid>
         </StackPanel>
     </ReportHeaderBand>
 
     <DetailBand DataSource="{Binding Customers}">
-        <StackPanel Height="Auto"
-                    Margin="0,12,0,0"
-                    d:DataContext="{d:DesignInstance Type=reports:RevenueCustomer}">
+        <StackPanel Height="Auto" d:DataContext="{d:DesignInstance Type=reports:RevenueCustomer}">
 
             <Grid Height="24"
                   Padding="6,0"
