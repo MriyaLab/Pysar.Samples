@@ -125,8 +125,8 @@
                           RenderBudget="256"
                           RenderFailed="OnRenderFailed"
                           Report="{Binding Report}"
-                           Zoom="{Binding Zoom}"
-                           ZoomMode="{Binding ZoomMode}" />
+                          Zoom="{Binding Zoom}"
+                          ZoomMode="{Binding ZoomMode}" />
 
         <Border x:Name="PageIndicator"
                 Grid.Row="2"
@@ -135,8 +135,8 @@
                 ZIndex="3">
             <HorizontalStackLayout Spacing="8">
                 <Image HeightRequest="16"
-                       WidthRequest="16"
-                       VerticalOptions="Center">
+                       VerticalOptions="Center"
+                       WidthRequest="16">
                     <Image.Source>
                         <FontImageSource FontFamily="FontAwesomeSolid"
                                          Glyph="file-lines"
@@ -144,8 +144,7 @@
                                          Color="{StaticResource ChromeText}" />
                     </Image.Source>
                 </Image>
-                <Label Style="{StaticResource PageIndicatorLabel}"
-                       Text="{Binding PageIndicatorText}" />
+                <Label Style="{StaticResource PageIndicatorLabel}" Text="{Binding PageIndicatorText}" />
             </HorizontalStackLayout>
         </Border>
 
