@@ -8,7 +8,8 @@
         xmlns:views="clr-namespace:Pysar.Sample.Shared.Views;assembly=Pysar.Sample.Shared"
         x:Name="Root"
         d:DataContext="{d:DesignInstance Type=reports:InvoiceData,
-                                         IsDesignTimeCreatable=True}">
+                                         IsDesignTimeCreatable=True}"
+        x:DataType="reports:InvoiceData">
 
     <Report.Resources>
         <ResourceDictionary>
@@ -20,7 +21,9 @@
         </ResourceDictionary>
     </Report.Resources>
 
-    <Metadata Title="Invoice" Author="Andrii Kolodiichyk" />
+    <Metadata Title="Invoice"
+              Author="Andrii Kolodiichyk"
+              CreatedAt="02.02.2026" />
 
     <PageFormat Margin="50"
                 Orientation="Portrait"
@@ -141,7 +144,6 @@
 
         <Grid Height="20"
               d:DataContext="{d:DesignInstance Type=reports:InvoiceItem}"
-              BackgroundColor="#FFFFFF"
               BorderColor="{StaticResource LightGray}"
               BorderThickness="0,0.5,0,0.5"
               ColumnDefinitions="30, *, 75, 60, 50, 50"

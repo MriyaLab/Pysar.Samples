@@ -36,7 +36,7 @@
               VerticalTextAlignment="Center" />
     </PageHeaderBand>
 
-    <ReportHeaderBand Height="215" Margin="-50,-20,-50,0">
+    <ReportHeaderBand Height="Auto" Margin="-50,-20,-50,0">
         <StackPanel Height="Auto">
             <views:CompanyHeader Company="{Binding Company}"
                                  DocumentDate="01/15/26"
@@ -47,8 +47,7 @@
 
             <!--  Year at a glance: the totals aggregated from every month's entries.  -->
             <Grid Height="Auto"
-                  Margin="0,20,0,0"
-                  Padding="50,0"
+                  Padding="50,20"
                   ColumnDefinitions="Auto, 110, Auto, 110, *, Auto, 110"
                   ColumnSpacing="16"
                   RowDefinitions="Auto, Auto, Auto"
@@ -135,7 +134,7 @@
     <!--  Outer level: one block per month.  -->
     <DetailBand DataSource="{Binding Months}" RepeatDetailHeaderOnEveryPage="True">
         <DetailBand.DetailHeader>
-            <Grid Height="22"
+            <Grid Height="Auto"
                   BorderColor="#5E6475"
                   BorderThickness="0,0,0,2"
                   ColumnDefinitions="*"
@@ -149,7 +148,7 @@
         </DetailBand.DetailHeader>
 
         <StackPanel Height="Auto"
-                    Margin="0,10,0,0"
+                    Margin="0,0,0,0"
                     d:DataContext="{d:DesignInstance Type=reports:MonthSummary}">
 
             <!--  The month's own summary line; the trigger colors it by the month's net result.  -->
@@ -271,8 +270,7 @@
 
         <DetailBand.DetailFooter>
             <Grid Height="Auto"
-                  Margin="0,16,0,0"
-                  Padding="6,10,6,0"
+                  Padding="6"
                   BorderColor="#5E6475"
                   BorderThickness="0,2,0,0"
                   ColumnDefinitions="*, 110, 110, 110"
