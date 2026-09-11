@@ -6,7 +6,8 @@
         xmlns:views="clr-namespace:Pysar.Sample.Shared.Views;assembly=Pysar.Sample.Shared"
         x:Name="Root"
         d:DataContext="{d:DesignInstance Type=reports:RevenueReportData,
-                                         IsDesignTimeCreatable=True}">
+                                         IsDesignTimeCreatable=True}"
+        x:DataContext="reports:RevenueReportData">
 
     <Report.Resources>
         <ResourceDictionary>
@@ -17,6 +18,7 @@
     </Report.Resources>
 
     <Metadata Title="Revenue by Customer" Author="Pysar Sample" />
+
     <PageFormat Margin="50"
                 Orientation="Portrait"
                 Size="A4" />
