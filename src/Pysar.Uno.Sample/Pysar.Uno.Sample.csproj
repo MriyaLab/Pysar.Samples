@@ -1,4 +1,4 @@
-<Project Sdk="Uno.Sdk/6.7.22">
+<Project Sdk="Uno.Sdk/6.8.0-dev.41">
   <PropertyGroup>
     <TargetFrameworks>net10.0-desktop</TargetFrameworks>
 
@@ -61,6 +61,30 @@
                       LogicalName="Fonts/%(Filename)%(Extension)" />
     <EmbeddedResource Include="..\Pysar.Sample.Shared\Images\**"
                       LogicalName="Images/%(Filename)%(Extension)" />
+    <EmbeddedResource Update="..\Pysar.Sample.Shared\Fonts\Font Awesome 6 Free-Regular-400.otf">
+      <Link>Fonts\Font Awesome 6 Free-Regular-400.otf</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Update="..\Pysar.Sample.Shared\Fonts\Font Awesome 6 Free-Solid-900.otf">
+      <Link>Fonts\Font Awesome 6 Free-Solid-900.otf</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Update="..\Pysar.Sample.Shared\Fonts\LibreBarcode128-Regular.ttf">
+      <Link>Fonts\LibreBarcode128-Regular.ttf</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Update="..\Pysar.Sample.Shared\Fonts\Ubuntu-Bold.ttf">
+      <Link>Fonts\Ubuntu-Bold.ttf</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Update="..\Pysar.Sample.Shared\Fonts\Ubuntu-Italic.ttf">
+      <Link>Fonts\Ubuntu-Italic.ttf</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Update="..\Pysar.Sample.Shared\Fonts\Ubuntu-Regular.ttf">
+      <Link>Fonts\Ubuntu-Regular.ttf</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Update="..\Pysar.Sample.Shared\Images\logo.svg">
+      <Link>Images\logo.svg</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Update="..\Pysar.Sample.Shared\Images\student.png">
+      <Link>Images\student.png</Link>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
