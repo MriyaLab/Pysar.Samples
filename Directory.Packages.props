@@ -11,12 +11,13 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- Pysar -->
-    <PackageVersion Include="Pysar" Version="0.1.31" />
-    <PackageVersion Include="Pysar.Xaml" Version="0.1.31" />
-    <PackageVersion Include="Pysar.Maui" Version="0.1.31" />
-    <PackageVersion Include="Pysar.Avalonia" Version="0.1.31" />
-    <PackageVersion Include="Pysar.Blazor" Version="0.1.31" />
-    <PackageVersion Include="Pysar.Wpf" Version="0.1.24" />
+    <PackageVersion Include="Pysar" Version="0.1.99" />
+    <PackageVersion Include="Pysar.Xaml" Version="0.1.99" />
+    <PackageVersion Include="Pysar.Maui" Version="0.1.99" />
+    <PackageVersion Include="Pysar.Avalonia" Version="0.1.99" />
+    <PackageVersion Include="Pysar.Blazor" Version="0.1.99" />
+    <PackageVersion Include="Pysar.Wpf" Version="0.1.35" />
+    <PackageVersion Include="Pysar.Uno" Version="0.1.99-preview" />
     <!-- Avalonia UI framework -->
     <PackageVersion Include="Avalonia" Version="12.1.1" />
     <PackageVersion Include="Avalonia.Desktop" Version="12.1.1" />
@@ -43,14 +44,14 @@
     <PackageVersion Include="SkiaSharp.NativeAssets.MacCatalyst" Version="4.151.2" />
     <PackageVersion Include="SkiaSharp.NativeAssets.WebAssembly" Version="4.151.2" />
     <PackageVersion Include="SkiaSharp.QrCode" Version="1.2.0" />
-    <PackageVersion Include="HarfBuzzSharp" Version="14.2.0" />
-    <PackageVersion Include="HarfBuzzSharp.NativeAssets.Win32" Version="14.2.0" />
-    <PackageVersion Include="HarfBuzzSharp.NativeAssets.macOS" Version="14.2.0" />
-    <PackageVersion Include="HarfBuzzSharp.NativeAssets.Linux" Version="14.2.0" />
-    <PackageVersion Include="HarfBuzzSharp.NativeAssets.Android" Version="14.2.0" />
-    <PackageVersion Include="HarfBuzzSharp.NativeAssets.iOS" Version="14.2.0" />
-    <PackageVersion Include="HarfBuzzSharp.NativeAssets.MacCatalyst" Version="14.2.0" />
-    <PackageVersion Include="HarfBuzzSharp.NativeAssets.WebAssembly" Version="14.2.0" />
+    <PackageVersion Include="HarfBuzzSharp" Version="14.2.1.1" />
+    <PackageVersion Include="HarfBuzzSharp.NativeAssets.Win32" Version="14.2.1.1" />
+    <PackageVersion Include="HarfBuzzSharp.NativeAssets.macOS" Version="14.2.1.1" />
+    <PackageVersion Include="HarfBuzzSharp.NativeAssets.Linux" Version="14.2.1.1" />
+    <PackageVersion Include="HarfBuzzSharp.NativeAssets.Android" Version="14.2.1.1" />
+    <PackageVersion Include="HarfBuzzSharp.NativeAssets.iOS" Version="14.2.1.1" />
+    <PackageVersion Include="HarfBuzzSharp.NativeAssets.MacCatalyst" Version="14.2.1.1" />
+    <PackageVersion Include="HarfBuzzSharp.NativeAssets.WebAssembly" Version="14.2.1.1" />
     <!-- Misc -->
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.11" />

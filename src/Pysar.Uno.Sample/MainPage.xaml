@@ -1,0 +1,40 @@
+<Page x:Class="Pysar.Uno.Sample.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:Pysar.Uno.Sample"
+      xmlns:pysar="using:Pysar.Uno"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <!-- The report to show, how to fit it, and the state the view reports back. -->
+    <StackPanel Grid.Row="0"
+                Orientation="Horizontal"
+                Spacing="12"
+                Padding="12">
+
+      <ComboBox x:Name="ReportPicker"
+                Width="220"
+                VerticalAlignment="Center"
+                SelectionChanged="OnReportChanged" />
+
+      <ComboBox x:Name="ZoomPicker"
+                Width="140"
+                VerticalAlignment="Center"
+                SelectionChanged="OnZoomModeChanged" />
+
+      <TextBlock x:Name="StatusText"
+                 VerticalAlignment="Center"
+                 Text="-" />
+    </StackPanel>
+
+    <pysar:ReportView x:Name="Viewer"
+                      Grid.Row="1"
+                      ZoomMode="FitWidth"
+                      PageSpacing="24" />
+  </Grid>
+</Page>

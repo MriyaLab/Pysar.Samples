@@ -1,0 +1,66 @@
+<Project Sdk="Uno.Sdk/6.7.22">
+  <PropertyGroup>
+    <TargetFrameworks>net10.0-desktop</TargetFrameworks>
+
+    <OutputType>Exe</OutputType>
+    <UnoSingleProject>true</UnoSingleProject>
+    <Nullable>enable</Nullable>
+
+    <!--
+      The Uno single project relies on these: the generated code-behind and Platforms/Desktop/Program.cs
+      reference Application, Window and STAThread without importing them. The template carries this in
+      a solution-level Directory.Build.props, which this repository has its own version of - so it is
+      set here instead.
+    -->
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <ApplicationTitle>Pysar Uno Sample</ApplicationTitle>
+    <ApplicationId>com.mriyalab.pysar.uno.sample</ApplicationId>
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <ApplicationVersion>1</ApplicationVersion>
+    <ApplicationPublisher>Mriya Lab</ApplicationPublisher>
+    <Description>Pysar report viewer running on Uno Platform.</Description>
+
+    <UnoFeatures>
+      SkiaRenderer;
+    </UnoFeatures>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Pysar.Sample.Shared\Pysar.Sample.Shared.csproj" />
+    <PackageReference Include="Pysar.Uno" />
+  </ItemGroup>
+
+  <!--
+    Pysar renders through SkiaSharp 4.151.x while Uno's Skia hosts ask for 3.119; one managed
+    SkiaSharp is resolved for the whole application, so these pins make that resolution explicit
+    rather than leaving it to whichever request happens to win. The native assets are pinned
+    alongside the managed wrapper for the reason Pysar's own Directory.Packages.props documents: a
+    split between the two is a startup crash, not a build error.
+  -->
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" />
+    <PackageReference Include="SkiaSharp.NativeAssets.macOS" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Win32" />
+    <PackageReference Include="HarfBuzzSharp" />
+  </ItemGroup>
+
+  <!--
+    The report assets live beside the reports that use them in Pysar.Sample.Shared and are shared
+    with the other samples, so they are linked here rather than copied. EmbeddedResource with an
+    explicit LogicalName is what UnoAssetFileSystem resolves against, and the LogicalName has to be
+    the exact relative path the reports ask for - "Fonts/...", "Images/...".
+
+    Embedded rather than Content because asset reads have to be synchronous: font registration and
+    image loading never await, Uno's ms-appx:/// path is asynchronous, and on the WebAssembly host
+    blocking on it deadlocks the single thread rather than stalling it.
+  -->
+  <ItemGroup>
+    <EmbeddedResource Include="..\Pysar.Sample.Shared\Fonts\**"
+                      LogicalName="Fonts/%(Filename)%(Extension)" />
+    <EmbeddedResource Include="..\Pysar.Sample.Shared\Images\**"
+                      LogicalName="Images/%(Filename)%(Extension)" />
+  </ItemGroup>
+
+</Project>
