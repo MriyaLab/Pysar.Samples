@@ -52,6 +52,15 @@
     <PackageVersion Include="HarfBuzzSharp.NativeAssets.iOS" Version="14.2.1.1" />
     <PackageVersion Include="HarfBuzzSharp.NativeAssets.MacCatalyst" Version="14.2.1.1" />
     <PackageVersion Include="HarfBuzzSharp.NativeAssets.WebAssembly" Version="14.2.1.1" />
+    <!-- Uno's Win32 Skia host pulls Microsoft.Windows.CsWin32, whose 0.3.106 bundles
+         System.Text.Encodings.Web 4.7.0 inside analyzers/cs - a version in the range CVE-2021-26701
+         covers. It travels as a file in the package rather than a declared dependency, so NuGet's
+         own audit does not see it; only a scanner that reads package contents does. It is an
+         analyzer, so it runs in the compiler rather than shipping to the application's output, but
+         0.3.333 carries the 8.0 build and costs nothing to pin. Transitive pinning is what makes
+         this take effect without a direct PackageReference - see the note at the top of this file. -->
+    <PackageVersion Include="Microsoft.Windows.CsWin32" Version="0.3.333" />
+
     <!-- Misc -->
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.11" />
