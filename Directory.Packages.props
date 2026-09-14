@@ -11,13 +11,13 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- Pysar -->
-    <PackageVersion Include="Pysar" Version="0.1.99" />
-    <PackageVersion Include="Pysar.Xaml" Version="0.1.99" />
-    <PackageVersion Include="Pysar.Maui" Version="0.1.99" />
-    <PackageVersion Include="Pysar.Avalonia" Version="0.1.99" />
-    <PackageVersion Include="Pysar.Blazor" Version="0.1.99" />
-    <PackageVersion Include="Pysar.Wpf" Version="0.1.35" />
-    <PackageVersion Include="Pysar.Uno" Version="0.1.99-preview" />
+    <PackageVersion Include="Pysar" Version="0.1.38" />
+    <PackageVersion Include="Pysar.Xaml" Version="0.1.38" />
+    <PackageVersion Include="Pysar.Maui" Version="0.1.38" />
+    <PackageVersion Include="Pysar.Avalonia" Version="0.1.38" />
+    <PackageVersion Include="Pysar.Blazor" Version="0.1.38" />
+    <PackageVersion Include="Pysar.Wpf" Version="0.1.38" />
+    <PackageVersion Include="Pysar.Uno" Version="0.1.38" />
     <!-- Avalonia UI framework -->
     <PackageVersion Include="Avalonia" Version="12.1.1" />
     <PackageVersion Include="Avalonia.Desktop" Version="12.1.1" />
@@ -60,7 +60,6 @@
          0.3.333 carries the 8.0 build and costs nothing to pin. Transitive pinning is what makes
          this take effect without a direct PackageReference - see the note at the top of this file. -->
     <PackageVersion Include="Microsoft.Windows.CsWin32" Version="0.3.333" />
-
     <!-- Misc -->
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.11" />
