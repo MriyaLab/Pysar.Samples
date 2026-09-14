@@ -30,7 +30,7 @@
               Padding="20,0"
               HorizontalAlignment="Center"
               VerticalAlignment="Center"
-              BorderColor="{Binding FontColor, Source={x:Reference WatermarkText}}"
+              BorderColor="{StaticResource DarkGray}"
               BorderThickness="10"
               Content="Watermark"
               FontColor="{StaticResource DarkGray}"
