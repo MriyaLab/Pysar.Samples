@@ -1,6 +1,6 @@
 <Project Sdk="Uno.Sdk/6.8.0-dev.41">
   <PropertyGroup>
-    <TargetFrameworks>net10.0-desktop</TargetFrameworks>
+    <TargetFrameworks>net10.0-desktop;net10.0-browserwasm</TargetFrameworks>
 
     <OutputType>Exe</OutputType>
     <UnoSingleProject>true</UnoSingleProject>
@@ -61,6 +61,15 @@
                       LogicalName="Fonts/%(Filename)%(Extension)" />
     <EmbeddedResource Include="..\Pysar.Sample.Shared\Images\**"
                       LogicalName="Images/%(Filename)%(Extension)" />
+    <!--
+      The reports pull shared brushes and styles in through <ResourceDictionary Source="..."/>, and
+      that Source is resolved against the directory the project was compiled in - a path that only
+      exists on the build machine. The desktop host gets away with it because the two are the same
+      machine; a browser has no file system at all, so the styles have to travel as assets the
+      platform handler can serve, exactly like the fonts and images above.
+    -->
+    <EmbeddedResource Include="..\Pysar.Sample.Shared\Styles\**"
+                      LogicalName="Styles/%(Filename)%(Extension)" />
     <EmbeddedResource Update="..\Pysar.Sample.Shared\Fonts\Font Awesome 6 Free-Regular-400.otf">
       <Link>Fonts\Font Awesome 6 Free-Regular-400.otf</Link>
     </EmbeddedResource>
