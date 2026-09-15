@@ -17,12 +17,6 @@ internal class Program
         global::Uno.WinRTFeatureConfiguration.Storage.Pickers.WasmConfiguration =
             global::Uno.WasmPickerConfiguration.FileSystemAccessApiWithFallback;
 
-        // Ctrl (or Command) plus wheel, and the trackpad pinch Chrome delivers as the same event,
-        // zoom the page rather than the report unless the browser's own zoom is suppressed over the
-        // canvas. ReportView cannot do this for itself - the script has to be imported, and a
-        // control cannot await - so the head asks for it.
-        await PysarUnoBrowser.UseWheelZoomAsync();
-
         var host = UnoPlatformHostBuilder.Create()
             .App(() => new App())
             .UseWebAssembly()
