@@ -1,6 +1,6 @@
 <Project Sdk="Uno.Sdk/6.8.0-dev.41">
   <PropertyGroup>
-    <TargetFrameworks>net10.0-desktop;net10.0-browserwasm</TargetFrameworks>
+    <TargetFrameworks>net10.0-desktop;net10.0-browserwasm;net10.0-android;net10.0-ios</TargetFrameworks>
 
     <OutputType>Exe</OutputType>
     <UnoSingleProject>true</UnoSingleProject>
@@ -29,6 +29,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Pysar.Sample.Shared\Pysar.Sample.Shared.csproj" />
     <PackageReference Include="Pysar.Uno" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
   </ItemGroup>
 
   <!--
@@ -44,6 +45,16 @@
     <PackageReference Include="SkiaSharp.NativeAssets.Linux" />
     <PackageReference Include="SkiaSharp.NativeAssets.Win32" />
     <PackageReference Include="HarfBuzzSharp" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-android'">
+    <PackageReference Include="SkiaSharp.NativeAssets.Android" />
+    <PackageReference Include="HarfBuzzSharp.NativeAssets.Android" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-ios'">
+    <PackageReference Include="SkiaSharp.NativeAssets.iOS" />
+    <PackageReference Include="HarfBuzzSharp.NativeAssets.iOS" />
   </ItemGroup>
 
   <!--

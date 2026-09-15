@@ -11,13 +11,13 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- Pysar -->
-    <PackageVersion Include="Pysar" Version="0.1.38" />
-    <PackageVersion Include="Pysar.Xaml" Version="0.1.38" />
-    <PackageVersion Include="Pysar.Maui" Version="0.1.38" />
-    <PackageVersion Include="Pysar.Avalonia" Version="0.1.38" />
-    <PackageVersion Include="Pysar.Blazor" Version="0.1.38" />
+    <PackageVersion Include="Pysar" Version="0.1.41" />
+    <PackageVersion Include="Pysar.Xaml" Version="0.1.41" />
+    <PackageVersion Include="Pysar.Maui" Version="0.1.41" />
+    <PackageVersion Include="Pysar.Avalonia" Version="0.1.41" />
+    <PackageVersion Include="Pysar.Blazor" Version="0.1.41" />
     <PackageVersion Include="Pysar.Wpf" Version="0.1.38" />
-    <PackageVersion Include="Pysar.Uno" Version="0.1.38" />
+    <PackageVersion Include="Pysar.Uno" Version="0.1.41" />
     <!-- Avalonia UI framework -->
     <PackageVersion Include="Avalonia" Version="12.1.1" />
     <PackageVersion Include="Avalonia.Desktop" Version="12.1.1" />
