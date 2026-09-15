@@ -3,43 +3,237 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:local="using:Pysar.Uno.Sample"
       xmlns:pysar="using:Pysar.Uno"
-      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+      Background="{StaticResource ChromeBackgroundBrush}">
 
-  <Grid>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="*" />
-    </Grid.RowDefinitions>
+  <Grid x:Name="RootLayout">
+    <SplitView x:Name="Shell"
+               DisplayMode="Inline"
+               IsPaneOpen="True"
+               OpenPaneLength="250"
+               PaneBackground="{StaticResource ChromeBackgroundBrush}">
 
-    <!-- The report to show, how to fit it, and the state the view reports back. -->
-    <StackPanel Grid.Row="0"
-                Orientation="Horizontal"
-                Spacing="12"
-                Padding="12">
+      <SplitView.Pane>
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
 
-      <ComboBox x:Name="ReportPicker"
-                Width="220"
-                VerticalAlignment="Center"
-                SelectionChanged="OnReportChanged" />
+          <Grid Height="200" Margin="0,30,0,40">
+            <Image Margin="10"
+                   Opacity="0.1"
+                   Source="ms-appx:///Assets/pysar.png"
+                   Stretch="Uniform" />
+            <TextBlock Margin="20,0"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontFamily="{StaticResource CookieRegular}"
+                       FontSize="42"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource ChromeTextBrush}"
+                       Text="Pysar Samples Uno"
+                       TextAlignment="Center"
+                       TextWrapping="Wrap" />
+          </Grid>
 
-      <ComboBox x:Name="ZoomPicker"
-                Width="140"
-                VerticalAlignment="Center"
-                SelectionChanged="OnZoomModeChanged" />
+          <ListView x:Name="ReportList"
+                    Grid.Row="1"
+                    IsItemClickEnabled="True"
+                    ItemsSource="{x:Bind ViewModel.Reports}"
+                    SelectedItem="{x:Bind ViewModel.SelectedReport, Mode=TwoWay}"
+                    SelectionChanged="OnReportListSelectionChanged"
+                    SelectionMode="Single">
+            <ListView.ItemContainerStyle>
+              <Style TargetType="ListViewItem">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Padding" Value="12,10" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+              </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+              <DataTemplate x:DataType="local:ReportDescriptor">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                  <TextBlock Width="40"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             FontSize="20"
+                             Foreground="{StaticResource ChromeTextBrush}"
+                             Text="{x:Bind Glyph}"
+                             TextAlignment="Center" />
+                  <TextBlock VerticalAlignment="Center"
+                             FontSize="16"
+                             Foreground="{StaticResource ChromeTextBrush}"
+                             Text="{x:Bind Title}" />
+                </StackPanel>
+              </DataTemplate>
+            </ListView.ItemTemplate>
+          </ListView>
+        </Grid>
+      </SplitView.Pane>
 
-      <Button x:Name="ExportPdfButton"
-              Content="Export PDF"
-              VerticalAlignment="Center"
-              Click="OnExportPdfClick" />
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-      <TextBlock x:Name="StatusText"
-                 VerticalAlignment="Center"
-                 Text="-" />
-    </StackPanel>
+        <Grid Padding="8,8,12,8" Background="{StaticResource ChromeBackgroundBrush}">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
 
-    <pysar:ReportView x:Name="Viewer"
-                      Grid.Row="1"
-                      ZoomMode="FitWidth"
-                      PageSpacing="24" />
+          <Border x:Name="NavToggle"
+                  Style="{StaticResource ToolbarPill}"
+                  Visibility="Collapsed">
+            <Button Click="OnNavToggleClick"
+                    Style="{StaticResource ToolbarPillButton}"
+                    ToolTipService.ToolTip="Reports">
+              <TextBlock FontFamily="{StaticResource FontAwesomeSolid}"
+                         FontSize="14"
+                         Foreground="{StaticResource ChromeTextBrush}"
+                         Text="&#xF0C9;" />
+            </Button>
+          </Border>
+
+          <StackPanel Grid.Column="1"
+                      HorizontalAlignment="Right"
+                      Orientation="Horizontal"
+                      Spacing="8">
+
+            <Border Style="{StaticResource ToolbarPill}">
+              <StackPanel Orientation="Horizontal">
+                <Button Command="{x:Bind ViewModel.ZoomOutCommand}"
+                        FontSize="18"
+                        Style="{StaticResource ToolbarPillButton}"
+                        ToolTipService.ToolTip="Zoom out"
+                        Content="−" />
+                <Rectangle Width="1"
+                           Height="16"
+                           VerticalAlignment="Center"
+                           Fill="{StaticResource ChromeDividerBrush}" />
+                <Button Width="52"
+                        Padding="0"
+                        Command="{x:Bind ViewModel.ActualSizeCommand}"
+                        Content="{x:Bind ViewModel.ZoomText, Mode=OneWay}"
+                        Style="{StaticResource ToolbarPillButton}"
+                        ToolTipService.ToolTip="Actual size" />
+                <Rectangle Width="1"
+                           Height="16"
+                           VerticalAlignment="Center"
+                           Fill="{StaticResource ChromeDividerBrush}" />
+                <Button Command="{x:Bind ViewModel.ZoomInCommand}"
+                        FontSize="18"
+                        Style="{StaticResource ToolbarPillButton}"
+                        ToolTipService.ToolTip="Zoom in"
+                        Content="+" />
+              </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource ToolbarPill}">
+              <Button Command="{x:Bind ViewModel.ToggleFitCommand}"
+                      Style="{StaticResource ToolbarPillButton}"
+                      ToolTipService.ToolTip="{x:Bind ViewModel.FitButtonTitle, Mode=OneWay}">
+                <TextBlock FontFamily="{StaticResource FontAwesomeSolid}"
+                           FontSize="18"
+                           Foreground="{StaticResource ChromeTextBrush}"
+                           Text="{x:Bind ViewModel.FitButtonGlyph, Mode=OneWay}" />
+              </Button>
+            </Border>
+
+            <Border Style="{StaticResource ToolbarPill}">
+              <Button Command="{x:Bind ViewModel.PrintCommand}"
+                      Style="{StaticResource ToolbarPillButton}"
+                      ToolTipService.ToolTip="Print">
+                <TextBlock FontFamily="{StaticResource FontAwesomeSolid}"
+                           FontSize="18"
+                           Foreground="{StaticResource ChromeTextBrush}"
+                           Text="&#xF02F;" />
+              </Button>
+            </Border>
+
+            <Border Style="{StaticResource ToolbarPill}">
+              <Button Click="OnExportPdfClick"
+                      Style="{StaticResource ToolbarPillButton}"
+                      ToolTipService.ToolTip="Export PDF">
+                <TextBlock x:Name="ExportGlyph"
+                           FontFamily="{StaticResource FontAwesomeSolid}"
+                           FontSize="18"
+                           Foreground="{StaticResource ChromeTextBrush}"
+                           Text="&#xE09A;" />
+              </Button>
+            </Border>
+          </StackPanel>
+        </Grid>
+
+        <TextBlock Grid.Row="1"
+                   Padding="8,12"
+                   Foreground="{StaticResource ChromeErrorBrush}"
+                   Text="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
+                   TextWrapping="Wrap"
+                   Visibility="{x:Bind ViewModel.ErrorVisibility, Mode=OneWay}" />
+
+        <Grid Grid.Row="2" Background="{StaticResource ChromeViewerBrush}">
+          <pysar:ReportView x:Name="Viewer"
+                            CurrentPage="{x:Bind ViewModel.CurrentPage, Mode=TwoWay}"
+                            DocumentPadding="16"
+                            EffectiveZoom="{x:Bind ViewModel.EffectiveZoom, Mode=TwoWay}"
+                            PageBorderColor="{StaticResource ChromePageBorder}"
+                            PageBorderThickness="2"
+                            PageCount="{x:Bind ViewModel.PageCount, Mode=TwoWay}"
+                            PageSpacing="16"
+                            RenderBudget="256"
+                            Report="{x:Bind ViewModel.Report, Mode=OneWay}"
+                            Zoom="{x:Bind ViewModel.Zoom, Mode=TwoWay}"
+                            ZoomMode="{x:Bind ViewModel.ZoomMode, Mode=TwoWay}" />
+
+          <Border x:Name="PageIndicator"
+                  Margin="16"
+                  Padding="14,10"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
+                  Background="#B32F2F2F"
+                  BorderBrush="#B34A4A4A"
+                  BorderThickness="1"
+                  CornerRadius="24"
+                  IsHitTestVisible="False"
+                  Visibility="Collapsed">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <TextBlock VerticalAlignment="Center"
+                         FontFamily="{StaticResource FontAwesomeSolid}"
+                         FontSize="14"
+                         Foreground="{StaticResource ChromeTextBrush}"
+                         Text="&#xF15C;" />
+              <TextBlock VerticalAlignment="Center"
+                         FontSize="14"
+                         Foreground="{StaticResource ChromeTextBrush}"
+                         Text="{x:Bind ViewModel.PageIndicatorText, Mode=OneWay}" />
+            </StackPanel>
+          </Border>
+        </Grid>
+      </Grid>
+    </SplitView>
+    <VisualStateManager.VisualStateGroups>
+      <VisualStateGroup x:Name="LayoutStates">
+        <VisualState x:Name="Wide">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="641" />
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="Shell.DisplayMode" Value="Inline" />
+            <Setter Target="NavToggle.Visibility" Value="Collapsed" />
+          </VisualState.Setters>
+        </VisualState>
+        <VisualState x:Name="Narrow">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="0" />
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="Shell.DisplayMode" Value="Overlay" />
+            <Setter Target="NavToggle.Visibility" Value="Visible" />
+          </VisualState.Setters>
+        </VisualState>
+      </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
   </Grid>
 </Page>

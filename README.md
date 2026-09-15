@@ -14,6 +14,7 @@ Every sample in this repository was built and executed to produce the screenshot
 | [Pysar.Maui.Sample](src/Pysar.Maui.Sample) | `ReportView` on phone and tablet, plus print and PDF export | iOS, Android, Mac Catalyst |
 | [Pysar.Avalonia.Sample](src/Pysar.Avalonia.Sample) | `ReportView` on the Avalonia desktop | Windows, macOS, Linux |
 | [Pysar.Wpf.Sample](src/Pysar.Wpf.Sample) | `ReportView` on WPF | Windows |
+| [Pysar.Uno.Sample](src/Pysar.Uno.Sample) | `ReportView` on Uno (desktop + WebAssembly) | Windows, macOS, Linux, browser, iOS, Android |
 
 ## Quick start
 
@@ -206,6 +207,7 @@ src/
   Pysar.Maui.Sample/
   Pysar.Avalonia.Sample/
   Pysar.Wpf.Sample/
+  Pysar.Uno.Sample/
 docs/screenshots/          the images in these READMEs
 tools/                     helper scripts (icon generation, screenshot capture)
 ```

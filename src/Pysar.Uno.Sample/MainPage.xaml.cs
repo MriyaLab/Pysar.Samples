@@ -1,142 +1,156 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Pysar.Elements;
+using System.ComponentModel;
 using Pysar.Export;
-using Pysar.Sample.Shared;
-using Pysar.Sample.Shared.Data;
-using Pysar.Sample.Shared.Reports.Invoice;
-using Pysar.Viewer.Zoom;
-using Windows.Storage;
+using Pysar.Uno.Sample.ViewModels;
 using Windows.Storage.Pickers;
+using Windows.UI.ViewManagement;
 
 namespace Pysar.Uno.Sample;
 
-/// <summary>
-/// One entry of the report picker: a display name, the name its PDF export is offered under, and
-/// how to build the report.
-/// </summary>
-public sealed record ReportDescriptor(string Title, string FileName, Func<Report> Create)
-{
-    public static IReadOnlyList<ReportDescriptor> All { get; } =
-    [
-        new("Invoice", "InvoiceReport.pdf", () => new InvoiceReport(InvoiceData.CreateDesignInstance())),
-        new("Annual", "AnnualReport.pdf", () => new AnnualReport(AnnualLedger.CreateDesignInstance())),
-        new("Revenue By Customer", "RevenueByCustomer.pdf", () => new RevenueByCustomerReport(RevenueReportData.CreateDesignInstance()))
-    ];
-
-    public override string ToString() => Title;
-}
-
 public sealed partial class MainPage : Page
 {
+    private bool _isNarrow;
+    private DispatcherTimer? _pageIndicatorTimer;
+
     public MainPage()
     {
-        this.InitializeComponent();
+        ViewModel = new ReportViewerViewModel();
+        InitializeComponent();
 
-        ReportPicker.ItemsSource = ReportDescriptor.All;
-        ZoomPicker.ItemsSource = new[] { ReportZoomMode.FitWidth, ReportZoomMode.FitPage, ReportZoomMode.Custom };
+        _pageIndicatorTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(3) };
+        _pageIndicatorTimer.Tick += OnPageIndicatorTick;
 
-        // The view reports where the scroll landed and what the current mode resolved to; showing
-        // them is what makes a wheel zoom or a pinch visibly do something beyond the pixels.
-        Viewer.RegisterPropertyChangedCallback(ReportView.CurrentPageProperty, (_, _) => UpdateStatus());
-        Viewer.RegisterPropertyChangedCallback(ReportView.PageCountProperty, (_, _) => UpdateStatus());
-        Viewer.RegisterPropertyChangedCallback(ReportView.EffectiveZoomProperty, (_, _) => UpdateStatus());
+        ViewModel.PropertyChanged += OnViewModelPropertyChanged;
+        Viewer.RenderFailed += (_, exception) => ViewModel.ErrorMessage = exception.ToString();
 
-        Viewer.RenderFailed += (_, exception) => StatusText.Text = $"Render failed: {exception.Message}";
-
-        ReportPicker.SelectedIndex = 0;
-        ZoomPicker.SelectedIndex = 0;
+        Loaded += OnMainPageLoaded;
     }
 
-    private void OnReportChanged(object sender, SelectionChangedEventArgs e)
+    public ReportViewerViewModel ViewModel { get; }
+
+    private void OnMainPageLoaded(object sender, RoutedEventArgs e)
     {
-        if (ReportPicker.SelectedItem is not ReportDescriptor descriptor)
+        ApplySafeArea();
+        SyncPaneForWidth(ActualWidth);
+        SizeChanged += OnMainPageSizeChanged;
+        ApplicationView.GetForCurrentView().VisibleBoundsChanged += (_, _) => ApplySafeArea();
+    }
+
+    private void OnMainPageSizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        ApplySafeArea();
+        SyncPaneForWidth(e.NewSize.Width);
+    }
+
+    private void SyncPaneForWidth(double width)
+    {
+        var narrow = width > 0 && width < 641;
+        if (narrow == _isNarrow)
             return;
 
-        try
-        {
-            var report = descriptor.Create();
-
-            // The view takes a report that has already been built - it measures and paginates, it
-            // does not build.
-            report.Build();
-
-            Viewer.Report = report;
-            StatusText.Text = "Loading...";
-        }
-        catch (Exception exception)
-        {
-            Viewer.Report = null;
-            StatusText.Text = $"Build failed: {exception.Message}";
-        }
+        _isNarrow = narrow;
+        Shell.IsPaneOpen = !narrow;
     }
 
-    private void OnZoomModeChanged(object sender, SelectionChangedEventArgs e)
+    private void ApplySafeArea()
     {
-        if (ZoomPicker.SelectedItem is ReportZoomMode mode)
-            Viewer.ZoomMode = mode;
+        RootLayout.Margin = GetSafeAreaMargin();
     }
 
-    /// <summary>
-    /// Renders the current report to PDF and offers it for saving. Rendering exercises a different
-    /// slice of Skia's C API than on-screen drawing does, which is why it is the first thing to
-    /// break when the managed SkiaSharp and the native binary linked beside it come from different
-    /// versions. The full exception goes into the status line deliberately: on a browser head that
-    /// is the only place it is readable.
-    /// </summary>
+    private Thickness GetSafeAreaMargin()
+    {
+#if __IOS__
+        double top = 0, left = 0, right = 0, bottom = 0;
+        foreach (var scene in UIKit.UIApplication.SharedApplication.ConnectedScenes.OfType<UIKit.UIWindowScene>())
+        {
+            foreach (var window in scene.Windows)
+            {
+                var windowInsets = window.SafeAreaInsets;
+                var viewInsets = window.RootViewController?.View?.SafeAreaInsets ?? default;
+                top = Math.Max(top, Math.Max(windowInsets.Top, viewInsets.Top));
+                left = Math.Max(left, Math.Max(windowInsets.Left, viewInsets.Left));
+                right = Math.Max(right, Math.Max(windowInsets.Right, viewInsets.Right));
+                bottom = Math.Max(bottom, Math.Max(windowInsets.Bottom, viewInsets.Bottom));
+            }
+        }
+
+        // Uno's Skia UIWindow reports 0 insets; Dynamic Island / notch is ~59pt.
+        if (top < 1)
+            top = 59;
+
+        return new Thickness(left, top, right, bottom);
+#else
+        if (XamlRoot is null)
+            return new Thickness(0);
+
+        var visible = ApplicationView.GetForCurrentView().VisibleBounds;
+        var width = XamlRoot.Size.Width;
+        var height = XamlRoot.Size.Height;
+        if (width <= 0 || height <= 0)
+            return new Thickness(0);
+
+        return new Thickness(
+            Math.Max(0, visible.X),
+            Math.Max(0, visible.Y),
+            Math.Max(0, width - visible.Right),
+            Math.Max(0, height - visible.Bottom));
+#endif
+    }
+
+    private void OnNavToggleClick(object sender, RoutedEventArgs e)
+        => Shell.IsPaneOpen = !Shell.IsPaneOpen;
+
+    private void OnReportListSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (Shell.DisplayMode == SplitViewDisplayMode.Overlay)
+            Shell.IsPaneOpen = false;
+    }
+
     private async void OnExportPdfClick(object sender, RoutedEventArgs e)
     {
-        if (Viewer.Report is not { } report || ReportPicker.SelectedItem is not ReportDescriptor descriptor)
+        if (ViewModel.Report is not { } report || ViewModel.IsBusy)
             return;
-
-        ExportPdfButton.IsEnabled = false;
 
         try
         {
-            // The picker comes first, before the report is rendered, and the order is not a
-            // preference. On WebAssembly this reaches the browser's File System Access API, which
-            // only opens while the click that started it still counts as a user gesture - a window
-            // of a few seconds. Rendering a multi-page report to PDF outruns it, and the picker
-            // then refuses to open at all, which arrives here as an ordinary "user cancelled".
-            //
-            // FileSavePicker is also what makes one code path serve both heads: a save dialog on
-            // the desktop host, a download in the browser.
             var picker = new FileSavePicker
             {
-                SuggestedFileName = Path.GetFileNameWithoutExtension(descriptor.FileName),
+                SuggestedFileName = Path.GetFileNameWithoutExtension(ViewModel.SelectedReport.FileName),
                 DefaultFileExtension = ".pdf"
             };
             picker.FileTypeChoices.Add("PDF document", new List<string> { ".pdf" });
 
             if (await picker.PickSaveFileAsync() is not { } file)
-            {
-                StatusText.Text = "Saving cancelled";
                 return;
-            }
 
-            StatusText.Text = "Exporting...";
-
-            var bytes = await PysarUno.ExportService.ExportAsync(report, ExportFormat.Pdf);
-
+            var bytes = await global::Pysar.Uno.PysarUno.ExportService.ExportAsync(report, ExportFormat.Pdf);
             await FileIO.WriteBytesAsync(file, bytes);
-
-            StatusText.Text = $"Saved {file.Name}: {bytes.Length:N0} bytes";
         }
         catch (Exception exception)
         {
-            StatusText.Text = $"PDF export failed: {exception}";
-        }
-        finally
-        {
-            ExportPdfButton.IsEnabled = true;
+            ViewModel.ErrorMessage = exception.ToString();
         }
     }
 
-    private void UpdateStatus()
-        => StatusText.Text = Viewer.PageCount == 0
-            ? "-"
-            : $"Page {Viewer.CurrentPage} of {Viewer.PageCount}  -  {Viewer.EffectiveZoom:P0}";
+    private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName is nameof(ReportViewerViewModel.CurrentPage)
+            or nameof(ReportViewerViewModel.PageCount))
+            ShowPageIndicator();
+    }
+
+    private void ShowPageIndicator()
+    {
+        if (ViewModel.PageCount < 1)
+            return;
+
+        PageIndicator.Visibility = Visibility.Visible;
+        _pageIndicatorTimer!.Stop();
+        _pageIndicatorTimer.Start();
+    }
+
+    private void OnPageIndicatorTick(object? sender, object e)
+    {
+        _pageIndicatorTimer?.Stop();
+        PageIndicator.Visibility = Visibility.Collapsed;
+    }
 }
