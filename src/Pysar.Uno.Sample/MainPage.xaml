@@ -27,6 +27,11 @@
                 VerticalAlignment="Center"
                 SelectionChanged="OnZoomModeChanged" />
 
+      <Button x:Name="ExportPdfButton"
+              Content="Export PDF"
+              VerticalAlignment="Center"
+              Click="OnExportPdfClick" />
+
       <TextBlock x:Name="StatusText"
                  VerticalAlignment="Center"
                  Text="-" />
