@@ -53,9 +53,7 @@
   -->
   <ItemGroup>
     <UnoFont Include="Assets\Fonts\Cookie-Regular.ttf" />
-    <UnoFont Include="..\Pysar.Sample.Shared\Fonts\Font Awesome 6 Free-Solid-900.otf">
-      <Link>Assets\Fonts\Font Awesome 6 Free-Solid-900.otf</Link>
-    </UnoFont>
+    <UnoFont Include="Assets\Fonts\Font Awesome 6 Free-Solid-900.otf" />
   </ItemGroup>
 
   <!--
