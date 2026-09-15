@@ -47,6 +47,18 @@
   </ItemGroup>
 
   <!--
+    Chrome fonts for the WinUI shell (sidebar title + toolbar glyphs). Separate from the
+    report EmbeddedResource fonts: those are read synchronously by Pysar, these are
+    loaded by the XAML font stack.
+  -->
+  <ItemGroup>
+    <UnoFont Include="Assets\Fonts\Cookie-Regular.ttf" />
+    <UnoFont Include="..\Pysar.Sample.Shared\Fonts\Font Awesome 6 Free-Solid-900.otf">
+      <Link>Assets\Fonts\Font Awesome 6 Free-Solid-900.otf</Link>
+    </UnoFont>
+  </ItemGroup>
+
+  <!--
     The report assets live beside the reports that use them in Pysar.Sample.Shared and are shared
     with the other samples, so they are linked here rather than copied. EmbeddedResource with an
     explicit LogicalName is what UnoAssetFileSystem resolves against, and the LogicalName has to be
