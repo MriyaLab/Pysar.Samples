@@ -21,15 +21,15 @@ public partial class App : Application
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
         // Before anything can build a report: installs the platform handler reports resolve their
-        // assets through, and the renderer ReportView draws with. The assembly is this one, because
-        // the fonts and images are linked into it as embedded resources - see the csproj.
-        var pysar = PysarUno.Use(typeof(App).Assembly, builder =>
+        // assets through, and the renderer ReportView draws with. On the WebAssembly head it also
+        // stops the browser zooming the page when Ctrl+wheel is meant for the report. The assembly
+        // is this one, because the fonts and images are linked into it as embedded resources - see
+        // the csproj.
+        this.UsePysar(typeof(App).Assembly, builder =>
         {
             ReportBootstrap.RegisterFonts(builder.Fonts);
             ReportBootstrap.RegisterDrawers(PysarUno.Renderer);
         });
-
-        _ = pysar;
 
         MainWindow = new Window();
 #if DEBUG
