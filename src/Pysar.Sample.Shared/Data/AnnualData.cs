@@ -1,11 +1,44 @@
-using Pysar.Sample.Shared.Data;
+using Pysar.Core.Abstractions;
 
-namespace Pysar.Sample.Shared;
+namespace Pysar.Sample.Shared.Data;
 
-/// <summary>
-///     The sample ledger for <see cref="AnnualReport"/>. The figures are fixed rather than random so
-///     the rendered PDF is byte-stable across runs, which keeps visual comparisons meaningful.
-/// </summary>
+
+public sealed record AnnualLedger(int Year, Organization Company, IReadOnlyList<MonthSummary> Months)
+    : IDesignTimeCreatable<AnnualLedger>
+{
+    /// <summary>The year as text, because the header component's parameters are strings.</summary>
+    public string YearLabel => Year.ToString();
+
+    public decimal Income => Months.Sum(month => month.Income);
+
+    public decimal Expense => Months.Sum(month => month.Expense);
+
+    public decimal Net => Income - Expense;
+    
+    public string MarginLabel => $"{(Income == 0 ? 0 : Net / Income * 100):N1} %";
+
+    public string BestMonth => Months.OrderByDescending(month => month.Net).First().Name;
+
+    public string WorstMonth => Months.OrderBy(month => month.Net).First().Name;
+
+    /// <summary>The sample ledger used by both the console application and design-time preview.</summary>
+    public static AnnualLedger CreateDesignInstance() => AnnualData.Ledger;
+}
+
+public sealed record LedgerEntry(string Category, string Description, decimal Income, decimal Expense)
+{
+    public decimal Net => Income - Expense;
+}
+
+public sealed record MonthSummary(string Name, IReadOnlyList<LedgerEntry> Entries)
+{
+    public decimal Income => Entries.Sum(entry => entry.Income);
+
+    public decimal Expense => Entries.Sum(entry => entry.Expense);
+
+    public decimal Net => Income - Expense;
+}
+
 public static class AnnualData
 {
     private static readonly string[] MonthNames =

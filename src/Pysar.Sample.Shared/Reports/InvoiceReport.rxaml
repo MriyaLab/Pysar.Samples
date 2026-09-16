@@ -14,7 +14,7 @@
     <Report.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../Styles/ReportStyles.rxaml" />
+                <ResourceDictionary Source="../Styles/ReportStyles.rxaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <conv:UppercaseConverter x:Key="Upper" />

@@ -1,8 +1,8 @@
-<Report x:Class="Pysar.Sample.Shared.RevenueByCustomerReport"
+<Report x:Class="Pysar.Sample.Shared.Reports.RevenueByCustomerReport"
         xmlns="https://mriyalab.com/pysar"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:reports="clr-namespace:Pysar.Sample.Shared;assembly=Pysar.Sample.Shared"
+        xmlns:reports="clr-namespace:Pysar.Sample.Shared.Data;assembly=Pysar.Sample.Shared"
         xmlns:views="clr-namespace:Pysar.Sample.Shared.Views;assembly=Pysar.Sample.Shared"
         x:Name="Root"
         d:DataContext="{d:DesignInstance Type=reports:RevenueReportData,
@@ -12,7 +12,7 @@
     <Report.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Styles/ReportStyles.rxaml" />
+                <ResourceDictionary Source="../Styles/ReportStyles.rxaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Report.Resources>
