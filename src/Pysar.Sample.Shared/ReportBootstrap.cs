@@ -11,7 +11,7 @@ public sealed class ReportBootstrap : IReportBootstrap
 {
     public static void Initialize(SkiaReportRenderer renderer)
     {
-        ReportPlatformHandler.Create(new FileSystemPlatformHandler());
+        ReportPlatformHandler.Create(new DefaultReportPlatformHandler());
 
         RegisterFonts(ReportPlatformHandler.FontCollection);
         RegisterDrawers(renderer);

@@ -27,5 +27,13 @@
       <Content Include="Fonts\**" CopyToOutputDirectory="PreserveNewest" />
       <Content Include="Images\**" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
+    <ItemGroup>
+      <None Update="Styles\ReportColors.rxaml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Styles\ReportStyles.rxaml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
 
 </Project>

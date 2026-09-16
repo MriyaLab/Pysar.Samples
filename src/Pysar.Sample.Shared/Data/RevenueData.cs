@@ -1,7 +1,6 @@
 using Pysar.Core.Abstractions;
-using Pysar.Sample.Shared.Data;
 
-namespace Pysar.Sample.Shared;
+namespace Pysar.Sample.Shared.Data;
 
 public sealed record RevenueReportData(
     Organization Company,
