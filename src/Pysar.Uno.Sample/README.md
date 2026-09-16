@@ -26,7 +26,8 @@ Android and iOS need the corresponding .NET workloads.
 ## Registering Pysar
 
 `UsePysar` runs in `App.OnLaunched`. The assembly is this one because report fonts and images
-are linked into it as embedded resources.
+from Shared are linked under `Assets/` as embedded resources (`LogicalName` remains `Fonts/...`
+and `Images/...`).
 
 ```csharp
 this.UsePysar(typeof(App).Assembly, builder =>
