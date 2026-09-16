@@ -69,9 +69,9 @@
 
   <!--
     The report assets live beside the reports that use them in Pysar.Sample.Shared and are shared
-    with the other samples, so they are linked here rather than copied. EmbeddedResource with an
-    explicit LogicalName is what UnoAssetFileSystem resolves against, and the LogicalName has to be
-    the exact relative path the reports ask for - "Fonts/...", "Images/...".
+    with the other samples, so they are linked here rather than copied. Linked under Assets/ —
+    Uno's package root — but LogicalName stays the path the reports ask for: "Fonts/...",
+    "Images/...", "Styles/...".
 
     Embedded rather than Content because asset reads have to be synchronous: font registration and
     image loading never await, Uno's ms-appx:/// path is asynchronous, and on the WebAssembly host
@@ -79,9 +79,11 @@
   -->
   <ItemGroup>
     <EmbeddedResource Include="..\Pysar.Sample.Shared\Fonts\**"
-                      LogicalName="Fonts/%(Filename)%(Extension)" />
+                      LogicalName="Fonts/%(Filename)%(Extension)"
+                      Link="Assets\Fonts\%(RecursiveDir)%(Filename)%(Extension)" />
     <EmbeddedResource Include="..\Pysar.Sample.Shared\Images\**"
-                      LogicalName="Images/%(Filename)%(Extension)" />
+                      LogicalName="Images/%(Filename)%(Extension)"
+                      Link="Assets\Images\%(RecursiveDir)%(Filename)%(Extension)" />
     <!--
       The reports pull shared brushes and styles in through <ResourceDictionary Source="..."/>, and
       that Source is resolved against the directory the project was compiled in - a path that only
@@ -90,31 +92,8 @@
       platform handler can serve, exactly like the fonts and images above.
     -->
     <EmbeddedResource Include="..\Pysar.Sample.Shared\Styles\**"
-                      LogicalName="Styles/%(Filename)%(Extension)" />
-    <EmbeddedResource Update="..\Pysar.Sample.Shared\Fonts\Font Awesome 6 Free-Regular-400.otf">
-      <Link>Fonts\Font Awesome 6 Free-Regular-400.otf</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Update="..\Pysar.Sample.Shared\Fonts\Font Awesome 6 Free-Solid-900.otf">
-      <Link>Fonts\Font Awesome 6 Free-Solid-900.otf</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Update="..\Pysar.Sample.Shared\Fonts\LibreBarcode128-Regular.ttf">
-      <Link>Fonts\LibreBarcode128-Regular.ttf</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Update="..\Pysar.Sample.Shared\Fonts\Ubuntu-Bold.ttf">
-      <Link>Fonts\Ubuntu-Bold.ttf</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Update="..\Pysar.Sample.Shared\Fonts\Ubuntu-Italic.ttf">
-      <Link>Fonts\Ubuntu-Italic.ttf</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Update="..\Pysar.Sample.Shared\Fonts\Ubuntu-Regular.ttf">
-      <Link>Fonts\Ubuntu-Regular.ttf</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Update="..\Pysar.Sample.Shared\Images\logo.svg">
-      <Link>Images\logo.svg</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Update="..\Pysar.Sample.Shared\Images\student.png">
-      <Link>Images\student.png</Link>
-    </EmbeddedResource>
+                      LogicalName="Styles/%(Filename)%(Extension)"
+                      Link="Assets\Styles\%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
 
 </Project>
