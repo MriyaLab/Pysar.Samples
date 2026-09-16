@@ -59,7 +59,8 @@ public partial class CompanyHeader
             companyHeader.CompanyWebsite = customer.Website;
             companyHeader.CompanyEmail = customer.Email;
             companyHeader.CompanyPhone = customer.Phone;
-            companyHeader.LogoSource = new FileImageSource(customer.Logo);
+            if (customer.Logo != null)
+                companyHeader.LogoSource = new FileImageSource(customer.Logo);
         }
     }
     

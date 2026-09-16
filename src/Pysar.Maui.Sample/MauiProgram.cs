@@ -15,7 +15,7 @@ public static class MauiProgram
 		builder
 			.UseMauiApp<App>()
 			.UsePysar(pysar => pysar
-				.RegisterFonts(ReportBootstrap.RegisterFonts)
+				.AddFonts(ReportBootstrap.RegisterFonts)
 				.AddDrawer<QRCode>(new QRCodeDrawer()))
 			.ConfigureFonts(fonts =>
 			{

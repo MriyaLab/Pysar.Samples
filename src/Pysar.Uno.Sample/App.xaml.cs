@@ -1,7 +1,4 @@
-using System;
-using Microsoft.Extensions.Logging;
 using Pysar.Sample.Shared;
-using Uno.Resizetizer;
 
 namespace Pysar.Uno.Sample;
 
