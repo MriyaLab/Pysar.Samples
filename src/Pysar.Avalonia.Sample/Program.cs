@@ -20,7 +20,7 @@ sealed class Program
             .UsePlatformDetect()
             .WithInterFont()
             .UsePysar(pysar => pysar
-                .RegisterFonts(ReportBootstrap.RegisterFonts)
+                .AddFonts(ReportBootstrap.RegisterFonts)
                 .AddDrawer<QRCode>(new QRCodeDrawer()))
             .LogToTrace();
 }

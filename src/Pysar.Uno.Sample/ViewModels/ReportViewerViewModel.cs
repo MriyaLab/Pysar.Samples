@@ -1,8 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.UI.Xaml;
 using Pysar.Elements;
-using Pysar.Uno;
 using Pysar.Viewer.Zoom;
 
 namespace Pysar.Uno.Sample.ViewModels;

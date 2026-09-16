@@ -93,11 +93,12 @@
 		<!--
 			The reports merge these dictionaries by relative path at load time. Compiled reports carry
 			the absolute directory they were built from, which a sandboxed application cannot read, so
-			the dictionaries travel in the package under the paths the reports ask for.
+			they travel as raw assets under the exact relative paths the reports ask for, which is what
+			Pysar.Maui resolves them by at render time.
 		-->
 		<MauiAsset Include="..\Pysar.Sample.Shared\Styles\**"
 		           Link="Resources\Raw\Styles\%(Filename)%(Extension)"
-		           LogicalName="Styles/%(Filename)%(Extension)" />
+			LogicalName="Styles/%(Filename)%(Extension)" />
 	</ItemGroup>
 
 	<ItemGroup>
