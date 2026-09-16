@@ -19,21 +19,11 @@
     </ItemGroup>
 
     <!--
-      Fonts and images are declared as Content rather than None so they flow through the project
-      reference into every host application's output directory, which is where the relative asset
-      paths in the reports are resolved from.
+      One declaration for every head. Pysar.Assets.targets embeds these into this assembly, and each
+      host's file system falls back to it - no per-head re-declaration, and nothing to keep in sync.
     -->
     <ItemGroup>
-      <Content Include="Fonts\**" CopyToOutputDirectory="PreserveNewest" />
-      <Content Include="Images\**" CopyToOutputDirectory="PreserveNewest" />
-    </ItemGroup>
-    <ItemGroup>
-      <None Update="Styles\ReportColors.rxaml">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Styles\ReportStyles.rxaml">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+      <ReportAsset Include="Fonts\**;Images\**;Styles\**" />
     </ItemGroup>
 
 </Project>

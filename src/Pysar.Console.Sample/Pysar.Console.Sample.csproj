@@ -14,12 +14,15 @@
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     </PropertyGroup>
 
+    <!--
+      This sample's own report assets. Pysar.Assets.targets embeds them into the assembly under the
+      exact paths the reports ask for - "Fonts/Kanit-Bold.ttf", "Images/world.svg" - and the platform
+      handler reads them from there, so nothing has to be copied next to the binary.
+    -->
     <ItemGroup>
-        <None Update="Fonts\**\*" CopyToOutputDirectory="PreserveNewest" />
-        <None Update="Images\**\*" CopyToOutputDirectory="PreserveNewest" />
-        <None Update="Styles\**\*" CopyToOutputDirectory="PreserveNewest" />
+        <ReportAsset Include="Fonts\**;Images\**;Styles\**" />
     </ItemGroup>
-    
+
     <ItemGroup>
       <AdditionalFiles Remove="Reports\Data\Invoice.rxaml" />
       <AdditionalFiles Remove="Reports\Styles\Styles\Colors.rxaml" />
@@ -37,11 +40,5 @@
       <PackageReference Include="Pysar.Xaml" />
       <PackageReference Include="SkiaSharp.QrCode" />
     </ItemGroup>
-    
-    <ItemGroup>
-      <Content Update="Fonts\LibreBarcode128-Regular.ttf">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-    </ItemGroup>
-    
+
 </Project>

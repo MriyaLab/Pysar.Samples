@@ -13,23 +13,6 @@
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
 
-  <!--
-    The report assets live next to the reports that use them, and are shared with the MAUI sample,
-    the console sample and the design-time preview - so they are linked here rather than copied.
-    Unlike MauiAsset, AvaloniaResource has no LogicalName: its avares:// path is the item's Link
-    (or, without one, its path relative to the project). The Link below is therefore set to the
-    exact relative path the reports ask for - "Fonts/...", "Images/...", "Styles/..." - which is
-    what AvaloniaAssetFileSystem resolves against at render time.
-  -->
-  <ItemGroup>
-    <AvaloniaResource Include="..\Pysar.Sample.Shared\Fonts\**"
-                       Link="Fonts\%(Filename)%(Extension)" />
-    <AvaloniaResource Include="..\Pysar.Sample.Shared\Images\**"
-                       Link="Images\%(Filename)%(Extension)" />
-    <AvaloniaResource Include="..\Pysar.Sample.Shared\Styles\**"
-                       Link="Styles\%(Filename)%(Extension)" />
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Avalonia" />
     <PackageReference Include="Avalonia.Desktop" />
