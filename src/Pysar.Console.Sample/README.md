@@ -33,7 +33,7 @@ public sealed class ReportBootstrap : IReportBootstrap
 {
     public static void Initialize(SkiaReportRenderer renderer)
     {
-        ReportPlatformHandler.Create(new FileSystemPlatformHandler());
+        ReportPlatformHandler.Create(new DefaultReportPlatformHandler());
 
         var fonts = ReportPlatformHandler.FontCollection;
         fonts.AddFont("Fonts/Kanit-Bold.ttf", "Kanit", FontStyle.Bold);
@@ -45,8 +45,10 @@ public sealed class ReportBootstrap : IReportBootstrap
 }
 ```
 
-`FileSystemPlatformHandler` is what turns `Images/world.svg` into bytes. Swap it and the same reports
-read their assets from an app package instead — that is exactly what the MAUI and Blazor samples do.
+`DefaultReportPlatformHandler` is what turns `Images/world.svg` into bytes: it reads the deployment
+directory first, then the assets embedded by `ReportAsset` — in this assembly and in any referenced
+report library. Swap it and the same reports read their assets from an app package instead — that is
+exactly what the MAUI and Blazor samples do.
 
 Export is one call:
 

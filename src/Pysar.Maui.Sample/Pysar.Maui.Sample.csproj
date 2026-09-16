@@ -70,37 +70,6 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
-	<!--
-		The report assets live next to the reports that use them, and are shared with the console
-		sample and the design-time preview - so they are linked here rather than copied. They travel
-		as raw assets under the exact relative paths the reports ask for, which is what
-		Pysar.Maui resolves them by at render time.
-
-		MauiFont and MauiImage are deliberately not used: MauiImage rasterises an SVG and files it
-		under the platform's image resources (res/drawable-* on Android), out of reach of the
-		application package, and the reports draw logo.svg as vector content themselves.
-
-		Link only decides where the files appear in the IDE - Resources/Raw, where MAUI keeps raw
-		assets. LogicalName alone decides the path inside the package.
-	-->
-	<ItemGroup>
-		<MauiAsset Include="..\Pysar.Sample.Shared\Fonts\**"
-		           Link="Resources\Raw\Fonts\%(Filename)%(Extension)"
-		           LogicalName="Fonts/%(Filename)%(Extension)" />
-		<MauiAsset Include="..\Pysar.Sample.Shared\Images\**"
-		           Link="Resources\Raw\Images\%(Filename)%(Extension)"
-		           LogicalName="Images/%(Filename)%(Extension)" />
-		<!--
-			The reports merge these dictionaries by relative path at load time. Compiled reports carry
-			the absolute directory they were built from, which a sandboxed application cannot read, so
-			they travel as raw assets under the exact relative paths the reports ask for, which is what
-			Pysar.Maui resolves them by at render time.
-		-->
-		<MauiAsset Include="..\Pysar.Sample.Shared\Styles\**"
-		           Link="Resources\Raw\Styles\%(Filename)%(Extension)"
-			LogicalName="Styles/%(Filename)%(Extension)" />
-	</ItemGroup>
-
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" />

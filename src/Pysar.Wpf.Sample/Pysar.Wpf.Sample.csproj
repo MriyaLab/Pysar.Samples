@@ -34,13 +34,4 @@
     <PackageReference Include="CommunityToolkit.Mvvm" />
   </ItemGroup>
 
-  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('windows'))">
-    <EmbeddedResource Include="..\Pysar.Sample.Shared\Fonts\**"
-                      LogicalName="Fonts/%(Filename)%(Extension)" />
-    <EmbeddedResource Include="..\Pysar.Sample.Shared\Images\**"
-                      LogicalName="Images/%(Filename)%(Extension)" />
-    <EmbeddedResource Include="..\Pysar.Sample.Shared\Styles\**"
-                      LogicalName="Styles/%(Filename)%(Extension)" />
-  </ItemGroup>
-
 </Project>

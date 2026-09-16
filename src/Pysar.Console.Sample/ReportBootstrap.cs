@@ -13,7 +13,9 @@ public sealed class ReportBootstrap : IReportBootstrap
 {
     public static void Initialize(SkiaReportRenderer renderer)
     {
-        ReportPlatformHandler.Create(new FileSystemPlatformHandler());
+        // Reads the deployment directory first, then the report assets embedded in this assembly and
+        // in any referenced library - which is where ReportAsset puts them.
+        ReportPlatformHandler.Create(new DefaultReportPlatformHandler());
         var fonts = ReportPlatformHandler.FontCollection;
         fonts.AddFont("Fonts/Kanit-Bold.ttf", "Kanit", FontStyle.Bold);
         fonts.AddFont("Fonts/Kanit-Regular.ttf", "Kanit");
