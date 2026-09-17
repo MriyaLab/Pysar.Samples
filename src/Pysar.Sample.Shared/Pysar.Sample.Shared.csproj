@@ -20,10 +20,10 @@
 
     <!--
       One declaration for every head. Pysar.Assets.targets embeds these into this assembly, and each
-      host's file system falls back to it - no per-head re-declaration, and nothing to keep in sync.
-    -->
+      host's file system falls back to it - no per-head re-declaration, and nothing to keep in sync.-->
+    
     <ItemGroup>
       <ReportAsset Include="Fonts\**;Images\**;Styles\**" />
     </ItemGroup>
-
+    
 </Project>

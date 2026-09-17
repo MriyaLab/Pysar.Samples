@@ -1,13 +1,11 @@
 using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Pysar.Avalonia;
 using Pysar.Elements;
 using Pysar.Export;
-using Pysar.Sample.Shared;
 using Pysar.Sample.Shared.Data;
+using Pysar.Sample.Shared.Reports;
 using Pysar.Sample.Shared.Reports.Invoice;
-using Pysar.Skia;
 using Pysar.Viewer.Zoom;
 
 namespace Pysar.Avalonia.Sample.ViewModels;
