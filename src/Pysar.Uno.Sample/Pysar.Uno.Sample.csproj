@@ -68,32 +68,20 @@
   </ItemGroup>
 
   <!--
-    The report assets live beside the reports that use them in Pysar.Sample.Shared and are shared
-    with the other samples, so they are linked here rather than copied. Linked under Assets/ —
-    Uno's package root — but LogicalName stays the path the reports ask for: "Fonts/...",
-    "Images/...", "Styles/...".
+    The shared report assets are not declared here: Pysar.Sample.Shared declares them once as
+    ReportAsset, which embeds them into its own assembly under the paths the reports ask for, and
+    UnoReportPlatformHandler falls back to the embedded assets of referenced libraries after this
+    application's own.
 
-    Embedded rather than Content because asset reads have to be synchronous: font registration and
-    image loading never await, Uno's ms-appx:/// path is asynchronous, and on the WebAssembly host
-    blocking on it deadlocks the single thread rather than stalling it.
+    The fallback keeps the property this head depends on - reads stay synchronous. Font registration
+    and image loading never await, Uno's ms-appx:/// path is asynchronous, and on the WebAssembly
+    host blocking on it deadlocks the single thread rather than stalling it. A manifest resource has
+    no such problem, whichever assembly it is embedded in.
+
+    The shared Styles/ travel the same way, and must: the reports pull brushes and styles in through
+    <ResourceDictionary Source="..."/>, whose Source resolves against the directory the project was
+    compiled in - a path that exists only on the build machine. The desktop host gets away with that
+    because the two are the same machine; a browser has no file system at all.
   -->
-  <ItemGroup>
-    <EmbeddedResource Include="..\Pysar.Sample.Shared\Fonts\**"
-                      LogicalName="Fonts/%(Filename)%(Extension)"
-                      Link="Assets\Fonts\%(RecursiveDir)%(Filename)%(Extension)" />
-    <EmbeddedResource Include="..\Pysar.Sample.Shared\Images\**"
-                      LogicalName="Images/%(Filename)%(Extension)"
-                      Link="Assets\Images\%(RecursiveDir)%(Filename)%(Extension)" />
-    <!--
-      The reports pull shared brushes and styles in through <ResourceDictionary Source="..."/>, and
-      that Source is resolved against the directory the project was compiled in - a path that only
-      exists on the build machine. The desktop host gets away with it because the two are the same
-      machine; a browser has no file system at all, so the styles have to travel as assets the
-      platform handler can serve, exactly like the fonts and images above.
-    -->
-    <EmbeddedResource Include="..\Pysar.Sample.Shared\Styles\**"
-                      LogicalName="Styles/%(Filename)%(Extension)"
-                      Link="Assets\Styles\%(RecursiveDir)%(Filename)%(Extension)" />
-  </ItemGroup>
 
 </Project>
