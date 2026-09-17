@@ -13,21 +13,6 @@
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
 
-  <!--
-    Font Awesome is not only a report asset: Themes/Colors.axaml addresses it as
-    avares://Pysar.Avalonia.Sample/Fonts#Font Awesome 6 Free Solid, and Avalonia's own font manager
-    resolves that through its asset loader, never through Pysar's IFileSystem. The embedded copy in
-    Pysar.Sample.Shared is therefore invisible to it, and the window fails to open with
-    "Could not create glyphTypeface".
-
-    So this one file has to be an Avalonia resource of this assembly - which is exactly what
-    ReportAsset becomes in an Avalonia head. The reports' other assets need no declaration here.
-  -->
-  <ItemGroup>
-    <ReportAsset Include="..\Pysar.Sample.Shared\Fonts\Font Awesome 6 Free-Solid-900.otf"
-                 Link="Fonts\%(Filename)%(Extension)" />
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Avalonia" />
     <PackageReference Include="Avalonia.Desktop" />

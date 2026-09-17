@@ -1,6 +1,6 @@
 using Pysar.Elements;
-using Pysar.Sample.Shared;
 using Pysar.Sample.Shared.Data;
+using Pysar.Sample.Shared.Reports;
 using Pysar.Sample.Shared.Reports.Invoice;
 
 namespace Pysar.Blazor.Wasm.Sample.Services;

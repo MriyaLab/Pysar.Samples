@@ -28,7 +28,7 @@
         Font Awesome ships one family per weight, so the solid face is addressed by its own family
         name. The file itself is linked into the project from Pysar.Sample.Shared/Fonts.
     -->
-    <FontFamily x:Key="FontAwesomeSolid">avares://Pysar.Avalonia.Sample/Fonts#Font Awesome 6 Free Solid</FontFamily>
+    <FontFamily x:Key="FontAwesomeSolid">avares://Pysar.Avalonia.Sample/Assets/Fonts#Font Awesome 6 Free Solid</FontFamily>
     <FontFamily x:Key="Cookie">avares://Pysar.Avalonia.Sample/Assets/Fonts#Cookie</FontFamily>
 
 </ResourceDictionary>
