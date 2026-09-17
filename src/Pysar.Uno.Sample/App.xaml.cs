@@ -20,8 +20,8 @@ public partial class App : Application
         // Before anything can build a report: installs the platform handler reports resolve their
         // assets through, and the renderer ReportView draws with. On the WebAssembly head it also
         // stops the browser zooming the page when Ctrl+wheel is meant for the report. The assembly
-        // is this one, because the fonts and images are linked into it as embedded resources - see
-        // the csproj.
+        // is this one - where an asset this application embeds itself would live. The shared report
+        // assets are found behind it, in Pysar.Sample.Shared, which declares them as ReportAsset.
         this.UsePysar(typeof(App).Assembly, builder =>
         {
             ReportBootstrap.RegisterFonts(builder.Fonts);
