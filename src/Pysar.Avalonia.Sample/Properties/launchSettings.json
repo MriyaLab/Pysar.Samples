@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Pysar.Avalonia.Sample.Browser": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:5210"
+    }
+  }
+}

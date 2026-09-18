@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <!-- LargeHeap: a report is rasterised page by page through Skia, which is heavier than a typical
+       Android view tree. -->
+  <!-- No android:icon - the sample ships no Android drawable, so the platform default is used. -->
+  <application android:allowBackup="true"
+               android:label="Pysar Samples"
+               android:largeHeap="true"
+               android:supportsRtl="true" />
+</manifest>

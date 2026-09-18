@@ -1,7 +1,5 @@
-﻿using Avalonia;
+using Avalonia;
 using System;
-using Pysar.Sample.Shared;
-using Pysar.Sample.Shared.QRCode;
 
 namespace Pysar.Avalonia.Sample;
 
@@ -14,13 +12,12 @@ sealed class Program
     public static void Main(string[] args) => BuildAvaloniaApp()
         .StartWithClassicDesktopLifetime(args);
 
-    // Avalonia configuration, don't remove; also used by visual designer.
+    // Avalonia configuration, don't remove; also used by visual designer. The Pysar registration
+    // (fonts, custom drawer) lives in AppConfiguration so every platform shares it.
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()
-            .UsePysar(pysar => pysar
-                .AddFonts(ReportBootstrap.RegisterFonts)
-                .AddDrawer<QRCode>(new QRCodeDrawer()))
+            .ConfigurePysarSample()
             .LogToTrace();
 }
