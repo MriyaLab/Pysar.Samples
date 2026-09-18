@@ -75,14 +75,20 @@
 
     <!--
         The panel is a drawer at every window size, as the MAUI flyout is: hidden until the toolbar's
-        hamburger opens it, then drawn over a scrim above the content. The window carries the open
-        state as its "nav-open" class.
+        hamburger opens it, then drawn over a scrim above the content. The view carries the open
+        state as its "nav-open" class - the view is a UserControl now, so it is shared by the
+        desktop window and the single-view (browser, mobile) hosts alike.
     -->
     <Style Selector="DockPanel.nav-panel">
         <Setter Property="IsVisible" Value="False" />
     </Style>
 
-    <Style Selector="Window.nav-open DockPanel.nav-panel">
+    <!--
+        :is() matters here - a bare type selector matches the exact type only, and the view is
+        MainView (a UserControl subclass), so "UserControl.nav-open" would never match and the
+        drawer would stay shut.
+    -->
+    <Style Selector=":is(UserControl).nav-open DockPanel.nav-panel">
         <Setter Property="IsVisible" Value="True" />
     </Style>
 
@@ -91,7 +97,7 @@
         <Setter Property="IsVisible" Value="False" />
     </Style>
 
-    <Style Selector="Window.nav-open Border.nav-scrim">
+    <Style Selector=":is(UserControl).nav-open Border.nav-scrim">
         <Setter Property="IsVisible" Value="True" />
     </Style>
 

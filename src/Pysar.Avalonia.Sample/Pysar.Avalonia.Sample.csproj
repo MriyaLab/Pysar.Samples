@@ -1,30 +1,120 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project>
+
+  <!--
+    One project for every platform, the way the Uno and MAUI samples do it: the UI lives here and
+    each platform's bootstrap sits under Platforms/<Platform>/.
+
+    Avalonia ships no single-project SDK of its own (Uno has Uno.Sdk), and the browser needs
+    Microsoft.NET.Sdk.WebAssembly while the other platforms need the plain SDK. The Sdk="..."
+    attribute cannot vary per target framework - but an explicit Sdk import can, which is what these
+    four lines do. The outer, multi-targeting build has no TargetFramework and so takes the plain
+    SDK branch, which is what dispatches the inner builds.
+  -->
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk.WebAssembly" Condition="'$(TargetFramework)' == 'net10.0-browser'" />
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk"             Condition="'$(TargetFramework)' != 'net10.0-browser'" />
+
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net10.0</TargetFramework>
+    <!--
+      iOS is pinned to the 27.0 platform band on purpose: the workload's default band (26.5) demands
+      Xcode 26.6, and this machine runs Xcode 27.0, so a bare "net10.0-ios" fails the version check.
+      The matching Microsoft.iOS.Sdk.net10.0_27.0 pack is what that band resolves to.
+    -->
+    <TargetFrameworks>net10.0;net10.0-browser;net10.0-android;net10.0-ios27.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-     <ApplicationManifest>app.manifest</ApplicationManifest>
-     <ApplicationIcon>Assets/pysar.ico</ApplicationIcon>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
+
+  <!-- Desktop (Windows, macOS, Linux). -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <OutputType>WinExe</OutputType>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets/pysar.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <!-- Browser (WebAssembly). -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0-browser'">
+    <OutputType>Exe</OutputType>
+    <!-- Required by the [JSImport] source generator used for browser printing. -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <!-- Android. There is no Main here - MainActivity is the entry point. -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0-android'">
+    <OutputType>Exe</OutputType>
+    <!-- 23 is the floor AndroidX (androidx.lifecycle.runtime, pulled in by Avalonia.Android) sets;
+         anything lower fails the manifest merge rather than the build. -->
+    <SupportedOSPlatformVersion>23</SupportedOSPlatformVersion>
+    <AndroidManifest>Platforms/Android/AndroidManifest.xml</AndroidManifest>
+    <ApplicationId>com.mriyalab.pysar.avalonia.sample</ApplicationId>
+    <ApplicationVersion>1</ApplicationVersion>
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+  </PropertyGroup>
+
+  <!-- iOS. Like Android there is no Main of our own - UIApplicationMain starts the AppDelegate. -->
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net10.0-ios'))">
+    <OutputType>Exe</OutputType>
+    <!-- 15.0 is the floor this iOS SDK band accepts. -->
+    <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
+
+    <!--
+      The 27.0 band is a preview SDK: it marks the whole UIKit/Foundation surface [Experimental],
+      which is an error by default, so even [Register] and UIApplication fail the build. Suppressing
+      the one diagnostic is what the SDK itself directs you to do. Drop this once a stable band that
+      supports the installed Xcode ships.
+    -->
+    <NoWarn>$(NoWarn);XCODE_27_0_PREVIEW</NoWarn>
+    <ApplicationId>com.mriyalab.pysar.avalonia.sample</ApplicationId>
+    <ApplicationVersion>1</ApplicationVersion>
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
 
+  <!-- Only the Platforms folder matching the target framework is compiled. -->
+  <ItemGroup>
+    <Compile Remove="Platforms/**" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <Compile Include="Platforms/Desktop/**/*.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-browser'">
+    <Compile Include="Platforms/Browser/**/*.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-android'">
+    <Compile Include="Platforms/Android/**/*.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net10.0-ios'))">
+    <Compile Include="Platforms/iOS/**/*.cs" />
+  </ItemGroup>
+
+  <!-- Shared by every platform. -->
   <ItemGroup>
     <PackageReference Include="Avalonia" />
-    <PackageReference Include="Avalonia.Desktop" />
     <PackageReference Include="Avalonia.Themes.Fluent" />
     <PackageReference Include="Avalonia.Fonts.Inter" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Pysar.Xaml" />
+
+    <!-- The sample reports draw a QR code, and this is reached only through their XAML, so it has
+         to be named here: the samples overlay disables transitive project references, so it does
+         not arrive on its own from Pysar.Sample.Shared. -->
+    <PackageReference Include="SkiaSharp.QrCode" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <PackageReference Include="Avalonia.Desktop" />
     <!-- Avalonia 12: Diagnostics moved to AvaloniaUI.DiagnosticsSupport. Exclude from Release output. -->
     <PackageReference Include="AvaloniaUI.DiagnosticsSupport">
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="CommunityToolkit.Mvvm" />
-    <PackageReference Include="Pysar.Xaml" />
 
     <!--
       Pinned ahead of what Avalonia's Linux support pulls in transitively: 0.21.2 carries a known
@@ -34,8 +124,58 @@
     <PackageReference Include="Tmds.DBus.Protocol" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-browser'">
+    <PackageReference Include="Avalonia.Browser" />
+
+    <!--
+      Pysar renders through managed SkiaSharp 4.151.2, so the browser-wasm native binary must match
+      or linking fails on undefined sk_* symbols - the exact case Pysar's own PYSAR1001 build check
+      guards against. HarfBuzzSharp is pinned alongside for the same reason.
+    -->
+    <PackageReference Include="SkiaSharp.NativeAssets.WebAssembly" />
+    <PackageReference Include="HarfBuzzSharp.NativeAssets.WebAssembly" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-android'">
+    <PackageReference Include="Avalonia.Android" />
+
+    <!-- Pinned to the managed SkiaSharp Pysar renders through, for the reason the repository's own
+         Directory.Packages.props documents: a split between managed and native is a startup crash,
+         not a build error. -->
+    <PackageReference Include="SkiaSharp.NativeAssets.Android" />
+    <PackageReference Include="HarfBuzzSharp.NativeAssets.Android" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net10.0-ios'))">
+    <PackageReference Include="Avalonia.iOS" />
+    <PackageReference Include="SkiaSharp.NativeAssets.iOS" />
+    <PackageReference Include="HarfBuzzSharp.NativeAssets.iOS" />
+  </ItemGroup>
+
+  <!--
+    Pysar drives reports through a reflection-based XAML engine (Pysar.Xaml): converters, custom
+    elements, their property setters and even IReportBootstrap.Initialize are named only in .rxaml
+    or reached by reflection, so the IL trimmer cannot see them and drops them - the running WASM
+    app then fails with "Type '...' not found", "Arg_SetMethNotFnd" or "Method not found".
+    Turning trimming fully off breaks the WASM runtime load, so instead keep every Pysar and sample
+    assembly whole and let the trimmer still shrink the framework and Avalonia around them.
+  -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-browser'">
+    <TrimmerRootAssembly Include="Pysar" />
+    <TrimmerRootAssembly Include="Pysar.Viewer" />
+    <TrimmerRootAssembly Include="Pysar.Xaml" />
+    <TrimmerRootAssembly Include="Pysar.Avalonia" />
+    <TrimmerRootAssembly Include="Pysar.Sample.Shared" />
+    <TrimmerRootAssembly Include="Pysar.Avalonia.Sample" />
+    <TrimmerRootAssembly Include="SkiaSharp.QrCode" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Pysar.Sample.Shared\Pysar.Sample.Shared.csproj" />
     <PackageReference Include="Pysar.Avalonia" />
   </ItemGroup>
+
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk.WebAssembly" Condition="'$(TargetFramework)' == 'net10.0-browser'" />
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk"             Condition="'$(TargetFramework)' != 'net10.0-browser'" />
+
 </Project>

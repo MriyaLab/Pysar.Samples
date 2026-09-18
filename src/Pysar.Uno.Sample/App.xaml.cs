@@ -75,11 +75,15 @@ public partial class App : Application
     /// </summary>
     public static void InitializeLogging()
     {
-#if DEBUG
-        // Logging is disabled by default for release builds, as it incurs a significant
-        // initialization cost from Microsoft.Extensions.Logging setup. If startup performance
-        // is a concern for your application, keep this disabled. If you're running on the web or
-        // desktop targets, you can use URL or command line parameters to enable it.
+        // The Uno template gates this whole method behind #if DEBUG, because Microsoft.Extensions
+        // .Logging costs something to initialise and a shipping application rarely needs it. This
+        // sample deviates deliberately: with no logger at all, Uno catches an exception thrown from
+        // OnLaunched and logs it nowhere, so a Release browser head that fails to start shows a
+        // splash screen forever and an empty console. That cost a day of someone's time - the
+        // reported symptom was "it never gets past the loading screen", with nothing else to go on.
+        //
+        // Release keeps the factory and raises the floor to Warning: startup failures surface,
+        // per-frame chatter does not. Debug keeps the template's Information level.
         //
         // For more performance documentation: https://platform.uno/docs/articles/Uno-UI-Performance.html
 
@@ -97,7 +101,11 @@ public partial class App : Application
 #endif
 
             // Exclude logs below this level
+#if DEBUG
             builder.SetMinimumLevel(LogLevel.Information);
+#else
+            builder.SetMinimumLevel(LogLevel.Warning);
+#endif
 
             // Default filters for Uno Platform namespaces
             builder.AddFilter("Uno", LogLevel.Warning);
@@ -136,7 +144,6 @@ public partial class App : Application
 
 #if HAS_UNO
         global::Uno.UI.Adapter.Microsoft.Extensions.Logging.LoggingAdapter.Initialize();
-#endif
 #endif
     }
 }
