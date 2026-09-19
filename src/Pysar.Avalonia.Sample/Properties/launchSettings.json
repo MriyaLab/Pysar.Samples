@@ -1,8 +1,14 @@
 {
   "profiles": {
-    "Pysar.Avalonia.Sample.Browser": {
+    "Pysar.Avalonia.Sample (Desktop)": {
       "commandName": "Project",
+      "compatibleTargetFramework": "net10.0"
+    },
+    "Pysar.Avalonia.Sample (Browser)": {
+      "commandName": "Project",
+      "compatibleTargetFramework": "net10.0-browser",
       "launchBrowser": true,
+      //"inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
       "applicationUrl": "http://localhost:5210"
     }
   }
