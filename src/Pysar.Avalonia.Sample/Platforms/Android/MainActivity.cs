@@ -29,6 +29,13 @@ public class MainApplication : AvaloniaAndroidApplication<App>
         SampleServices.Printer = new AndroidReportPrinter();
 
         return base.CustomizeAppBuilder(builder)
+            .With(new AndroidPlatformOptions
+            {
+                // EGL on the Android emulator draws bitmaps as opaque black, so report pages vanish.
+                // Software is the mode that paints them; EGL stays as a fallback for devices where
+                // software is unavailable.
+                RenderingMode = [AndroidRenderingMode.Software, AndroidRenderingMode.Egl]
+            })
             .WithInterFont()
             .ConfigurePysarSample();
     }
