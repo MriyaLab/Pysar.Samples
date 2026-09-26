@@ -10,6 +10,10 @@ public partial class App : Application
     /// </summary>
     public App()
     {
+        // OpenGL ES on the Android emulator draws Image textures as opaque black, which hides
+        // every report page. Software Skia draws those bitmaps. Must be set before the window exists.
+        global::Uno.UI.FeatureConfiguration.Rendering.UseOpenGLOnSkiaAndroid = false;
+
         this.InitializeComponent();
     }
 
