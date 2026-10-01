@@ -153,9 +153,14 @@
             </Border>
 
             <Border Style="{StaticResource ToolbarPill}">
-              <Button Click="OnExportPdfClick"
-                      Style="{StaticResource ToolbarPillButton}"
+              <Button Style="{StaticResource ToolbarPillButton}"
                       ToolTipService.ToolTip="Export PDF">
+                <Button.Flyout>
+                  <MenuFlyout>
+                    <MenuFlyoutItem Click="OnExportPdfClick" Text="PDF" />
+                    <MenuFlyoutItem Click="OnExportPdfAClick" Text="PDF/A-2b" />
+                  </MenuFlyout>
+                </Button.Flyout>
                 <TextBlock x:Name="ExportGlyph"
                            FontFamily="{StaticResource FontAwesomeSolid}"
                            FontSize="18"

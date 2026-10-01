@@ -135,9 +135,11 @@ menu entry demonstrates.
 thing that differs between the samples:
 
 ```csharp
-// Console: straight to a PDF file.
+// Console: straight to a PDF file. PDF/A-2b is an option of that PDF.
+using Pysar.Export;
+
 var renderer = new SkiaReportRenderer();
-await renderer.SavePdfAsync(report, path);
+await renderer.SavePdfAsync(report, path, new PdfExportOptions { PdfA = true });
 ```
 
 ```xml
@@ -168,13 +170,13 @@ public static void RegisterDrawers(SkiaReportRenderer renderer)
 // MAUI
 builder.UseMauiApp<App>()
     .UsePysar(pysar => pysar
-        .RegisterFonts(ReportBootstrap.RegisterFonts)
+        .AddFonts(ReportBootstrap.RegisterFonts)
         .AddDrawer<QRCode>(new QRCodeDrawer()));
 
 // Avalonia
 AppBuilder.Configure<App>()
     .UsePysar(pysar => pysar
-        .RegisterFonts(ReportBootstrap.RegisterFonts)
+        .AddFonts(ReportBootstrap.RegisterFonts)
         .AddDrawer<QRCode>(new QRCodeDrawer()));
 
 // Blazor WebAssembly

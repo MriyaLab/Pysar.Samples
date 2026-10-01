@@ -44,6 +44,8 @@
                     <MenuItem Command="{Binding #Root.ExportPdfCommand}"
                               Header="_Export PDF..."
                               InputGesture="Ctrl+E" />
+                    <MenuItem Command="{Binding #Root.ExportPdfACommand}"
+                              Header="Export PDF/_A-2b..." />
                     <Separator IsVisible="{Binding #Root.IsDesktop}" />
                     <MenuItem Command="{Binding #Root.ExitCommand}"
                               Header="E_xit"

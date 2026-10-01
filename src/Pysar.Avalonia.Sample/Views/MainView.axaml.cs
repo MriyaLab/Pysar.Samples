@@ -35,7 +35,8 @@ public partial class MainView : UserControl
     public MainView()
     {
         ExitCommand = new RelayCommand(Exit);
-        ExportPdfCommand = new AsyncRelayCommand(ExportPdfAsync);
+        ExportPdfCommand = new AsyncRelayCommand(() => ExportPdfAsync(pdfA: false));
+        ExportPdfACommand = new AsyncRelayCommand(() => ExportPdfAsync(pdfA: true));
 
         InitializeComponent();
 
@@ -48,6 +49,8 @@ public partial class MainView : UserControl
     public ICommand ExitCommand { get; }
 
     public ICommand ExportPdfCommand { get; }
+
+    public ICommand ExportPdfACommand { get; }
 
     /// <summary>
     ///     Whether this host is a desktop window. Only Exit depends on it: there is no window to
@@ -122,7 +125,7 @@ public partial class MainView : UserControl
         PageIndicator.IsVisible = false;
     }
 
-    private async Task ExportPdfAsync()
+    private async Task ExportPdfAsync(bool pdfA)
     {
         if (_viewModel?.Report is null)
             return;
@@ -135,8 +138,8 @@ public partial class MainView : UserControl
 
         var file = await storageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
-            Title = "Export report",
-            SuggestedFileName = _viewModel.SelectedReport.FileName,
+            Title = pdfA ? "Export PDF/A-2b" : "Export report",
+            SuggestedFileName = PdfFileName(_viewModel.SelectedReport.FileName, pdfA),
             DefaultExtension = "pdf",
             FileTypeChoices = [FilePickerFileTypes.Pdf]
         });
@@ -146,7 +149,8 @@ public partial class MainView : UserControl
 
         try
         {
-            var bytes = await _exporter.ExportAsync(_viewModel.Report, ExportFormat.Pdf);
+            var bytes = await _exporter.ExportAsync(
+                _viewModel.Report, ExportFormat.Pdf, new PdfExportOptions { PdfA = pdfA });
 
             await using var stream = await file.OpenWriteAsync();
             await stream.WriteAsync(bytes);
@@ -160,4 +164,9 @@ public partial class MainView : UserControl
             Console.WriteLine($"Pysar: export failed - {exception}");
         }
     }
+
+    private static string PdfFileName(string fileName, bool pdfA)
+        => pdfA
+            ? Path.GetFileNameWithoutExtension(fileName) + "-pdfa.pdf"
+            : fileName;
 }
