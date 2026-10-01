@@ -53,8 +53,10 @@ exactly what the MAUI and Blazor samples do.
 Export is one call:
 
 ```csharp
+using Pysar.Export;
+
 var renderer = new SkiaReportRenderer();
-await renderer.SavePdfAsync(report, path);
+await renderer.SavePdfAsync(report, path, new PdfExportOptions { PdfA = true });
 ```
 
 ## `Reports/Base` — bands, panels, page format

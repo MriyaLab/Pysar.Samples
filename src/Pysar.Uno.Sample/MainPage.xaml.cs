@@ -106,23 +106,31 @@ public sealed partial class MainPage : Page
     }
 
     private async void OnExportPdfClick(object sender, RoutedEventArgs e)
+        => await ExportPdfAsync(pdfA: false);
+
+    private async void OnExportPdfAClick(object sender, RoutedEventArgs e)
+        => await ExportPdfAsync(pdfA: true);
+
+    private async Task ExportPdfAsync(bool pdfA)
     {
         if (ViewModel.Report is not { } report || ViewModel.IsBusy)
             return;
 
         try
         {
+            var baseName = Path.GetFileNameWithoutExtension(ViewModel.SelectedReport.FileName);
             var picker = new FileSavePicker
             {
-                SuggestedFileName = Path.GetFileNameWithoutExtension(ViewModel.SelectedReport.FileName),
+                SuggestedFileName = pdfA ? baseName + "-pdfa" : baseName,
                 DefaultFileExtension = ".pdf"
             };
-            picker.FileTypeChoices.Add("PDF document", new List<string> { ".pdf" });
+            picker.FileTypeChoices.Add(pdfA ? "PDF/A-2b document" : "PDF document", new List<string> { ".pdf" });
 
             if (await picker.PickSaveFileAsync() is not { } file)
                 return;
 
-            var bytes = await global::Pysar.Uno.PysarUno.ExportService.ExportAsync(report, ExportFormat.Pdf);
+            var bytes = await global::Pysar.Uno.PysarUno.ExportService.ExportAsync(
+                report, ExportFormat.Pdf, new PdfExportOptions { PdfA = pdfA });
             await FileIO.WriteBytesAsync(file, bytes);
         }
         catch (Exception exception)

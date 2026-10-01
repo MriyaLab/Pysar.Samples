@@ -22,7 +22,7 @@ other sample uses:
 builder
     .UseMauiApp<App>()
     .UsePysar(pysar => pysar
-        .RegisterFonts(ReportBootstrap.RegisterFonts)
+        .AddFonts(ReportBootstrap.RegisterFonts)
         .AddDrawer<QRCode>(new QRCodeDrawer()))
     .ConfigureFonts(fonts =>
     {
@@ -82,7 +82,10 @@ Avalonia and WPF hosts run.
 Export produces bytes and hands them to the platform share sheet — a phone has no "save to desktop":
 
 ```csharp
-var bytes = await _exporter.ExportAsync(Report, ExportFormat.Pdf);
+using Pysar.Export;
+
+var bytes = await _exporter.ExportAsync(
+    Report, ExportFormat.Pdf, new PdfExportOptions { PdfA = true });
 await _sharer.ShareAsync(bytes, _reportDescriptor.FileName, $"{_reportDescriptor.Title} report");
 ```
 

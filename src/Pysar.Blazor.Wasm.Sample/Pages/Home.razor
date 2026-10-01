@@ -57,8 +57,14 @@
         <button class="toolbar-pill-button"
                 title="Export PDF"
                 disabled="@(_isBusy || _report is null)"
-                @onclick="ExportPdfAsync">
+                @onclick="() => ExportPdfAsync(pdfA: false)">
             <span class="fa" aria-hidden="true">@("\ue09a")</span>
+        </button>
+        <button class="toolbar-pill-button"
+                title="Export PDF/A-2b"
+                disabled="@(_isBusy || _report is null)"
+                @onclick="() => ExportPdfAsync(pdfA: true)">
+            <span class="fa" aria-hidden="true">@("\uf1c1")</span>
         </button>
     </div>
 </div>
@@ -317,7 +323,7 @@
         }
     }
 
-    private async Task ExportPdfAsync()
+    private async Task ExportPdfAsync(bool pdfA)
     {
         if (_report is null || _isBusy)
             return;
@@ -327,11 +333,15 @@
 
         try
         {
-            var bytes = await Exporter.ExportAsync(_report, ExportFormat.Pdf);
+            var bytes = await Exporter.ExportAsync(
+                _report, ExportFormat.Pdf, new PdfExportOptions { PdfA = pdfA });
+            var fileName = pdfA
+                ? Path.GetFileNameWithoutExtension(_descriptor.FileName) + "-pdfa.pdf"
+                : _descriptor.FileName;
 
             await JS.InvokeVoidAsync(
                 "pysarSample.downloadFile",
-                _descriptor.FileName,
+                fileName,
                 "application/pdf",
                 Convert.ToBase64String(bytes));
         }

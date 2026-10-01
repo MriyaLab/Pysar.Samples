@@ -26,7 +26,7 @@ public static AppBuilder BuildAvaloniaApp()
         .UsePlatformDetect()
         .WithInterFont()
         .UsePysar(pysar => pysar
-            .RegisterFonts(ReportBootstrap.RegisterFonts)
+            .AddFonts(ReportBootstrap.RegisterFonts)
             .AddDrawer<QRCode>(new QRCodeDrawer()))
         .LogToTrace();
 ```

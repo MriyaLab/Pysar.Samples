@@ -1,5 +1,6 @@
 ﻿using Pysar.Console.Sample;
 using Pysar.Console.Sample.Reports;
+using Pysar.Export;
 using Pysar.Console.Sample.Reports.Base;
 using Pysar.Console.Sample.Reports.CustomControls;
 using Pysar.Console.Sample.Reports.Data;
@@ -58,13 +59,21 @@ while (true)
         continue;
     }
 
+    Console.Write("PDF/A-2b? [y/N] ");
+    var pdfA = string.Equals(Console.ReadLine()?.Trim(), "y", StringComparison.OrdinalIgnoreCase);
+
     var selected = reports[choice - 1];
-    var path = Path.Combine(desktop, selected.FileName);
+    var path = Path.Combine(desktop, PdfFileName(selected.FileName, pdfA));
     var report = selected.Build();
-    await renderer.SavePdfAsync(report, path);
+    await renderer.SavePdfAsync(report, path, new PdfExportOptions { PdfA = pdfA });
     Console.WriteLine($"Exported {selected.Title} -> {path}");
     Console.WriteLine();
 }
+
+static string PdfFileName(string fileName, bool pdfA)
+    => pdfA
+        ? Path.GetFileNameWithoutExtension(fileName) + "-pdfa.pdf"
+        : fileName;
 
 static Report BuildRuntimeXamlReport()
 {

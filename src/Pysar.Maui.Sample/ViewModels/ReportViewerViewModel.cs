@@ -42,7 +42,8 @@ public sealed class ReportViewerViewModel : INotifyPropertyChanged
         _sharer = sharer;
         _printer = printer;
 
-        ExportPdfCommand = new Command(async () => await ExportPdfAsync(), () => !IsBusy);
+        ExportPdfCommand = new Command(async () => await ExportPdfAsync(pdfA: false), () => !IsBusy);
+        ExportPdfACommand = new Command(async () => await ExportPdfAsync(pdfA: true), () => !IsBusy);
         PrintCommand = new Command(async () => await PrintAsync(), () => !IsBusy);
         ZoomInCommand = new Command(ZoomIn);
         ZoomOutCommand = new Command(ZoomOut);
@@ -55,6 +56,8 @@ public sealed class ReportViewerViewModel : INotifyPropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
 
     public ICommand ExportPdfCommand { get; }
+
+    public ICommand ExportPdfACommand { get; }
 
     public ICommand PrintCommand { get; }
 
@@ -161,6 +164,7 @@ public sealed class ReportViewerViewModel : INotifyPropertyChanged
 
             OnPropertyChanged(nameof(IsNotBusy));
             ((Command)ExportPdfCommand).ChangeCanExecute();
+            ((Command)ExportPdfACommand).ChangeCanExecute();
             ((Command)PrintCommand).ChangeCanExecute();
         }
     }
@@ -223,7 +227,7 @@ public sealed class ReportViewerViewModel : INotifyPropertyChanged
         ZoomMode = ReportZoomMode.Custom;
     }
 
-    private async Task ExportPdfAsync()
+    private async Task ExportPdfAsync(bool pdfA)
     {
         if (IsBusy || Report is null)
             return;
@@ -233,8 +237,13 @@ public sealed class ReportViewerViewModel : INotifyPropertyChanged
 
         try
         {
-            var bytes = await _exporter.ExportAsync(Report, ExportFormat.Pdf);
-            await _sharer.ShareAsync(bytes, _reportDescriptor.FileName, $"{_reportDescriptor.Title} report");
+            var bytes = await _exporter.ExportAsync(
+                Report, ExportFormat.Pdf, new PdfExportOptions { PdfA = pdfA });
+            var fileName = pdfA
+                ? Path.GetFileNameWithoutExtension(_reportDescriptor.FileName) + "-pdfa.pdf"
+                : _reportDescriptor.FileName;
+            var title = pdfA ? $"{_reportDescriptor.Title} PDF/A-2b" : $"{_reportDescriptor.Title} report";
+            await _sharer.ShareAsync(bytes, fileName, title);
         }
         catch (Exception exception)
         {

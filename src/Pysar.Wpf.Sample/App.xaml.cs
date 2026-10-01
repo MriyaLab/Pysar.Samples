@@ -12,7 +12,7 @@ public partial class App : Application
         base.OnStartup(e);
 
         this.UsePysar(pysar => pysar
-            .RegisterFonts(ReportBootstrap.RegisterFonts)
+            .AddFonts(ReportBootstrap.RegisterFonts)
             .AddDrawer<QRCode>(new QRCodeDrawer()));
 
         var window = new MainWindow
