@@ -1,4 +1,5 @@
 using Pysar.Elements;
+using Pysar.Maui.Sample.Reports;
 using Pysar.Sample.Shared.Data;
 using Pysar.Sample.Shared.Reports;
 using Pysar.Sample.Shared.Reports.Invoice;
@@ -10,6 +11,7 @@ public sealed record ReportDescriptor(string Title, string FileName, string Flyo
 {
     public static IReadOnlyList<ReportDescriptor> All { get; } =
     [
+        new("MAUI fonts", "MauiFonts.pdf", "font", MauiFontsReport.Create),
         new("Invoice", "InvoiceReport.pdf", "file-invoice-dollar", () => new InvoiceReport(InvoiceData.CreateDesignInstance())),
         new("Annual", "AnnualReport.pdf", "chart-line", () => new AnnualReport(AnnualLedger.CreateDesignInstance())),
         new("Revenue By Customer", "RevenueByCustomer.pdf", "users", () => new RevenueByCustomerReport(RevenueReportData.CreateDesignInstance()))
