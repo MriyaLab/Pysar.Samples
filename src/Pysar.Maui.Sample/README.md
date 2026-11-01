@@ -1,5 +1,11 @@
 # Pysar.Maui.Sample
 
+> The "MAUI fonts" report requires the platform font integration added in Pysar commit
+> `fc4a988` or a later package containing it. This repository currently pins Pysar packages to
+> `0.1.63`, which does not include that integration. Update the package references when that
+> release is available; a build against `0.1.63` does not verify automatic font resolution.
+
+
 The Pysar viewer on mobile: a Shell app with one page per report, a compact toolbar, native print
 and PDF export through the system share sheet.
 
@@ -31,8 +37,10 @@ builder
     });
 ```
 
-Two font registrations, two different jobs: `RegisterFonts` feeds the *report* renderer, while
-`ConfigureFonts` feeds MAUI's own UI (the toolbar glyphs). They are separate collections.
+`RegisterFonts` still feeds the shared reports (`Ubuntu`, `LibreBarcode128`). A face registered
+only with `ConfigureFonts` is also available to a report, by that alias, at `FontStyle.Normal`.
+The "MAUI fonts" page uses `OpenSansRegular` and `CookieRegular` that way — there is no `AddFont`
+for them. `MauiImage` is still not a report image; `Images/world.svg` is a `ReportAsset`.
 
 ## The viewer
 
